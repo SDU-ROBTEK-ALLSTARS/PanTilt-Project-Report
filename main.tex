@@ -4,14 +4,14 @@
 %
 % Front page
 \pagenumbering{alph} %frontpage numbered with a letter
-\input{content/frontmatter/frontpage.tex}
+\input{content/00_frontmatter/frontpage.tex}
 %
 % Abstract (un-numbered chapter)
 \pagenumbering{roman} %until main content we use roman page numbering
-\input{content/frontmatter/abstract.tex}
+\input{content/00_frontmatter/abstract.tex}
 %
 % Preface (un-numbered chapter)
-\input{content/frontmatter/preface.tex}
+\input{content/00_frontmatter/preface.tex}
 %
 % Table of contents, figures, tables, listings and abbreviations
 \tableofcontents
@@ -26,9 +26,15 @@
 %
 \input{content/_temp/writingconventions.tex} %THIS IS A TEMPORARY HELP TO WRITING (naming conventions and possibly other stuff)
 %
-\input{content/introduction.tex}
-\input{content/discussion.tex}
-\input{content/conclusion.tex}
+\input{content/01_introduction/introduction.tex}
+\input{content/02_modelling/modelling.tex}
+\input{content/03_low_level_control/llc.tex}
+\input{content/04_communication/communication.tex}
+\input{content/05_operating_system/os.tex}
+\input{content/06_user_interface/ui.tex}
+\input{content/07_experiments/experiments.tex}
+\input{content/08_discussion/discussion.tex}
+\input{content/09_conclusion/conclusion.tex}
 % 
 % References
 \clearpage
@@ -37,7 +43,7 @@
 %
 % Appendix
 \appendix %all sections below are numbered A, B, C,...
-\input{content/appendix/test.tex}%not sure if this should be here at
+\input{content/10_appendix/app.tex}%not sure if this should be here at
 \input{content/template.tex}
 %
 \end{document}
