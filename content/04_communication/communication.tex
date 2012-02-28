@@ -1,1 +1,49 @@
 \chapter{Communication protocol}\label{chap:comm}
+For the main hardware components to be able to communicate, some kind of network communication has to be defined. Throughout this chapter the communication hardware, methods and final design of this network will be introduced.
+
+\subsection{SPI introduction}
+% What is SPI
+% Data link / Tail - Header on dataframes
+% Limitations
+
+% SPI stands for Serial Peripheral Interface
+% Used for moving data simply and quickly from one device to another
+% Serial Interface
+% Synchronous
+% Master-Slave
+% Data Exchange
+% Data on SCK  (the clock rate can vary, unlike RS-232 style communications)
+% SPI sync modes
+% WIKI fact:  frequencies are commonly in the range of 1–70 MHz
+
+\subsection{Hardware support}
+% Support on ARM development board -- The LM3S6965 controller includes one SSI module that provides the functionality for synchronous
+% serial communications with peripheral devices, and can be configured to use the Freescale SPI,
+% MICROWIRE, or TI synchronous serial interface frame formats. The size of the data frame is also
+% configurable, and can be set between 4 and 16 bits, inclusive.
+
+% Separate transmit and receive FIFOs, 16 bits wide, 8 locations deep
+
+\subsection{Inspiration for protocol}
+% ArcNet / PA10
+% CAN / DeviceNet
+% - What is it used for, and why is it interesting to look at?
+
+\subsection{Concept}
+% Just a .h file for the ARM (Looks like a blackbox)
+% Data written directly to mem on the FPGA.
+% Block figure descripeing the communication endpoints.
+% Each joint consideret as an SPI slave. Communication will only be with one joint at a time.
+
+\subsection{Protocol requirements}
+% Sequence nb. not needed
+% Communication only with one joint at a time
+% Data from "`controller"': 2 Byte signed PWM value, lock h-bridge, reset encoder pos
+% Data from "`joint/plant"': ack last package, ack encoder reset, 2 byte signed position
+
+\subsection{Protocol design}
+% Each frame is 9 bit. 8 bit data and escape bit. The escape bit is only high in the beginnign of each transmission.
+% Texas Instruments Synchronous Serial Frame Format is used
+
+\subsection{Protocol ARM implementation}
+\subsection{Protocol FPGA implementation}
