@@ -1,8 +1,17 @@
-#OS junk files
-[Tt]humbs.db
-*.DS_Store
 
-#(La)TeX-related
+.*
+!.gitignore
+*~
+.directory
+[Tt]humbs.db
+Thumbs.db
+Desktop.ini
+*.DS_Store
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
 *.aux
 *.bbl
 *.blg
@@ -43,5 +52,3 @@
 /*.texlipse
 /*.pdf
 /.settings
-
-*.*~
