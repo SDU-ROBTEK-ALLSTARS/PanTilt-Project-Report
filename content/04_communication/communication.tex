@@ -41,9 +41,12 @@ For the main hardware components to be able to communicate, some kind of network
 % Data from "`controller"': 2 Byte signed PWM value, lock h-bridge, reset encoder pos
 % Data from "`joint/plant"': ack last package, ack encoder reset, 2 byte signed position
 
+% Error detection
+% Room for extending protocol
+
 \subsection{Protocol design}
 % Each frame is 9 bit. 8 bit data and escape bit. The escape bit is only high in the beginnign of each transmission.
-% Texas Instruments Synchronous Serial Frame Format is used
+% Freescale, because of the SSIFss high period to syncronize frames.
 
 \subsection{Protocol ARM implementation}
 \subsection{Protocol FPGA implementation}
