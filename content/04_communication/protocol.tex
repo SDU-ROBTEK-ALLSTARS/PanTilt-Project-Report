@@ -1,0 +1,36 @@
+\section{Low level protocol specification}
+In \marginnote{Not sure about the exact placement of each part of section. Let's talk about that some day!}[-25pt] the assignment proposal it is given that the communication interface between the FPGA and LM3S6965 microcontroller must be SPI. There are no formal SPI protocol standards however, so it must be decided how the link will work. The Stellaris SSI\footnote{Synchronous Serial Interface} module supports three different interfaces: Freescale SPI, MICROWIRE and Texas Instruments SSI. The main difference between these three formats is how they handle each individual serial frame.
+
+The Freescale SPI mode of operation is chosen, as it enables full-duplex transmission (which MICROWIRE does not) and because of the way the select signal (\texttt{SSIFss}) works in this mode. Using the Freescale frame format, the \texttt{SSIFss} is high while the communication line is idle. \marginnote{This calls for an illustration} It is then pulled low while sending a frame. Pulling it low thus signifies the beginning of a frame, and pulling it high tells the slave that the frame is at its end. The Texas Instruments SSI format works by instead pulsing its \texttt{SSIFss} signal for only one \texttt{SSIClk} period to signify the beginning and ending of a frame. This is deemed more error prone as there is no time in-between frames to synchronize. Freescale SPI has one \texttt{SSIClk} period in-between frames, where \texttt{SSIFss} gets pulled high, allowing the slave a chance to "catch up".\nomenclature{SSI}{Synchronous Serial Interface}
+
+The LM3S6965 microcontroller will be operating as master and the FPGA as slave, letting the microcontroller when communication should take place.
+
+\section{High level protocol specification}
+Going \marginnote{I'm calling the "high" level frame \textit{a packet} to avoid confusion with the 16 bit frame} up one abstraction level, the format of communication packets between the microcontroller and FPGA will now be described. According to the LM3S6965 data sheet the receive and transmit FIFO buffers are both 16 bits wide and 8 locations deep. Since the maximum frame size on the low, hardware-near level can range from 4 to 16 bits in size, the buffer width makes good sense. Because of the 8 location depth of the buffer, it is decided to use a 16 byte long packet size (meaning the frame size will be 16 bits). This, in turn, also means the size of every data transmission will always be divisible by 16, and each packet will always be filling the buffer (unless, of course, it is emptied while transmitting).
+\nomenclature{FIFO}{First In, First Out}
+
+Each data packet will consist of a very short 1-byte header that will allow the master to specify what kind of data he wishes to receive. The slave can also fill in the header, when returning data, to enable verification of message type.
+
+\begin{verbatim}
+     "data link"-level packet format (units are BYTES):
+     ----------------------------------------------------------------
+     | reply- and message id | DATA (can be "dummy"-data) |   CRC   |
+     ----------------------------------------------------------------
+     |           0           |            1-13            |  14-15  |
+\end{verbatim}
+\marginnote{Todo: Make this a real table}[-50pt]
+
+A CRC checksum is attached to the end of every data packet to verify the validity of its content.
+
+\subsection{Todo}
+\begin{itemize}
+  \item CRC polynomial type.
+  \item Tests:
+  \begin{description}
+    \item [Error rate]. Does it even make sense to attach CRC checks?
+    \item [CRC calculation time] on MCU. Is it reasonable?
+    \item [Specify header] in greater detail.
+  \end{description}
+\end{itemize}
+
+% s. 473 datablad
