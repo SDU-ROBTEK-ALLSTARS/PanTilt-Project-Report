@@ -29,11 +29,25 @@ For the main hardware components to be able to communicate, some kind of network
 
 % Separate transmit and receive FIFOs, 16 bits wide, 8 locations deep
 
-\subsection{Inspiration for protocol}
+%\subsection{Inspiration for protocol}
 % ArcNet / PA10
 % CAN / DeviceNet
 % ADNS9500 Mouse sensor, EMU sensor
 % - What is it used for, and why is it interesting to look at?
+%The first approach for designing the SPI protocol was to look for  
+
+\subsection{Protocol ideas}
+During the design of the protocol three approaches were considered. These three approaches and the final protocol solution are described below.
+
+\subsubsection{Specialised protocol}
+The first approach was to design the protocol to carry just the information that needs to be exchanged between the FPGA and ARM solutions. This idea had the advantage of a low overhead on the protocol and thereby a minimal need for resources on the platforms. This idea was discarded, because a change in the data would require a redesign of the protocol.
+
+\subsubsection{Memory synchronisation protocol}
+Another approach to the protocol design is to make a protocol to synchronise a static sized memory between the two platforms. The idea was to take advantage of the 16bit x 8 FIFO on the ARM platform, so one package would fit exactly into it. The advantage would be that the ARM platform only needs to be interrupted when the FIFO it full. A similar solution would then be written in hardware to the FPGA, making this solution quite efficient.
+[yED image]
+
+\subsubsection{Generic protocol}
+
 
 \subsection{Concept}
 % Just a .h file for the ARM (Looks like a blackbox)
