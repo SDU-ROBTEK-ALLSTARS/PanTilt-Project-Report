@@ -6,7 +6,7 @@
 \usepackage{graphicx} %support the \includegraphics command and options
 \usepackage{fancyhdr} % Headers/footers (should be set AFTER setting up the page geometry and before hyperref)
 \usepackage{color}
-%\usepackage{eso-pic} %background pictures
+\usepackage{eso-pic} %background pictures
 \usepackage[latin1]{inputenc}
 \IfFileExists{inconsolata.sty}{% Use inconsolata as mono type if available
   \usepackage{inconsolata}%
@@ -24,12 +24,12 @@
 \usepackage{subfig} %make it possible to include more than one captioned figure/table in a single float
 \usepackage{float} %float positioning etc
 \usepackage{amsmath,amsfonts,amssymb,amsthm} %AMS' packages for symbols, theorems etc.
-%\usepackage{xfrac} %for slash fractions
-\usepackage{wrapfig}
+\usepackage{xfrac} %for slash fractions
+%\usepackage{wrapfig}
 \usepackage{multicol}
 \usepackage{footnote}
 \usepackage{perpage}
-\usepackage{ctable}
+%\usepackage{ctable}
 \usepackage[intoc]{nomencl} %for abbreviations list
 \usepackage{listings} %for source code listings
 \usepackage{marginnote} %Margin notes - use \marginnote{}
@@ -97,22 +97,22 @@
 
 % hyperref package settings
 \hypersetup{
-    unicode=true,          % non-Latin characters in Acrobat’s bookmarks
-    pdftoolbar=true,        % show Acrobat’s toolbar?
-    pdfmenubar=true,        % show Acrobat’s menu?
-    pdffitwindow=false,     % window fit to page when opened
-    pdfstartview={FitH},    % fit page to the window Horizontal/Vertical
-    pdftitle={TITLE},    % title
-    pdfauthor={Alexander Adelholm Brandbyge, Frederik Hagelskjær, Rudi Hansen, Leon Bonde Larsen, Kent Stark Olsen, Kim Lindberg Schwaner},% author
-    pdfsubject={SUBJECT},   % subject of the document
-    pdfkeywords={wordone} {wordtwo} {SDU}, % list of keywords
-    pdfnewwindow=true,      % links in new window
-    colorlinks=false,       % false: boxed links; true: colored links
-    linkcolor=red,          % color of internal links
-    citecolor=green,        % color of links to bibliography
-    filecolor=magenta,      % color of file links
-    urlcolor=cyan,           % color of external links
-    plainpages=false
+  unicode=true,          % non-Latin characters in Acrobat’s bookmarks
+  pdftoolbar=true,        % show Acrobat’s toolbar?
+  pdfmenubar=true,        % show Acrobat’s menu?
+  pdffitwindow=false,     % window fit to page when opened
+  pdfstartview={FitH},    % fit page to the window Horizontal/Vertical
+  pdftitle={TITLE},    % title
+  pdfauthor={Alexander Adelholm Brandbyge, Frederik Hagelskjær, Rudi Hansen, Leon Bonde Larsen, Kent Stark Olsen, Kim Lindberg Schwaner},% author
+  pdfsubject={SUBJECT},   % subject of the document
+  pdfkeywords={wordone} {wordtwo} {SDU}, % list of keywords
+  pdfnewwindow=true,      % links in new window
+  colorlinks=false,       % false: boxed links; true: colored links
+  linkcolor=red,          % color of internal links
+  citecolor=green,        % color of links to bibliography
+  filecolor=magenta,      % color of file links
+  urlcolor=cyan,           % color of external links
+  plainpages=false
 }
 
 % Headers and footers
@@ -181,7 +181,7 @@
 %
 %  * Pass this line to MakeIndex:
 %    %bm.nlo -s nomencl.ist -o %bm.nls
-
+%
 %  * Use \nomenclature{abbr}{discriptive text} to add an entry to the
 %    abbreviations list (best done where the abbreviation first occurs in the text)
 %  * Example:
