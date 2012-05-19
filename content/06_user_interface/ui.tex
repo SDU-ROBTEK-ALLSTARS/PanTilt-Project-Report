@@ -1,23 +1,57 @@
 \chapter{User interface}\label{chap:ui}
-Considerations for building a user interface for a pan tilt system.
 
-Platform The user interface (here after UI) must be implemented on a
-demonstration board for the stellaris L3S696 (here after EMP board)
+\section{UI}
+This chapter concerns building an application provideing a user interface to the
+pan-tilt system. The application runs on the ARM Cortex M3 based EMP-board
+(Reference ???)
 
-Functionality The UI must allow the user to see a numerical expression of the
-position of the system. The user must also be able to set the wanted position of
-the system, either by entering the wanted values, or by recording multiple
-positions and shifting between them. It could also be considered making a simple
-solution where the digiswitch and potmeter controls for setting the parameters
-respectively, giving the user a kind of realtime control.
+\subsection{Requirements}
+Functionality The UI must allow the user to see a numerical expression
+describing the position of the system. The user must also be able to set the
+wanted position of the system, either by entering the wanted values, or by
+recording multiple positions and shifting between them.
 
-The main application for the UI will be in testing the pan-tilt system. It is
-expected that collection and processing of data will be the responsibility of
-the UI. Like in any testing it is not definite what numbers and values are
+It should also be considered making a simple solution where the potmeter
+controls the pan and th digiswitch controls the tilt to provide some kind of
+realtime control.
+
+The main application for the UI will be in testing the pan-tilt system.
+Therefore a logging system must be built to provide data for sthe development
+and testing of the system. It is not definite what numbers and values are
 interesting, so a versatile and easily adaptable system is required.
 
-Users Though the system will be used mainly by people with som programming
-experience, it must provide a user friendly way of working with the system code.
+Though the system will be used mainly by people with some programming
+experience, it must provide an easy way of working with the system code.
 During testing there should be little focus on configuring and deep knowledge of
 the source code should not be required.
 
+\subsection{Discussion}
+The EMP-board provides several channels for outputting data to the user. One is
+by communication to a computer terminal. This is a good way of displaying large
+amount of data, but should be kept in simple ASCII based text format. It is
+imortant to provide a simple interface so output can be easily changed.
+
+Another output channel is the two displays. Since focus is on displaying facts
+rather than graphics, the small LCD display should not be used. Since the 16x2
+is limited to displaying 32 characters at any time, it is necessary to implemet
+some form of menu system.
+ 
+The EMP board also provides a number of inputs. There are several buttons, but
+given the easy to use requirements the use of buttons is avoided. That leaves
+the digiswitch as the main input to control the menus and the potentiometer as a
+secondary input.
+
+The entire system should be seen as a big state machine controlling smaller
+state machines so spltting the system into smaller controllable parts should be
+considered
+
+\subsection{Implementation}
+Implementing a menu based state machine can be split into two parts. One
+concerns the user navigating the menus and the other concerns having the menus
+control the rest of the system.
+
+Two ways: atomic system with many tasks blocking on queues or central task
+executing functionality based on state of the system.
+
+pros and cons: atomic system has overhead due to many tasks and many queues.
+central system polling on data leads to inefficient use of CPU.
