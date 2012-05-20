@@ -1,1 +1,23 @@
 \chapter{User interface}\label{chap:ui}
+Considerations for building a user interface for a pan tilt system.
+
+Platform The user interface (here after UI) must be implemented on a
+demonstration board for the stellaris L3S696 (here after EMP board)
+
+Functionality The UI must allow the user to see a numerical expression of the
+position of the system. The user must also be able to set the wanted position of
+the system, either by entering the wanted values, or by recording multiple
+positions and shifting between them. It could also be considered making a simple
+solution where the digiswitch and potmeter controls for setting the parameters
+respectively, giving the user a kind of realtime control.
+
+The main application for the UI will be in testing the pan-tilt system. It is
+expected that collection and processing of data will be the responsibility of
+the UI. Like in any testing it is not definite what numbers and values are
+interesting, so a versatile and easily adaptable system is required.
+
+Users Though the system will be used mainly by people with som programming
+experience, it must provide a user friendly way of working with the system code.
+During testing there should be little focus on configuring and deep knowledge of
+the source code should not be required.
+
