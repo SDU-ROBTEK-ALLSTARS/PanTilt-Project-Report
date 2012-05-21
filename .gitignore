@@ -14,6 +14,7 @@ Desktop.ini
 
 *.aux
 *.bbl
+*.bcf
 *.blg
 *.dvi
 *.fdb_latexmk

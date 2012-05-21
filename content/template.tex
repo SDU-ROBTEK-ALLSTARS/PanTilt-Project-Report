@@ -52,11 +52,10 @@ api->servicePort('1',myPort1);
 \subsection{Example figure}
 
 \begin{figure}[htb]
-	\begin{center}
+	\centering
 	\includegraphics[scale=1,trim=0 0 0 0]{content/00_frontmatter/sdu_logo.pdf} %trim=l b r t (can cut off from every side)
 	\caption{SDU logo}
 	\label{fig:sdu_logo_xx}			% figure labels are of the form \label{fig:*}
-	\end{center}
 \end{figure}
 
 
@@ -66,21 +65,18 @@ api->servicePort('1',myPort1);
 
 \subsection{Example equations}
 
-Ved hjælp af Laplacetransformation ønskes det at løse differentialligningen
-
 \begin{equation}						% one-line equation
 	y''(t)+2y'(t)-3y(t)=2t
 	\label{eq:opg1}
 \end{equation}
 
-med begyndelsesbetingelserne
+
 \begin{align}								% equation on several lines, aligned where the &-sign is
 	y(0)&=1\notag\\						% notag means this line is not numbered
 	y'(0)&=2
 	\label{eq:opg1_beting}		% equation labels are of the form \label{eq:*}
 \end{align}
 
-Første trin er, at finde Laplacetransformationen til hvert led i differentialligningen.
 \begin{equation}
 	\boxed
 	{
@@ -89,7 +85,6 @@ Første trin er, at finde Laplacetransformationen til hvert led i differentiallig
 	\label{eq:opg1_lapl_difflign}
 \end{equation}
 
-Laplacetransformationen til den $n$'te afledte af en funktion $f$ er givet\footcite[228]{kreyzig} i \eqref{eq:opg1_lapl_difflign}. Laplacetransformationen af $2t$ er givet i tabellen\footcite[224]{kreyzig} over funktioner og deres Laplacetransformeringer.
 																	% \footcite[224]{kreyzig} = Reference to kreyzig side 224 in a footnote
 																	% \eqref{} = Reference to an equation (or \align)
 
