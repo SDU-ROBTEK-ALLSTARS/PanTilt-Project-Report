@@ -1,1 +1,10 @@
 \chapter*{Abstract}\addcontentsline{toc}{chapter}{Abstract}
+
+The purpose of this project is to create a pan-tilt device, which position is to be regulated. A model of the pan-tilt system will be developed and a regulation system will be created for it. The device is moved by two dc motors, which are controlled by a FPGA, which also tracks speed and position. The system is regulated by an ARM microprocessor and the ARM is also taking care of the user interface. The ARM is programmed in C and a FreeRTOS OS is running on the system. The two units are communicating by a SPI connection. The team decided to divide the project into small independent modules. This will result in a high cohesion which will make modifications much easier to implement and earlier developed modules can be reused in the development, debugging and testing of other modules.
+
+This report will include the analyses and solutions to the challenges that the individual modules will create.
+
+Lidt ekstra der skal tilføjes
+
+The user interface will be developed in intent of showing the systems capabilities in regulating the pan-tilts position.
+The FPGA is a Spartan3E which will be programmed in VHDL. 
