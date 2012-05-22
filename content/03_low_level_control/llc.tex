@@ -4,8 +4,6 @@
 
 
 REWREITE!!!
-
-
 The low level control is all implemented on a Digilent Nexys 2 test kit, featuring a spartan 3 fpga from Xilinx.
 Architecturally, it is split in two nearly independent systems, one being the SPI driver and the other being the motor control.
 They communicate through a shared RAM (uddyb type) block, but functions otherwise completely independant of each other.
@@ -195,6 +193,7 @@ In both cases smoothing of the result can be needed. By using a running average 
 In the final application, there is no velocity estimator, since it is not needed in the chosen regulation method, however the two mentioned measurement methods are included in the codebase for completeness sake.
 
 
-\subsection{Watchdog}
+\section{Watchdog}
 Since all control commands are buffered in the ram until updated again, the fpga has no way of knowing if the SPI link has been lost, either because of the ARM processor crashing, or cable failure etc. This means that in case the case of the link being lost, it will continue going if any velocity command has been issued before the connection died. To correct this problem, a watchdog is implemented. It outputs an enable signal as long as there is a link between the fpga and ARM. 
 To detect the link presence, two registers in the control register are constantly incremented, and the watchdog keeps a watch on them, should they fail to change within a set time, the watchdog will stop all motor activity.
+The watchdog module is not included in the final application due to time constraints.

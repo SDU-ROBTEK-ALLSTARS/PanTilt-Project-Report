@@ -1,0 +1,69 @@
+\chapter{LLC testing}
+Each subsytem in the low level control section is encapsulated in a seperate module.
+Each module is tested seperately before being assembled in the main memory interface block, and this chapter will deal with the individual module tests, as well as the final test.
+The test consists of a testbench file and an associated evaluation.
+
+\section{PWM generator}
+Range:                  PWM Generator (PWMv1.vhd)
+Testbench: 				pwmtester.vhd
+Search area:            Can a duty cycle be set, and will it produce a corresponding correct output?
+						If the input is all zero or max value, will the module output dc ?
+Expectations:           The expectations are that all of the above will work.
+Result:                 It worked
+Conclusion:             The FPGA can control the motor. 
+
+\section{Signed to magnitude}
+Range:                  Signed int to magnitude and sign splitter (SignedToMagnitude.vhd)
+Testbench: 				signtest.vhd
+Search area:            Every possible(18 bit) integer is input, and the output is examined.
+Expectations:           That the magnitude of the number is on the output pins, as well as the sign.
+Result:                 The correct results for all integers, except for the most negative, which was truncated to maximum magnitude.
+Conclusion:             The splitter works as intended, and can be used to direct the duty cycle input. 
+
+\section{Controlblock}
+Range:                  Top motor control module(ControlBlockTop.vhd)
+Testbench: 				motor\_control\_block\_test.vhd
+Search area:            Can the module generate a PWM signal based on a signed integer, switch to freerun and brake ?
+Expectations:           It is expected that the module works as described.
+Result:                 The module works
+Conclusion:             The pan/tilt system can be convieniently controlled by a signed integer and a control bit.
+
+\section{Input filter}
+Range:                  Input filter(Hysteresis.vhd)
+Testbench: 				inputfiltertest.vhd
+Search area:            Does the input filter, filter out high frequency noise.
+Expectations:           It filters out noise and the signal had a slight delay.
+Result:                 Noise was removed and the signal was delayed by a couple of nano seconds.
+Conclusion:             Disturbances was removed from the signal reliably, and the signal can be used as decoder input.
+
+\section{Quadrature decoder}
+Range:                  Quadrature decoder module (FourXDecoderV2.vhd)
+Testbench: 				decoder\_v2\_testb.vhd
+Search area:            Can the decoder correctly keep track of a position, when a pule train is applied to the inputs.	
+Expectations:           The decoder counts up/down with the given input signal.
+Result:                 The decoder counted correctly.
+Conclusion:             The decoder can be used to keep track of the pan/tilt position.
+
+\section{Velocity estimator using secant method}
+Range:                  Velocity approximations(dxdt)
+Testbench: 				velocity\_test\_secant.vhd
+Search area:            (What is examined?)	
+Expectations:           (What results are expected?)
+Result:                 (What results were received?)
+Conclusion:             (What significance do these results have?)
+
+\section{velocity estimator avg}
+Range:                  Velocity approximations(dvdtv2)
+Testbench: 				velocity\_test\_avg.vhd
+Search area:            Can the velocity estimator \"guess\" the velocity, when applied a changing position.
+Expectations:           A reasonable velocity.
+Result:                 Garbage output.
+Conclusion:             It would have been nice if this module worked, but it is not strictly needed and therefore it does not matter that it did not work.
+
+\section{Watchdog}
+Range:                  (Which system part is tested?) module file
+Testbench: 				watchdog\_test.vhd
+Search area:            Can the velocity estimator \"guess\" the velocity, when applied a changing position.	
+Expectations:           A reasonable velocity.
+Result:                 Garbage output.
+Conclusion:             It would have been nice if this module worked, but it is not strictly needed and therefore it does not matter that it did not work.
