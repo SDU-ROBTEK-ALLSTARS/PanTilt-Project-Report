@@ -1,0 +1,161 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      5186,        151]
+NotebookOptionsPosition[      4835,        134]
+NotebookOutlinePosition[      5178,        149]
+CellTagsIndexPosition[      5135,        146]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.546360333811782*^9, 3.5463603391480875`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ListLinePlot", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"2", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"2", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"3", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"4", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"4", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"5", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"6", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"6", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"7", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"8", ",", "0"}], "}"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"2", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"3", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"3", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"4", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"5", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"5", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"6", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"7", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"7", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"8", ",", "1"}], "}"}]}], "}"}]}], "}"}], ",", 
+    RowBox[{"Filling", "\[Rule]", " ", "Axis"}], ",", 
+    RowBox[{"PlotStyle", "\[Rule]", " ", "Thick"}], ",", 
+    RowBox[{"AspectRatio", "\[Rule]", "0.2"}], ",", 
+    RowBox[{"AxesLabel", "\[Rule]", " ", 
+     RowBox[{"{", 
+      RowBox[{"Rotation", ",", "Output"}], "}"}]}]}], "]"}], 
+  "\[IndentingNewLine]"}]], "Input",
+ CellChangeTimes->{{3.5463603851527185`*^9, 3.5463603973944187`*^9}, {
+   3.5463604513965073`*^9, 3.5463606447815685`*^9}, {3.5463607984193563`*^9, 
+   3.546361050022747*^9}, {3.546361086127812*^9, 3.5463610996505857`*^9}, {
+   3.5463611322864523`*^9, 3.546361137373743*^9}, {3.5463611755589275`*^9, 
+   3.5463611761209593`*^9}, {3.546361246343976*^9, 3.546361265103049*^9}, 
+   3.5463612968078623`*^9, 3.546361427317327*^9, {3.5463614662795553`*^9, 
+   3.5463614803783617`*^9}, {3.5463615180825186`*^9, 3.546361588720559*^9}, {
+   3.5463617027600813`*^9, 3.5463617418463173`*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[GraphicsComplexBox[CompressedData["
+1:eJxTTMoPSmViYGCQAWIQjQo+2GOnGRyw82GAA40vgIMP0y+CxpfAwYcBGTS+
+AhofBnC5H+5uGEDTj+5+GB+mj5D7YXwYIOR+GB+mXwGNjw5w+ZeBAQDzDRt6
+
+   "], {{{}, 
+     {Hue[0.67, 0.6, 0.6], Opacity[0.2], EdgeForm[None], 
+      GraphicsGroupBox[PolygonBox[{{6, 10, 9, 8, 7}, {1, 28, 4, 3, 2}}]]}, {}, 
+     {Hue[0.9060679774997897, 0.6, 0.6], Opacity[0.2], EdgeForm[None], 
+      GraphicsGroupBox[{PolygonBox[{{23, 27, 25, 24}, {13, 26, 15, 14}}], 
+        PolygonBox[{{17, 21, 20, 19, 
+         18}}]}]}, {}, {}, {}, {}, {}, {}}, {{}, {}, 
+     {Hue[0.67, 0.6, 0.6], Thickness[Large], 
+      LineBox[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}]}, 
+     {Hue[0.9060679774997897, 0.6, 0.6], Thickness[Large], 
+      LineBox[{13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25}]}}}],
+  AspectRatio->0.2,
+  Axes->True,
+  AxesLabel->{
+    FormBox["Rotation", TraditionalForm], 
+    FormBox["Output", TraditionalForm]},
+  AxesOrigin->{0, 0},
+  ImageSize->{649., Automatic},
+  PlotRange->{{0., 8.}, {0., 1.}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{
+    Scaled[0.02], 
+    Scaled[0.02]}]], "Output",
+ CellChangeTimes->{
+  3.546361428295383*^9, {3.5463614676546345`*^9, 3.5463614807383823`*^9}, {
+   3.5463615319273105`*^9, 3.5463615798920536`*^9}, 3.5463617213171425`*^9}]
+}, Open  ]]
+},
+WindowSize->{1358, 652},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"8.0 for Microsoft Windows (64-bit) (November 7, 2010)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 94, 1, 31, "Input"],
+Cell[CellGroupData[{
+Cell[676, 25, 2831, 74, 92, "Input"],
+Cell[3510, 101, 1309, 30, 167, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
