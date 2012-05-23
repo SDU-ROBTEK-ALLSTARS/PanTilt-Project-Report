@@ -1,7 +1,31 @@
 \chapter{Dynamics}\label{chap:dynamics}
-This chapter will contain an analysis of the dynamics of the pan/tilt system which will result in a mathematical model. Calculations made throughout this chapter will reside in appendix \ref{app:dynamics_calc}. Identifying and understanding the relevant dynamics of a system is important as this will lead to an as accurate theoretical model as needed for the application. Ideally a perfect model would somewhat be preferred, but it would be a very difficult and tedious task to derive a perfect model and completely unnecessary to achieve. The reason for that is some of the dynamics are completely insignificant to the behaviour of the system, some other might have a little impact on the behaviour but can be omitted due to more dominating dynamic. The response of electrical circuits are often much quicker than the response of a mechanical system. This response delay is encoded into the poles of a system, which makes the poles of the system very interesting to analyse. The poles of the system tell if it is stable, and if any dynamic in the system possibly can be omitted due to its relatively fast response compared to the rest of the system which acts slower.
+This chapter will contain an analysis of the dynamics of the pan/tilt system which will result in a mathematical model. Calculations made throughout this chapter will reside in appendix \ref{app:dynamics_calc}. Identifying and understanding the relevant dynamics of a system is important as this will lead to an as accurate theoretical model as needed for the application. Ideally a perfect model would somewhat be preferred, but it would be a very difficult and tedious task to derive a perfect model and completely unnecessary to achieve. The reason for that is some of the dynamics are completely insignificant to the behaviour of the system, some others might have a little impact on the behaviour but can be omitted due to more dominating dynamic. The response of electrical circuits are often much quicker than the response of a mechanical system. This response delay is encoded into the poles of a system, which makes the poles of the system very interesting to analyse. The poles of the system tell if it is stable, and if any dynamic in the system possibly can be omitted due to its relatively fast response compared to the rest of the system which acts slower.
 
-%Every system can be constructed of first order systems and second order systems in a cascade. These two types of systems defines a time constant. For first order systems this time constant is hidden in the zeroth order term and in second order systems it is hidden in the first order term. The time constant defines $ 1 - \sfrac{1}{e} \approx 63.2% $ of its energy level. 
+Every system can be constructed of first order systems and second order systems in a cascade. These two types of systems defines a time constant. For first order systems this time constant is hidden in the zeroth order term and in second order systems it is hidden in the first order term. From a physical point of view the time constant defines the point in time where the system reaches $1 - \sfrac{1}{e} \approx 63.2\%$ of its final energy state, below in figure \ref{fig:energy_systems} is illustrated a step response on a first and a second order system.
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[scale=1,trim=0 0 0 0]{graphics/energy_systems.pdf} %trim=l b r t (can cut off from every side)
+	\caption{(a) Illustrates the step response of a first order system. (b) Illustrates a step response of a second order system. Both will raise in time and reach some asymptotic value provided that the systems are stable, $\tau$ denotes the time constant.}
+	\label{fig:energy_systems}			% figure labels are of the form \label{fig:*}
+	\end{center}
+\end{figure}
+In figure \ref{fig:energy_systems}(b), notice the transient which seems more inert compared to (a). This is due to some mass in the system if the second order differential equation which represents the system is a mechanical equation. The transient response of a system is encoded into the poles of the system, which is defined by the time constant the following way:
+\begin{equation}
+	\tau = \frac{1}{\zeta\omega_{n}}\label{eq:time_constant}
+\end{equation}
+where $\zeta$ is the dampening ratio and $\omega_{n}$ is the undampened natural frequency, this relates to the poles as seen in figure \ref{fig:s_plane}.
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[scale=1,trim=0 0 0 0]{graphics/splane.pdf} %trim=l b r t (can cut off from every side)
+	\caption{This figure illustrates a pole in the s-plane and the relation between poles and time constants.}
+	\label{fig:s_plane}			% figure labels are of the form \label{fig:*}
+	\end{center}
+\end{figure}
+In figure \ref{fig:s_plane} the real part of the pole is given by $Re(p) = - \zeta\omega_{n} = - \omega_{n} \cos(\varphi)$ and the imaginary part is given by $Im(p) = j\omega_{n}\sqrt{1 - \zeta^{2}} = j\omega_{n}\sin(\varphi)$. Considering equation \ref{eq:time_constant} and figure \ref{fig:s_plane} it is easy to see that real part of a pole directly relates to the time constant. Systems with one pole can therefore have their time constant calculated from the poles real part. Systems consisting of more than one pole can have their time constant calculated from the super positioning the poles real part. Below is shown an example.
+\begin{equation}
+	\tau = \frac{1}{Re(p_{1})} + \frac{1}{Re(p_{2})} + \frac{1}{Re(p_{3})} + ...\label{eq:time_constant}
+\end{equation}
+As the time constant is defined as the reciprocal of the real part of the pole, then poles far away from the imaginary axis will not add that much to the total time constant as poles located near the imaginary axis. Therefore can the following be concluded, \textit{faster} poles in a system compared to \textit{slower} poles can be omitted from the model of the system.
 
 \section{Overview of pan/tilt}
 The following will give an overview of the physical aspects of the pan/tilt system and also define the mathematics which is tied to the system. The pan/tilt is assembled from two motors, a set of gears connected to each motor. Each motor can rotate a mass individually by transferring torque from the motors, through the gears, to the masses which are connected to the gears. A model of the motors are needed, along with a model of the reflected inertia through the gears, and other dynamics might be relevant to, but are discussed later in this section.
@@ -39,20 +63,72 @@ To derive $\frac{di}{dt}$ the time derivative is taken of \ref{eq:electrical_mec
 \end{equation}
 Now \ref{eq:electrical_mechanical_torque} and \ref{eq:electrical_mechanical_torque_derivative} can be substituted into \ref{eq:motor_model} in which the following is obtained:
 \begin{equation}
-	u = \frac{L J_L}{K_T} \frac{d^{2}\omega}{dt^{2}} + \frac{R J_L}{K_T} \frac{d\omega}{dt} + K_B \omega
+	u = \frac{L J_L}{K_T} \frac{d^{2}\omega}{dt^{2}} + \frac{R J_L}{K_T} \frac{d\omega}{dt} + K_B \omega\label{eq:model_model}
 \end{equation}
-%An expression for torque is needed, so the above equation is rewritten with respect to \ref{eq:mechanical_torque} which subsequently leads to:
-%\begin{equation}
-%	J_L \frac{d\omega}{dt} = \frac{K_T}{R} u - \frac{L J_L}{R} \frac{d^{2}\omega}{dt^{2}} - \frac{K_B K_T}{R} \omega\label{eq:torque_motor_model}
-%\end{equation}
 
 Stiction, coulomb and viscous friction are omitted as it is assumed that the inertia from the internal friction of the motor is a lot less than the inertia from the mass, so this concludes the model of the motor.
 
 \subsection{Gears}
-The gears does not add to the dynamics of the system but changes the existing poles of the existing system. Calculations for reflected inertia is kept in \ref{app:dynamics_calc}. 
+The gears between the mass to be rotated and the motor of the system reflect the actual inertia of the mass onto the motor. Calculations for the reflected inertia is kept in appendix \ref{app:dynamics_calc}.
   
-\subsection{Precession}
+\subsection{Torque-induced precession}
+When a body rotates around an axis the phenomenon of precession occurs. The torque-induced precession occurs when a body accelerates around an axis a torque is induced perpendicular to the axis of rotation. In figure \ref{fig:precession} a sketch of this situation is shown.
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[scale=1,trim=0 0 0 0]{graphics/precession.pdf} %trim=l b r t (can cut off from every side)
+	\caption{Show the concept of of the torque-induced precession.}
+	\label{fig:precession}			% figure labels are of the form \label{fig:*}
+	\end{center}
+\end{figure}
+This torque is given by:
+\begin{equation}
+	\tau = I\alpha\label{eq:induced_torque}
+\end{equation}
+where $\tau$ is the torque, I is the inertia of the body rotating and $\alpha$ is the angle acceleration the body is affect by. An example is that if the tilt part of the system is accelerating up to some velocity, a torque will be applied to the pan part of the system, this torque is acting perpendicular to the rotation causing the pan to rotate as long as the motor for the tilt part is accelerating. To investigate the impact of the torque-induced precession, equation \ref{eq:motor_model} and \ref{eq:induced_torque} have to be related to each other. As equation \ref{eq:induced_torque} is expressed as torque, equation \ref{eq:motor_model} is rewritten with respect to torque, equation \ref{eq:mechanical_torque}.
+\begin{equation}
+	J_L \frac{d\omega}{dt} = \frac{K_T}{R} u - \frac{L J_L}{R} \frac{d^{2}\omega}{dt^{2}} - \frac{K_B K_T}{R} \omega\label{eq:torque_motor_model}
+\end{equation}
+then equation \ref{eq:induced_torque} is subtracted from the total torque \ref{eq:torque_motor_model} as follows:
+\begin{equation}
+	J_L \frac{d\omega_{1}}{dt} = \frac{K_T}{R} u - \frac{L J_L}{R} \frac{d^{2}\omega_{1}}{dt^{2}} - \frac{K_B K_T}{R} \omega_{1} - I \frac{d\omega_{2}}{dt}\label{eq:coupled_torque_motor_model}
+\end{equation}
+where $\omega_1$ for example is the velocity of the pan and $\omega_2$ is the velocity of the tilt. 
 
-\subsection{Omitted dynamic}
+\section{Finding parameters}
+The following will contain a brief discussion on how the parameters was found. To obtain the parameters for the model some measurements where made on tilt part of the system, these measurements and the Matlab script which was used for analysing the data is located on the CD. The measurements that where produced is expressed in position $[ticks]$ against time $[ms]$. All the previous equations are dependent of the velocity of the system, so the measurements have to be differentiated with respect to time, this is done by a numerical method called the secant method\footnote{NR ref}, the differentiated result is plotted and shown in figure \ref{fig:measured_step_tilt}.
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[scale=1,trim=0 0 0 0]{graphics/measured_step_tilt.pdf} %trim=l b r t (can cut off from every side)
+	\caption{This graph show the actual velocity of the tilt part of the system. The horizontal axis show time in seconds. The vertical axis show angular velocity in radians per second.}
+	\label{fig:measured_step_tilt}			% figure labels are of the form \label{fig:*}
+	\end{center}
+\end{figure}
+If a mean is calculated from the steady-state part of the graph $22.57 \sfrac{rad}{s}$ is obtained, and compared to the data sheet of the motor which says the rated speed is $22.62 \sfrac{rad}{s}$, the data from the graph represented in figure \ref{fig:measured_step_tilt} is assumed to be correct. Next a set of equations are formed from equation \ref{eq:model_model}, the input is set to zero and rewritten as follows:
+\begin{equation}
+	\frac{d^{2}\omega}{dt^{2}} = - \frac{R}{L} \frac{d\omega}{dt} - \frac{K_B K_T}{L J_L} \omega
+\end{equation}
+where $\frac{d^{2}\omega}{dt^{2}}$, $\frac{d\omega}{dt}$, and $\omega$ is known, this is due to that these can be calculated with numerical analysis, so the constants $\frac{R}{L}$ and $\frac{K_B K_T}{L J_L}$ can be found. $R$ and $J_L$ is also known and $K_B = K_T$. Matlab have been used for calculating the set of equations $\textbf{Ax} = \textbf{b}$, so that the rest of the unknowns can be found. Check Matlab script located on the CD to see further details about how the set of equations where formed.
 
-\section{State space}
+\subsection{Verification}
+Previous experiments and calculations have shown that $R = 5.124\Omega$, $L = 38.4mH$ and $K_B = K_T = 35.1 \sfrac{mV}{\dfrac{rad}{s}}$. Through the Matlab script included on the CD, $\frac{R}{L}$ and $\frac{K_B K_T}{L J_L}$ is found to be the following:
+\begin{equation}
+	\frac{R}{L} = 791.7 \Rightarrow L = \frac{5.124}{791.7} \approx 6.471mH
+\end{equation}
+\begin{equation}
+	\frac{K_B K_T}{L J_L} = 25.63\label{eq:constants}
+\end{equation}
+According to equation \ref{app:eq_reflected_pan_inertia}, $J_L = 0.970 \cdot 10^{-3} kg \cdot m^{2}$ which is the reflected inertia of the tilt part through the gears, $L = 6.471mH$, and $K_B = K_T$. Now $K_B$ and $K_T$ can be calculated the following way:
+\begin{equation}
+	K_B = K_T = \sqrt{25.63 \cdot L \cdot J_L} \Rightarrow K_B = K_T = \sqrt{25.63 \cdot L \cdot J_L} \approx 401.1 \frac{mV}{\sfrac{rad}{s}}
+\end{equation}
+Compared to the values found in previous experiments the values found here does not match, so which parameters to use? This can be answered by looking at a pole-zero plot of the system and the open-loop response of the system. To set up the model a state-space representation is made of the system as follows below. The coupled system is set up with respect to equation \ref{eq:coupled_torque_motor_model}:
+
+\begin{array}{•}
+
+\end{array}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Kblet MODEL hEr og nu, men helst i går
+
+
+

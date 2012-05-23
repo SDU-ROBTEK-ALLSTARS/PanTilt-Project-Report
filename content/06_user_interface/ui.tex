@@ -1,23 +1,92 @@
 \chapter{User interface}\label{chap:ui}
-Considerations for building a user interface for a pan tilt system.
 
-Platform The user interface (here after UI) must be implemented on a
-demonstration board for the stellaris L3S696 (here after EMP board)
+\section{UI}
+This chapter concerns building an application providing a user interface to the
+pan-tilt system. The application runs on the ARM Cortex M3 based EMP-board
+(Reference ???)
 
-Functionality The UI must allow the user to see a numerical expression of the
-position of the system. The user must also be able to set the wanted position of
-the system, either by entering the wanted values, or by recording multiple
-positions and shifting between them. It could also be considered making a simple
-solution where the digiswitch and potmeter controls for setting the parameters
-respectively, giving the user a kind of realtime control.
+\subsection{Requirements}
+The UI must allow the user to see a numerical expression
+describing the position of the system. The user must also be able to set the
+wanted position of the system, either by entering the wanted values, or by
+recording multiple positions and shifting between them.
 
-The main application for the UI will be in testing the pan-tilt system. It is
-expected that collection and processing of data will be the responsibility of
-the UI. Like in any testing it is not definite what numbers and values are
+It should also be considered making a simple solution where the potmeter
+controls the pan and the digiswitch controls the tilt to provide some kind of
+realtime control.
+
+The main application for the UI will be in testing the pan-tilt system.
+Therefore a logging system must be built to provide data for the development
+and testing of the system. It is not definite which numbers and values are
 interesting, so a versatile and easily adaptable system is required.
 
-Users Though the system will be used mainly by people with som programming
-experience, it must provide a user friendly way of working with the system code.
-During testing there should be little focus on configuring and deep knowledge of
-the source code should not be required.
+Though the system will be used mainly by people with some programming
+experience, it must provide an easy way of configuring and altering the functionalities of the system. Since it is a faily complex system it should be separated and organized to ensure as little focus on programming as possible while configuring and testing the system.
+
+\subsection{Discussion}
+The EMP-board provides several channels for outputting data to the user. One is
+by communication to a computer terminal. This is a good way of displaying large
+amount of data, but should be kept in simple ASCII based text format. It is
+important to provide a simple interface so output can be easily changed.
+
+Another output channel is the two displays. Since focus is on displaying facts
+rather than graphics, the small LCD display should not be used. Since the 16x2
+is limited to displaying 32 characters at any time, it is necessary to implement
+some form of menu system.
+ 
+The EMP board also provides a number of inputs. There are several buttons, but
+given the easy to use requirements the use of buttons is avoided. That leaves
+the digiswitch as the main input to control the menus and the potentiometer as a
+secondary input.
+
+\subsection{Implementation}
+Implementing a menu based state machine can be split into two parts. One
+concerns the user navigating the menus and the other concerns having the menus or inputs to them
+control the rest of the system. 
+
+To make the system easy to reconfigure, the menus and their functionalities are based uponthe configuration file menu_setup.c. A menu concists of two lines of menu text and a number of fields to shuffle through using the dreh impuls geber. 
+
+The menu task has the responsibility of handling the systems inputs and outputs based on the rules given by the menu items. Normally it would be preferred to have the task block on a queue or a semaphore, but in this case since there are two types of input to be handled another approach is needed.  Input from the user and updated values from the SPI connection must both be handled by the menu task, but the updates come at fixed intervals at all times and the user inputs are events happening at random times.
+
+Normally it would be preferred to split the task into two sub tasks, each responsible for their own input and thus differently timed. If this approach was followed, the menu task would be split into an input handling task and an output handling task and the output task would run every time the parameters had been updated. 
+
+The reason for the frequent updates is to provide accurate data for the control algorithm, but there is no need to update the display this often. This is he reason for not dividing the menu task. Instead the task runs every five milliseconds, which is sufficient to service both inputs and outputs without the user noticing any delays. Some operating systems support blocking on multiple conditions, but this is not supported by FreeRTOS so on this system blocking on time is the best solution.
+
+The menu task first handles inputs from the dreh impuls geber and updates current menu based on this. It then checks whether any of the fields in the current menu takes input and handles theese updating relevant parameters. Then the display buffer is updated to contain the two lines provided by the current menu and data from any output fields are written to the buffer before yielding. The system state is held entirely in the menu item, thus reducing the menu task to a piece of sequential code.
+
+\section{Service tasks}
+The peripherals provided by the EMP board are each assigned a service task. Theese tasks are based on code developed during the EMP course though some changes had to be made in order to comply with a preemptive system. 
+
+\subsection{Dreh task}
+The dreh impuls geber also known as a digiswitch is an electrical component that outputs a pair of phase shifted pulse trains when turned. The pulses are used to determine the turning direction as well as the number of clicks. The rod on the dreh impuls geber can also be pushed and thus functions like any button.
+
+The driver software for the dreh impuls geber is based on a finite state machine shown in fig XXX. When run the task compares the current state of the three input pins with the saved states. If there are differences, it generates an event based on the pins.
+
+\subsection{Numpad task}
+
+\subsection{Lcd task}
+The lcd task 
+
+\subsection{Blink task}
+The blink task controls the blinking characters on the display. It runs every onehundred milliseconds and increases a counter. When the counter reaches a defined number, it toggles the blink state and resets the counter. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

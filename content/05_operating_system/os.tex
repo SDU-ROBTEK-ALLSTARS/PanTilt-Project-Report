@@ -1,6 +1,8 @@
 \chapter{Operating system}\label{chap:os}
 
 
+\marginnote{Frederik}
+
 In the project-description it is stated that a microprocessor shall run a user interface, a regulation system and a SPI communication with the FPGA. This system will require the microprocessor to run multiple tasks and thus an operating system is necessary. It has been decided to use the lent ARM microprocessor so the operating system has to be available for this system.
 
 The system has to run in real time to create a reliable environment for the regulation. Thus a RTOS have to be used.
@@ -41,3 +43,84 @@ Is there a possibility of
 Data corruption
 Deadlocks
 Priority inversion
+
+
+
+\section{Inter task communication}\marginnote{Leon}
+When multiple cooperating tasks run under the same system, some service must be
+provided for sharing information and data. There are two ways of doing this. One
+is to allow access to some shared memory and the other is to provide message
+passing mechanisms.
+
+The main difference between the to ways is that while message passing must be
+provided by the operating system, shared memory is entirely up to the programmer
+to control. In either case race conditions must be considered.
+
+Free RTOS provides queues and semaphores for inter task communication (Frederik
+uddyber\ldots)
+
+\subsection{Requirements}
+In the considered pan-tilt system there are several paths requiring inter task
+communication. By default the shared data must be protected by mutual exclusion
+though it might be considered if data has to be reliable at all times.
+
+ It must be taken into consideration that some of the time critical tasks needs
+ to access multiple parameters. For example the control task needs access to all
+ system parameters to calculate the control signals.
+ 
+ The inter task communication system should ensure low coupling to allow reuse
+ of sourcecode in other projects. It should also be considered, that the code
+ might run on other operating systems so the coupling to OS should also be kept
+ low.
+ 
+ Since multiple programmers will have to use the inter task communication
+ system, it should be considered to uphold some similarity between the
+ interfaces though different data structures lies behind.
+ 
+ The system must provide interfaces for parameters, events, states, queues
+and counters. Parameters will define the current state of the external system
+thereby representing the entire interface to the physical system. States will be
+used to control the state of the internal system state machine.
+
+Events are used for presenting user inputs and timing events to the tasks and
+are signified in the message being deleted once read. Counters are also simple
+data structures and is in essence just another way of interfacing to a global
+variable. The reason for maintaining counters as a seperate interface is that
+some systems provide hardware counters.
+
+Though advanced queues are provided by freRTOS, a simple version is justified by
+remaining a low coupling between the peripheral modules and the operating
+system.
+
+\subsection{Discussion}
+A common way of sharing variables between tasks is to declare them globally and
+then letting the individual tasks obtain a mutex and access the variable either
+directly or by calling a function providing some interface to the variable.
+
+The upside of this solution is that it is easily implemented. The downside is
+increased coupling between different parts of the code, since multiple tasks are
+depending upon knowledge of both the operating system to obtain the mutex and
+the methods to access the variables.
+
+Another solution would be to rely only on the queues and semaphores provided by
+freeRTOS. This resembles message passing, since the interface is provided by the
+operating system. The upside of this solution is, that coupling is now only
+between the task and the operating system and could be further reduced by using
+the preprocessor to provide a low coupling interface to any queue or semaphore
+in any operating system. The downside is a considerable amount of overhead,
+since the queue structure is a poor way of storing variables.
+
+\subsection{Implementation}
+The chosen solution is to build a simple common interface to shared memory. It
+facilitates the simplicity of shared memory, while still retaining a low
+coupling to the operating system. Another upside is that access to multiple
+variables can be done under the same mutex, reducing overhead.
+
+Seen from the calling application, variables are accessed by a function call.
+Obtaining the mutex is done inside the function so instead of having a lot of
+calls to the operating system sprinkled all over the source code, it is held in
+one place. The interface function is based on a switch-case structure, ensuring
+that as short time as possible is spend under the mutex.
+
+
+
