@@ -44,7 +44,7 @@ Implementing a menu based state machine can be split into two parts. One
 concerns the user navigating the menus and the other concerns having the menus or inputs to them
 control the rest of the system. 
 
-To make the system easy to reconfigure, the menus and their functionalities are based uponthe configuration file menu_setup.c. A menu concists of two lines of menu text and a number of fields to shuffle through using the dreh impuls geber. 
+To make the system easy to reconfigure, the menus and their functionalities are based uponthe configuration file menu\_setup.c. A menu concists of two lines of menu text and a number of fields to shuffle through using the dreh impuls geber. 
 
 The menu task has the responsibility of handling the systems inputs and outputs based on the rules given by the menu items. Normally it would be preferred to have the task block on a queue or a semaphore, but in this case since there are two types of input to be handled another approach is needed.  Input from the user and updated values from the SPI connection must both be handled by the menu task, but the updates come at fixed intervals at all times and the user inputs are events happening at random times.
 

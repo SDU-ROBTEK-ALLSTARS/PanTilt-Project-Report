@@ -7,7 +7,7 @@ This chapter concerns implementation of a regulator for the pan tilt system.
 \section{implementation}
 The control algorithm is implemented in the control task. All parameters are provided from the parameter server but are cast as single precision floating point values for exact calculations.
 
-When run the control task saves the value of the tick counter and when finished, it uses the FreeRTOS vTaskDelayUntil API to calculate when to unblock. As a starting point the control task runs at one hundred hertz frequency.
+When run the control task saves the value of the tick counter and when finished, it uses the FreeRTOS \texttt{vTaskDelayUntil} API to calculate when to unblock. As a starting point the control task runs at one hundred hertz frequency.
 
 To calculate the error, a common format is needed. The parameter server holds the setpoint in degrees and the actual position in ticks. To be able to have an intuition about the control algorithm, degrees are cosen and the position in degrees is calculated. The error is then calculated as the difference between setpoint and actual position and is thus a signed value in degrees.
 
@@ -60,6 +60,7 @@ Testing was done with a fixed P-gain of ten, I-gain of 0.05 with anti-windup at 
 
 
 REWREITE!!!
+
 The low level control is all implemented on a Digilent Nexys 2 test kit, featuring a spartan 3 fpga from Xilinx.
 Architecturally, it is split in two nearly independent systems, one being the SPI driver and the other being the motor control.
 They communicate through a shared RAM (uddyb type) block, but functions otherwise completely independant of each other.
@@ -78,9 +79,8 @@ The output pins of the PWM controller A and B, is connected to the three pins of
 The input pins of the decoder system comes from the index pins of the hall sensors mounted on the pan/tilt system and the decoder A and B signal from the two output pins on the motors.
 
 \begin{figure}[htb]
-
+\centering
 \includegraphics[scale=0.6,clip,trim=135 270 135 270]{FPGAmotorarchitecture.pdf}
-
 \caption{FPGA architecture, from the motor interface perspective}
 \label{fig:FPGAMotorArchitecture}
 \end{figure}
@@ -129,6 +129,7 @@ It takes a 16 bit signed integer and a control bit as input, indicating whether 
 When the motor is not in free run, the enable pin on the H-bridge is high, and the pwm signal changes between the braking and running state. If the free run bit is set, the H-bridge is disabled and no pwm signal is generated.
 
 \begin{figure}[htb]
+\centering
 \includegraphics[scale=0.6,clip,trim=0 250 10 250]{PWMblock.pdf}
 \caption{Block/signal layout of the Motor control block}
 \label{fig:pwmblock}
@@ -162,6 +163,7 @@ This is way to low, and therefore the amount of used bits are reduced by four gi
 Which is just above the minimum frequency requirement.
 
 \begin{figure}[htb]
+\centering
 \includegraphics[scale=0.6,clip,trim=10 330 10 330]{PWMexecution.pdf}
 \caption{Flowchart of the pwm generator}
 \label{fig:pwmchart}
@@ -184,6 +186,7 @@ The decoder is split into 4 major components: The Input filtering, the quadratur
 
 
 \begin{figure}[htb]
+\centering
 \includegraphics[scale=0.6,clip,trim=2 250 2 230]{decoderblock.pdf}
 \caption{Block/signal layout of the decoder system}
 \label{fig:decoderblock}
@@ -217,6 +220,7 @@ These values give a maximum input delay of 16 clock ticks(320 ns) which is suffi
 \subsection{Quadrature encoder}
 The quadrature encoders job is to convert the two decoded signals from the motor, to a relative position. The signal is generated from two hall sensors that are positioned 90 degrees apart. Giving 4 different output states, each state indicating what quadrant the motor is positioned in, an example of the signal can be seen in figure \ref{fig:decodersignal}.
 \begin{figure}[htb]
+\centering
 \includegraphics[scale=0.6,clip,trim=0 0 0 0]{ddecodersignal.pdf}
 \caption{Example decoder output from a motor with constant speed}
 \label{fig:decodersignal}
@@ -227,6 +231,7 @@ Overflow is not handled in this module, as it is not its job to know anything ab
 The situation where the input pins both change in one clock cycle is not handled by the system.
 
 \begin{figure}[htb]
+\centering
 \includegraphics[scale=0.6,clip,trim=130 330 130 330]{decoderstates.pdf}
 \caption{State diagram of the decoder module, the stipled arrows indicate a negative clockwise, the solid indicate a counter-clockwise or vice verca.}
 \label{fig:decoderstate}

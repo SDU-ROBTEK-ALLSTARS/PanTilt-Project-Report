@@ -3,11 +3,10 @@ This chapter will contain an analysis of the dynamics of the pan/tilt system whi
 
 Every system can be constructed of first order systems and second order systems in a cascade. These two types of systems defines a time constant. For first order systems this time constant is hidden in the zeroth order term and in second order systems it is hidden in the first order term. From a physical point of view the time constant defines the point in time where the system reaches $1 - \sfrac{1}{e} \approx 63.2\%$ of its final energy state, below in figure \ref{fig:energy_systems} is illustrated a step response on a first and a second order system.
 \begin{figure}[htb]
-	\begin{center}
+	\centering
 	\includegraphics[scale=1,trim=0 0 0 0]{graphics/energy_systems.pdf} %trim=l b r t (can cut off from every side)
 	\caption{(a) Illustrates the step response of a first order system. (b) Illustrates a step response of a second order system. Both will raise in time and reach some asymptotic value provided that the systems are stable, $\tau$ denotes the time constant.}
 	\label{fig:energy_systems}			% figure labels are of the form \label{fig:*}
-	\end{center}
 \end{figure}
 In figure \ref{fig:energy_systems}(b), notice the transient which seems more inert compared to (a). This is due to some mass in the system if the second order differential equation which represents the system is a mechanical equation. The transient response of a system is encoded into the poles of the system, which is defined by the time constant the following way:
 \begin{equation}
@@ -15,15 +14,14 @@ In figure \ref{fig:energy_systems}(b), notice the transient which seems more ine
 \end{equation}
 where $\zeta$ is the dampening ratio and $\omega_{n}$ is the undampened natural frequency, this relates to the poles as seen in figure \ref{fig:s_plane}.
 \begin{figure}[htb]
-	\begin{center}
+	\centering
 	\includegraphics[scale=1,trim=0 0 0 0]{graphics/splane.pdf} %trim=l b r t (can cut off from every side)
 	\caption{This figure illustrates a pole in the s-plane and the relation between poles and time constants.}
 	\label{fig:s_plane}			% figure labels are of the form \label{fig:*}
-	\end{center}
 \end{figure}
 In figure \ref{fig:s_plane} the real part of the pole is given by $Re(p) = - \zeta\omega_{n} = - \omega_{n} \cos(\varphi)$ and the imaginary part is given by $Im(p) = j\omega_{n}\sqrt{1 - \zeta^{2}} = j\omega_{n}\sin(\varphi)$. Considering equation \ref{eq:time_constant} and figure \ref{fig:s_plane} it is easy to see that real part of a pole directly relates to the time constant. Systems with one pole can therefore have their time constant calculated from the poles real part. Systems consisting of more than one pole can have their time constant calculated from the super positioning the poles real part. Below is shown an example.
 \begin{equation}
-	\tau = \frac{1}{Re(p_{1})} + \frac{1}{Re(p_{2})} + \frac{1}{Re(p_{3})} + ...\label{eq:time_constant}
+	\tau = \frac{1}{Re(p_{1})} + \frac{1}{Re(p_{2})} + \frac{1}{Re(p_{3})} + ...\label{eq:time_constant_two}
 \end{equation}
 As the time constant is defined as the reciprocal of the real part of the pole, then poles far away from the imaginary axis will not add that much to the total time constant as poles located near the imaginary axis. Therefore can the following be concluded, \textit{faster} poles in a system compared to \textit{slower} poles can be omitted from the model of the system.
 
@@ -33,11 +31,10 @@ The following will give an overview of the physical aspects of the pan/tilt syst
 \subsection{Motor}
 The motor converts electrical energy to mechanical energy as a voltage is supplied to the motor. This voltage make the motor turn and this turning motion deliver torque though some gears to a mass which then spins up to some maximum speed. A simplification of a DC motors circuit can be seen in figure \ref{fig:motor_circuit}, from this a mathematical model of the motor can be derived.
 \begin{figure}[htb]
-	\begin{center}
+	\centering
 	\includegraphics[scale=1,trim=0 0 0 0]{graphics/motor_circuit.pdf} %trim=l b r t (can cut off from every side)
 	\caption{Simplification of circuit for a DC motor. Voltage supplied is denoted by $u$, $i$ is the current through the motor, $L$ is inductance, $R$ is resistance and $V_B$ is the the voltage generated from the coil rotating in a magnetic field.}
 	\label{fig:motor_circuit}			% figure labels are of the form \label{fig:*}
-	\end{center}
 \end{figure}
 Following can be derived from the circuit seen in figure \ref{fig:motor_circuit}.
 \begin{align}
@@ -74,11 +71,10 @@ The gears between the mass to be rotated and the motor of the system reflect the
 \subsection{Torque-induced precession}
 When a body rotates around an axis the phenomenon of precession occurs. The torque-induced precession occurs when a body accelerates around an axis a torque is induced perpendicular to the axis of rotation. In figure \ref{fig:precession} a sketch of this situation is shown.
 \begin{figure}[htb]
-	\begin{center}
+	\centering
 	\includegraphics[scale=1,trim=0 0 0 0]{graphics/precession.pdf} %trim=l b r t (can cut off from every side)
 	\caption{Show the concept of of the torque-induced precession.}
 	\label{fig:precession}			% figure labels are of the form \label{fig:*}
-	\end{center}
 \end{figure}
 This torque is given by:
 \begin{equation}
@@ -97,11 +93,10 @@ where $\omega_1$ for example is the velocity of the pan and $\omega_2$ is the ve
 \section{Finding parameters}
 The following will contain a brief discussion on how the parameters was found. To obtain the parameters for the model some measurements where made on tilt part of the system, these measurements and the Matlab script which was used for analysing the data is located on the CD. The measurements that where produced is expressed in position $[ticks]$ against time $[ms]$. All the previous equations are dependent of the velocity of the system, so the measurements have to be differentiated with respect to time, this is done by a numerical method called the secant method\footnote{NR ref}, the differentiated result is plotted and shown in figure \ref{fig:measured_step_tilt}.
 \begin{figure}[htb]
-	\begin{center}
+	\centering
 	\includegraphics[scale=1,trim=0 0 0 0]{graphics/measured_step_tilt.pdf} %trim=l b r t (can cut off from every side)
 	\caption{This graph show the actual velocity of the tilt part of the system. The horizontal axis show time in seconds. The vertical axis show angular velocity in radians per second.}
 	\label{fig:measured_step_tilt}			% figure labels are of the form \label{fig:*}
-	\end{center}
 \end{figure}
 If a mean is calculated from the steady-state part of the graph $22.57 \sfrac{rad}{s}$ is obtained, and compared to the data sheet of the motor which says the rated speed is $22.62 \sfrac{rad}{s}$, the data from the graph represented in figure \ref{fig:measured_step_tilt} is assumed to be correct. Next a set of equations are formed from equation \ref{eq:model_model}, the input is set to zero and rewritten as follows:
 \begin{equation}
@@ -123,9 +118,9 @@ According to equation \ref{app:eq_reflected_pan_inertia}, $J_L = 0.970 \cdot 10^
 \end{equation}
 Compared to the values found in previous experiments the values found here does not match, so which parameters to use? This can be answered by looking at a pole-zero plot of the system and the open-loop response of the system. To set up the model a state-space representation is made of the system as follows below. The coupled system is set up with respect to equation \ref{eq:coupled_torque_motor_model}:
 
-\begin{array}{•}
-
-\end{array}
+%\begin{array}{•}
+%
+%\end{array}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Kblet MODEL hEr og nu, men helst i går

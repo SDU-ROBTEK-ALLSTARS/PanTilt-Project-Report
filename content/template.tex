@@ -33,13 +33,12 @@ api->servicePort('1',myPort1);
 \subsection{Example table}
 
 \begin{table}[htb]								%[htb] means here, top or bottom (where latex tries to place the float on the page)
-	\begin{center}
+	\centering
 	\begin{tabular}{c|c|c}					% | is a vertical line ; c means center, l left and r right
 	Byte 1 & Byte 2 & Byte 3 \\			% the &-sign seperates columns
 	\hline													%horizontal line
 	\verb@TYPE@ & \verb@KOMMANDO@ & \verb@DATA@ \\
 	\end{tabular}
-	\end{center}
 	\caption{Telegramformat}				% The caption (billedtekst!). All floats should have a caption
 	\label{tab:telegramformat}			% reference ID. Tables are of the format \label{tab:*}
 \end{table}
