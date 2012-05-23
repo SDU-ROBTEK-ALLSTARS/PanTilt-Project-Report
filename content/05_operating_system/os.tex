@@ -11,18 +11,20 @@ The group have decided to use FreeRTOS both because it meets the requirements an
 
 To secure that the specific tasks is run in real time pre-emptive scheduling will be implemented. This is implemented by giving tasks priority when they are declared. Thus all tasks which have to run in real time is given a high priority. If a task is scheduled to run, but a task is already running, new task has a higher priority it can temporarily stop the task. Run it's own task and resume the suspended task. That way a high priority task can be guaranteed to run at specific frequency or at certain interrupts.
 
+When every task has been set up, the function \texttt{vTaskStartScheduler()} will initiate 
+
+
 \section{ Delays  }
 
 In the system tasks does either need to be blocked by a timer or an i/o port. In FreeRTOS the time delay is handled by to different calls. 
-
-To secure that tasks run regularly each task is blocked with either $vTaskDelay$ or $vTaskDelayUntil$. These calls will insure a relatively or a precise frequency of operation respectively. $vTaskDelayUntil$ is able to do this by the user saving current tick at resume-time and giving that as input to the function.
+To secure that tasks run regularly each task is blocked with either \texttt{vTaskDelay} or \texttt{vTaskDelayUntil}. These calls will insure a relatively or a precise frequency of operation respectively. \texttt{vTaskDelayUntil} is able to do this by the user saving current tick at resume-time and giving that as input to the function.
  
 \section{ Semaphores }
 
-To synchronize processes and avoid race conditions, FreeRTOS use semaphores. The standard semaphore for synchronization between tasks is a binary semaphore. In FreeRTOS semaphores is created by, like with tasks first creating a handler, using the function $( xSemaphoreHandle xSemaphore )$
+To synchronize processes and avoid race conditions, FreeRTOS use semaphores. The standard semaphore for synchronization between tasks is a binary semaphore. In FreeRTOS semaphores is created by, like with tasks first creating a handler, using the function \texttt{( xSemaphoreHandle xSemaphore )}
 
-The FreeRTOS semaphore have two operations just like standard semaphores, the $wait()$ and $signal()$. They are designed as $xSemaphoreTake$ and $xSemaphoreGive$, respectively. The $xSemaphoreTake$ checks if the semaphore is free and takes it if possible.
-When obtained a semaphore can be released with $xSemaphoreGive$.
+The FreeRTOS semaphore have two operations just like standard semaphores, the \texttt{wait()} and \texttt{signal()}. They are designed as \texttt{xSemaphoreTake} and \texttt{xSemaphoreGive}, respectively. The \texttt{xSemaphoreTake} checks if the semaphore is free and takes it if possible.
+When obtained a semaphore can be released with \texttt{xSemaphoreGive}.
 
 \section{ Queues }
 
