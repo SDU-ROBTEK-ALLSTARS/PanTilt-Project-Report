@@ -47,10 +47,10 @@ Conclusion:             The decoder can be used to keep track of the pan/tilt po
 \section{Velocity estimator using secant method}
 Range:                  Velocity approximations(dxdt)
 Testbench: 				velocity\_test\_secant.vhd
-Search area:            (What is examined?)	
-Expectations:           (What results are expected?)
-Result:                 (What results were received?)
-Conclusion:             (What significance do these results have?)
+Search area:            Can the velocity estimator \"guess\" the velocity, when applied a changing position.	
+Expectations:           A reasonable velocity.
+Result:                 Garbage output.
+Conclusion:             It would have been nice if this module worked, but it is not strictly needed and therefore it does not matter that it did not work.
 
 \section{velocity estimator avg}
 Range:                  Velocity approximations(dvdtv2)
@@ -63,7 +63,7 @@ Conclusion:             It would have been nice if this module worked, but it is
 \section{Watchdog}
 Range:                  (Which system part is tested?) module file
 Testbench: 				watchdog\_test.vhd
-Search area:            Can the velocity estimator \"guess\" the velocity, when applied a changing position.	
-Expectations:           A reasonable velocity.
-Result:                 Garbage output.
-Conclusion:             It would have been nice if this module worked, but it is not strictly needed and therefore it does not matter that it did not work.
+Search area:            Can the watchdog maintain an \"alive\" signal when an alternating input is applied, and will the output be low when the input dies.
+Expectations:           The above.
+Result:                 It works perfectly, the output dies a short time after the input.
+Conclusion:             The watchdog can be used in the project.
