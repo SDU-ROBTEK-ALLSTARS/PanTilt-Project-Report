@@ -122,13 +122,142 @@ According to equation \ref{app:eq_reflected_pan_inertia}, $J_L = 0.970 \cdot 10^
 	K_B = K_T = \sqrt{25.63 \cdot L \cdot J_L} \Rightarrow K_B = K_T = \sqrt{25.63 \cdot L \cdot J_L} \approx 401.1 \frac{mV}{\sfrac{rad}{s}}
 \end{equation}
 Compared to the values found in previous experiments the values found here does not match, so which parameters to use? This can be answered by looking at a pole-zero plot of the system and the open-loop response of the system. To set up the model a state-space representation is made of the system as follows below. The coupled system is set up with respect to equation \ref{eq:coupled_torque_motor_model}:
+\[
+ \dot{\textbf{x}} =
+ \begin{bmatrix}
+   0 & 1 & 0 & 0\\
+   - \frac{K_B K_T}{L J_{Pan}} & - \frac{R}{L} & 0 & - \frac{I_{Tilt}}{J_{Tilt}}\\
+   0 & 0 & 0 & 1\\
+   0 & - \frac{I_{Pan}}{J_{Pan}} & - \frac{K_B K_T}{L J_{Tilt}} & - \frac{R}{L}
+ \end{bmatrix}
+ \textbf{x} +
+ \begin{bmatrix}
+   0 & 0\\
+   \frac{K_T}{L J_{Pan}} & 0\\
+   0 & 0\\
+   0 & \frac{K_T}{L J_{Tilt}}
+ \end{bmatrix}
+ \textbf{u}
+\]
+where the state vector $\textbf{x}$ is as follows:
+\[
+ \textbf{x} =
+ \begin{bmatrix}
+   \omega_{Pan}\\
+   \dot{\omega_{Pan}}\\
+   \omega_{Tilt}\\
+   \dot{\omega_{Tilt}}\\
+ \end{bmatrix}
+\]
+The two set of parameters are inserted into the model, parameters from previous experiments are inserted first which leads to: $R = 5.124\Omega$, $L = 38.4mH$, and $K_B = K_T = 35.1 \sfrac{mV}{\dfrac{rad}{s}}$. $J_{Pan}$, $J_{Tilt}$, $I_{Pan}$, and $I_{Tilt}$ can be found in appendix \ref{app:dynamics_calc}.
+\begin{equation}
+ \dot{\textbf{x}} =
+ \begin{bmatrix}
+   0 & 1 & 0 & 0\\
+   - 16.9754 & - 133.4375 & 0 & - 100\\
+   0 & 0 & 0 & 1\\
+   0 & - 100 & - 33.0759 & - 133.4375
+ \end{bmatrix}
+ \textbf{x} +
+ \begin{bmatrix}
+   0 & 0\\
+   483.6310 & 0\\
+   0 & 0\\
+   0 & 942.3325
+ \end{bmatrix}
+ \textbf{u}\label{eq:crap_ss_model}
+\end{equation}
+The eigenvalues of the A matrix is calculated in Matlab to be:
+\begin{equation}
+ \lambda =
+ \begin{bmatrix}
+   - 233.3303\\
+   - 32.6712\\
+   - 0.7790\\
+   - 0.0946
+ \end{bmatrix}\label{eq:crap_eig_val}
+\end{equation}
+Looking at the values in \ref{eq:crap_eig_val} show that the last value of the vector is really close to zero which mean that the system is close to marginal stable. The open-loop response of the system is plotted below.
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[scale=1,trim=0 0 0 0]{graphics/CrapSim.pdf} %trim=l b r t (can cut off from every side)
+	\caption{This figure illustrates the open-loop step response of the system in equation \ref{eq:crap_ss_model}}
+	\label{fig:crap_step}			% figure labels are of the form \label{fig:*}
+	\end{center}
+\end{figure}
+The step response in figure \ref{fig:crap_step} show some instability as a steady state response is never achieved.  compared to the figure, so the parameters from earlier experiments can not be used. The top graph of figure \ref{fig:crap_step} repressent the pan part and the lower graph represent the tilt part. Same procedure is made with the calculated set of parameters, the parameters are $R = 5.124\Omega$, $L = 6.471mH$, and $K_B = K_T = 401.1 \frac{mV}{\sfrac{rad}{s}}$. $J_{Pan}$, $J_{Tilt}$, $I_{Pan}$, and $I_{Tilt}$ can be found in appendix \ref{app:dynamics_calc}.
+These parameters leads to the following model:
+\begin{equation}
+ \dot{\textbf{x}} =
+ \begin{bmatrix}
+   0 & 1 & 0 & 0\\
+   - 13153.8453 & - 791.7958 & 0 & - 100\\
+   0 & 0 & 0 & 1\\
+   0 & - 100 & - 25629.6574 & - 791.7958
+ \end{bmatrix}
+ \textbf{x} +
+ \begin{bmatrix}
+   0 & 0\\
+   32794.2344 & 0\\
+   0 & 0\\
+   0 & 63898.0443
+ \end{bmatrix}
+ \textbf{u}\label{eq:super_ss_model}
+\end{equation}
+The \textbf{A}-matrix in equation \ref{eq:super_ss_model} got the following eigenvalues:
+\begin{equation}
+ \lambda =
+ \begin{bmatrix}
+   - 869.7571\\
+   - 662.0630\\
+   - 16.6873\\
+   - 35.0842
+ \end{bmatrix}\label{eq:super_eig_val}
+\end{equation}
+Eigenvalues in equation \ref{eq:super_eig_val} indicate the the model in equation \ref{eq:super_ss_model} is stable which is expectable as the system is driven by motors which has a limitation in speed. A plot of the coupled system is shown below.
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[scale=1,trim=0 0 0 0]{graphics/GoodSim.pdf} %trim=l b r t (can cut off from every side)
+	\caption{This figure illustrates the open-loop step response of the system in equation \ref{eq:super_ss_model}}
+	\label{fig:good_step}			% figure labels are of the form \label{fig:*}
+	\end{center}
+\end{figure}
+In figure \ref{fig:good_step} a simulation of the open-loop step response is represented, the top graph is the pan part and the lower graph is the tilt. The amplitude is representing angular velocity of the motors, the system have been excited with a $12V$ step on the motor which controls the tilt part, notice that the pan is affected of the tilt accelerating to about $30\sfrac{rad}{s}$ which is not far from $22.57\sfrac{rad}{s}$ which was measured and shown in figure \ref{fig:measured_step_tilt}. The offset can be explained by all the omitted dynamic such as friction in the system. This offset can be adjusted with an overall gain. The gain can be found the following way:
+\begin{equation}
+	Gain = \frac{Actual velocity}{Estimated velocity} = \frac{22.57\sfrac{rad}{s}}{30\sfrac{rad}{s}} = 0.7523\label{eq:gain_constant}
+\end{equation}
+The calculated gain can be put into the \textbf{C}-matrix of the model in the following way:
+\begin{equation}
+ \textbf{y} =
+ \begin{bmatrix}
+   0.7523 & 0 & 0 & 0\\
+   0 & 0 & 0.7523 & 0
+ \end{bmatrix}
+ \textbf{x} +
+ \begin{bmatrix}
+   0 & 0\\
+   0 & 0
+ \end{bmatrix}
+ \textbf{u}\label{eq:output_ss_model}
+\end{equation}
+The state space model can now be formed from equation \ref{eq:super_ss_model} and \ref{eq:output_ss_model}. The output have been plotted in the graph below, the blue line is the open-loop response of the state-space model with a gain of $1$ and the green is the response of the model with the calculated gain from equation \ref{eq:gain_constant}.
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[scale=1,trim=0 0 0 0]{graphics/ZoomOpenLoop.pdf} %trim=l b r t (can cut off from every side)
+	\caption{This figure a comparison between the actual model made and the adjusted model.}
+	\label{fig:zoom_step}			% figure labels are of the form \label{fig:*}
+	\end{center}
+\end{figure}
+On figure \ref{fig:zoom_step} it is seen that the coupling between pan and tilt is insignificant, this means that the system can be decoupled such that the pan cannot affect the the tilt and visa versa. This conclusion make the state-space model a major overkill as a simple transfer functions can de derived by equation \ref{eq:model_model} the following way:
+\begin{align}
+	U(s) &= \frac{L J_L}{K_T} s^2 \Omega(s) + \frac{R J_L}{K_T} s \Omega(s) + K_B \Omega(s) \Rightarrow\\
+	H(s) &= \frac{\Omega(s)}{U(s)} = \frac{1}{\frac{L J_L}{K_T} s^2 + \frac{R J_L}{K_T} s + K_B}\label{eq:transfer_function}
+\end{align}
+If parameters for pan and tilt are inserted into equation \ref{eq:transfer_function} the following is obtained:
+\begin{align}
+	H_{Pan}(s) &= \frac{1}{30.49 \cdot 10^{-6} s^2 + 24.14 \cdot 10^{-3} s + 0.4011}\label{eq:transfer_function_pan}\\
+	H_{Tilt}(s) &= \frac{1}{15.65 \cdot 10^{-6} s^2 + 12.39 \cdot 10^{-3} s + 0.4011}\label{eq:transfer_function_tilt}
+\end{align}
 
-\begin{array}{•}
-
-\end{array}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Kblet MODEL hEr og nu, men helst i går
-
-
-
+\section{Summary}
+From models developed throughout this chapter and analysis made on measurements of the actual system, it can be concluded that using a state-space model for simulating the system is a plain overkill, it is like shooting birds with cannons. Therefore two transfer functions have been derived instead for further analysis of the control system. Decoupling the system was done due to the almost non-existent mutual effect expressed in figure \ref{fig:zoom_step}. 
