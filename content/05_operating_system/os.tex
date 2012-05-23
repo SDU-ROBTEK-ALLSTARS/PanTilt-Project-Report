@@ -1,1 +1,43 @@
 \chapter{Operating system}\label{chap:os}
+
+
+In the project-description it is stated that a microprocessor shall run a user interface, a regulation system and a SPI communication with the FPGA. This system will require the microprocessor to run multiple tasks and thus an operating system is necessary. It has been decided to use the lent ARM microprocessor so the operating system has to be available for this system.
+
+The system has to run in real time to create a reliable environment for the regulation. Thus a RTOS have to be used.
+
+The group have decided to use FreeRTOS both because it meets the requirements and is well documented, but also because the whole group have experience with FreeRTOS from the EMP course.
+
+\section{ Pre-emptive Scheduling }
+
+To secure that the specific tasks is run in real time pre-emptive scheduling will be implemented. This is implemented by giving tasks priority when they are declared. Thus all tasks which have to run in real time is given a high priority. If a task is scheduled to run, but a task is already running, new task has a higher priority it can temporarily stop the task. Run it's own task and resume the suspended task. That way a high priority task can be guaranteed to run at specific frequency or at certain interrupts.
+
+When every task has been set up, the function \texttt{vTaskStartScheduler()} will initiate 
+
+
+\section{ Delays  }
+
+In the system tasks does either need to be blocked by a timer or an i/o port. In FreeRTOS the time delay is handled by to different calls. 
+To secure that tasks run regularly each task is blocked with either \texttt{vTaskDelay} or \texttt{vTaskDelayUntil}. These calls will insure a relatively or a precise frequency of operation respectively. \texttt{vTaskDelayUntil} is able to do this by the user saving current tick at resume-time and giving that as input to the function.
+ 
+\section{ Semaphores }
+
+To synchronize processes and avoid race conditions, FreeRTOS use semaphores. The standard semaphore for synchronization between tasks is a binary semaphore. In FreeRTOS semaphores is created by, like with tasks first creating a handler, using the function \texttt{( xSemaphoreHandle xSemaphore )}
+
+The FreeRTOS semaphore have two operations just like standard semaphores, the \texttt{wait()} and \texttt{signal()}. They are designed as \texttt{xSemaphoreTake} and \texttt{xSemaphoreGive}, respectively. The \texttt{xSemaphoreTake} checks if the semaphore is free and takes it if possible.
+When obtained a semaphore can be released with \texttt{xSemaphoreGive}.
+
+\section{ Queues }
+
+In FreeRTOS queues are implemented as a mean for intertask communication. It works as an FIFO buffer where the different tasks can either push or pop from the buffer.
+
+\section{ Suspend }
+It is also possible to suspend and resume tasks by function calls. If a task is suspended it will not get any CPU time independent of it's priority.
+
+\section{Risks of faults}
+
+FreeRTOS does not do any work for error prevention. Does it is up to the developer to 
+
+Is there a possibility of 
+Data corruption
+Deadlocks
+Priority inversion
