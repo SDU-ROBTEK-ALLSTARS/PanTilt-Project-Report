@@ -57,7 +57,7 @@ To understand how the implementation works, lets describe what goes on ``under t
 
 \begin{figure}[htb]
   \centering
-  \fbox{\includegraphics[width=\textwidth,clip,trim=90 110 90 110]{content/04_communication/figures/spi_task_diagram_running.pdf}}
+  \includegraphics[width=\textwidth,clip,trim=90 110 90 110]{content/04_communication/figures/spi_task_diagram_running.pdf}
   \caption{An overview of the SPI implementation.}
   \label{fig:spi_task_diagram}
 \end{figure}%trim=l b r t
@@ -82,4 +82,4 @@ Pros/cons\\
 Possible optimization\\
 Is it inefficient?\\
 Overhead linearly proportional with amounts transmitted/received?\\
-Tasks transmission priority is currently decided by the order of which the use spi\_register\_task()
+Tasks transmission priority is decided by the order in which they use \texttt{spi\_register\_task()}
