@@ -12,7 +12,7 @@ The LM3S6965 microcontroller will be operating as master and the FPGA as slave, 
 
 %------------------------------------------
 \section{SPI introduction}
-SPI is short for Serial Peripheral Interface, and is a commonly used standard for internal communication. Because SPI is a commonly used transmission interface, this will only contain a short introduction. The \marginnote{Check me}{simplest} SPI connection consists of a master, a slave and 4 signal lines: A clock, a signal from master to slave (MOSI\footnote{Master Out Slave In}), a signal from slave to master (MISO\footnote{Master In Slave Out}) and a slave select (SS) signal. The clock is used to control when to put data on the signal lines, and is always controlled by the master device. This way the master devices always controls when there is data available on the signal lines, and at what data rate the it is send. An effect of this is that for the master to be able to get a reply from the slave, some extra data needs to be send to activate the clock. The synchronisation between the clock and the data on the MOSI and MISO lines can be set up in four different ways, depending on the clock phase (CPHA) and polarity (CPOL). The slave select signal is used to enable the transmission on the slave device. When pulled low, the slave device starts listening for data from the master device. This enables the use of the clock, MOSI and MISO lines for multiple device. 
+SPI is short for Serial Peripheral Interface, and is a commonly used standard for internal communication. Because SPI is a commonly used transmission interface, this will only contain a short introduction. The \marginnote{Check me}{simplest} SPI connection consists of a master, a slave and 4 signal lines: A clock, a signal from master to slave (MOSI\footnote{Master Out Slave In}), a signal from slave to master (MISO\footnote{Master In Slave Out}) and a slave select (SS) signal. The clock is used to control when to put data on the signal lines, and is always controlled by the master device. This way the master devices always controls when there is data available on the signal lines, and at what data rate the it is send. An effect of this is that for the master to be able to get a reply from the slave, some extra data needs to be send to activate the clock. The synchronisation between the clock and the data on the MOSI and MISO lines can be set up in four different ways, depending on the clock phase (CPHA) and polarity (CPOL). The slave select signal is used to enable the transmission on the slave device. When pulled low, the slave device starts listening for data from the master device. This enables the use of the clock, MOSI and MISO lines for multiple devices. 
 % What is SPI
 % Limitations
 
@@ -57,7 +57,7 @@ The protocol are using SPI, so there is no need for synchronising the packages, 
 
 SPEED REQUIREMENTS ??
 
-Because the protocol carries important data for the control system, the timing criteria needs to be taken into consideration. Tough the actuators controlled by the control system are relatively slow compared to the transmission speed, (?? how fast does this need to be?)
+Because the protocol carries important data for the control system, the timing criteria needs to be taken into consideration. Although the actuators controlled by the control system are relatively slow compared to the transmission speed, (?? how fast does this need to be?)
 
 
 \section{Protocol ideas}
@@ -69,7 +69,7 @@ During the design of the protocol three approaches were considered. These three 
 The first approach was to design the protocol to carry just the information that needs to be exchanged between the FPGA and ARM boards. A data package would then consist of a header followed by a series of only the needed data. This idea had the advantage of a low overhead on the protocol and thereby a minimal need for resources on the platforms. This idea was discarded, because a change in the data requirements would require a redesign of the protocol.
 
 \subsection{Memory synchronisation protocol}
-Another approach to the protocol design was to make a protocol to synchronise a static sized memory between the two platforms. The idea was to take advantage of the 16bit x 8 FIFO on the ARM platform, so one package would fit exactly into it. The advantage would be that the ARM platform only needs to be interrupted when the FIFO was full. A similar solution would then be written in hardware to the FPGA, making this solution quite efficient. The large amount of data in one package would allow a CRC or checksum to be implemented without too much overhead. An example of how this protocol could be made is shown in figure \ref{fig:spi_protocol_format_memsync}.
+Another approach to the protocol design was to make a protocol to synchronise a static sized memory between the two platforms. The idea was to take advantage of the 16bit x 8 FIFO on the ARM platform, so one package would fit exactly into it. The advantage would be that the ARM processor only needs to be interrupted when the FIFO was full. A similar solution would then be written in hardware to the FPGA, making this solution quite efficient. The large amount of data in one package would allow a CRC or checksum to be implemented without too much overhead. An example of how this protocol could be made is shown in figure \ref{fig:spi_protocol_format_memsync}.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -98,7 +98,7 @@ Something that sounds smart or REMOVE ME.
 \section{Protocol design}
 \label{spi_rotocol_design}
 It has been decided to use a generic way of communicating with SPI between the FPGA and ARM board. Other ideas were considered and can be read about in \ref{spi_protocol_ideas}.
-The main advantage for choosing a generic design is the compatibility with other SPI devices. The ADNS9500 mouse sensor and the ADIS16405 IMU sensor were used as reference devices, as these were used in previously projects. The main difference between the protocol in these two devices are the length of the carried data. The ADNS9500 reads and writes only 8 bits at a time, where ADIS16405 supports 16bit data sizes. The 8 bit solution was chosen as reference.
+The main advantage for choosing a generic design is the compatibility with other SPI devices. The ADNS9500~\cite{SPI_ADNS} mouse sensor and the ADIS16405~\cite{SPI_ADIS} IMU sensor were used as reference devices, as these were used in previously projects. The main difference between the protocol in these two devices are the length of the carried data. The ADNS9500 reads and writes only 8 bits at a time, where ADIS16405 supports 16bit data sizes. The 8 bit solution was chosen as reference.
 
 For synchronisation of clock and data on the signal lines, mode 0 was chosen. Mode 0 is when data is available on clock rising edge and changes on falling edge.
 
@@ -178,12 +178,18 @@ The "SPI protocol controller" is the state machine which controls the package fl
 	\end{center}
 \end{figure}
 
-\marginnote{I will make this a list instead.}{The protocol controller is started in an initial state, where it sets up the signals between the SPI and RAM to be ready. When the signals are set, it goes to a waiting mode, where it will wait for the \texttt{data\_out\_ready} to be set high. When this happens, the data/command is read and the next state depends on whether is was a read or write command.
-It the received command was a read command, the next state \"Read mem init\" will set the requested address on the memory block, and continue to the next state \"Read mem to SPI", where the \texttt{data\_out\_ready} will be set on the SPI interface. This will signal the SPI to read from mem and protocol controller will continue to the next state "Read mem wait SPI". In the "Read mem wait SPI" state, it waits for the SPI to acknowledge the data. When this is received it continues to the "Clean up" state, where waits for the SPI interface to be ready for next transmission, and returns back to the \"Wait for command\" state.
-} 
+
+%\begin{description}
+%\item[Init] is the initial state, where it sets up the signals between the SPI and RAM to be ready. When the signals are set, it goes to "Wait for command" state.
+%\end{description}
+
+The protocol controller is started in an initial state, where it sets up the signals between the SPI and RAM to be ready. When the signals are set, it goes to a waiting mode, where it will wait for the \texttt{data\_out\_ready} to be set high. When this happens, the data/command is read and the next state depends on whether is was a read or write command.
+It the received command was a read command, the next state "Read mem init" will set the requested address on the memory block, and continue to the next state "Read mem to SPI", where the \texttt{data\_out\_ready} will be set on the SPI interface. This will signal the SPI to read from mem and protocol controller will continue to the next state "Read mem wait SPI". In the "Read mem wait SPI" state, it waits for the SPI to acknowledge the data. When this is received it continues to the "Clean up" state, where waits for the SPI interface to be ready for next transmission, and returns back to the "Wait for command" state.
+
+Another possible way through the states in the state machine, is that a write command was received in the "Wait for command" state. When the write command is received the requested write address is set on the memory block and continue to "Write mem init". In the "Write mem init" state it waits for the \texttt{from\_spi\_valid} to go low, so the SPI is ready to receive next transmission. Next it goes to the "Wait for next byte" state, where it waits for the \texttt{from\_spi\_valid} to go high again, which will happen when the next transmission occur. Now it will set the "write" signal high on the memory, so the data will be saved to RAM. It then goes to the state "Mem delay" where it set the "write" signal low again, and continue to the "Clean up" state.
 %Scaleability
 
-As memory a true dual port ram is used, which is out-of-the-box solution from Xilinx. This RAM has to interfaces, which makes it ideas as interface between communication and other hardware in the FPGA. The data in and data out ports are connected to the parallel interface and the control signals are connected to the protocol controller.
+As memory a true dual port ram is used, which is out-of-the-box solution from Xilinx. This RAM has two interfaces, which makes it ideal as interface between communication and other hardware modules in the FPGA. The data in and data out ports are connected to the parallel interface and the write and enable signals are connected to the protocol controller. The reading and writing process of the memory module is well described in the datasheet ~\cite{XILINX_MEM}.
 
 
 % Block overview / hardware planning
