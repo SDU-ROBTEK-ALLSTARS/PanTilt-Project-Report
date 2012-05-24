@@ -134,6 +134,8 @@ The command send from the master device when writing to the slave device is simi
 
 
 \section{Protocol ARM implementation}
+\input{content/04_communication/spi_arm.tex}
+
 \section{Protocol FPGA implementation}
 % Something about the memeory interface to the other hardware parts
 The SPI client interface on the FPGA needs to written in hardware language. As interface to other components in the FPGA it was chosen to use a true dual port RAM on the xilinx board. The RAM then has the responsibility of avoiding race conditions, and presenting an easy-to-use and known-to-work interface between the components. 
