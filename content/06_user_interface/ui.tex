@@ -64,7 +64,7 @@ Normally it would be preferred to split the task into two sub tasks, each respon
 The reason for the frequent updates is to provide accurate data for the control algorithm, but there is no need to update the display this often. This is he reason for not dividing the menu task. Instead the task runs every five milliseconds, which is sufficient to service both inputs and outputs without the user noticing any delays. Some operating systems support blocking on multiple conditions, but this is not supported by FreeRTOS so on this system blocking on time is the best solution.
 
 \subsection{Task diagram}
-Layers....
+The user interface can be split into three layer as seen in \ref{fig:ui_task_diagram}. The layers reside between the pan tilt system and the hardware. A number of service tasks handle the hardware and parses data between the inter task communication modules and the hardware. The menu task then handles the inputs and events parsing to and from the system parameters.
 
 The menu task first handles inputs from the dreh impuls geber and updates current menu based on this. It then checks whether any of the fields in the current menu takes input and handles theese updating relevant parameters. Then the display buffer is updated to contain the two lines provided by the current menu and data from any output fields are written to the buffer before yielding. The system state is held entirely in the menu item, thus reducing the menu task to a piece of sequential code.
 
