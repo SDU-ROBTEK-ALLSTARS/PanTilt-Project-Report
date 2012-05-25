@@ -1,20 +1,19 @@
-\chapter{Low level control}\label{chap:llc}
+\chapter{Low level control GENOVERVEJ OVERSKRIFT !!!!,FLYT MUTEX DEL TIL RAM DELEN}\label{chap:llc}
 
 
-
-
-REWREITE!!!
-The low level control is all implemented on a Digilent Nexys 2 test kit, featuring a spartan 3 fpga from Xilinx.
-Architecturally, it is split in two nearly independent systems, one being the SPI driver and the other being the motor control.
-They communicate through a shared RAM (uddyb type) block, but functions otherwise completely independant of each other.
+Before the ARM core can control the physical system, an interpreting layer needs to be added, that can receive torque commands and control the physical system based on them, and report position and velocity of the physical system back as useful values.
+This part of the system is situated on the FPGA, and architecturally, it is split in two nearly independent systems, one being the SPI driver and the other being the motor control.
+The SPI driver acts as the link between the ARM processor and the FPGA and is described in chapter \ref{chap:comm}, the motor control section is described in this chapter.
+The two subsystems communicate through a shared RAM block using the method described in chapter \ref{chap:comm}, but functions otherwise completely independent of each other.
 
 
 \section{Motor interface}
 The motor interface is responsible for presenting an easy to use interface to the arm processor, making it possible to control the motor torque and receive feedback in the form of pan and tilt position and velocity.
-All communication is done through the RAM block as seen on figure \ref{fig:FPGAMotorArchitecture}, which means that the interface functions independently of the SPI implementation.
+Also, an auxillary register is implemented, enabling the two parties to set and read flags between them, for instance the ARM can set the freerun bits, which disable the H-bridge entirely or command a reset of the position counters, the FPGA can report whether the index Hall sensors are active (meaning that the physical system approximately is in a neutral position).
+All communication is done through the RAM block as seen on figure \ref{fig:FPGAMotorArchitecture}, thus the interface functions independently of the SPI implementation.
 
 \subsection{Overall architecture}
-The motor interface is split into two distinct parts. The PWM controller, which generates a pwm signal from a given input and a decoder controller, which reads the decoder pins, and tracks position and velocity.
+The motor interface is split into two distinct parts. The PWM controller, which generates a PWM signal from a given input and a decoder controller, which reads the decoder pins, and tracks position and velocity.
 
 A top level module is introduced to handle all memory interfacing. It houses all the individual component instances, and binds them together.
 
@@ -30,8 +29,8 @@ The input pins of the decoder system comes from the index pins of the hall senso
 \end{figure}
 
 \subsection{Memory layout}
-The memory layout is as seen on table \ref{tab:Memorymapping}. The position is represented by an unsigned bit, centered around 0x8000, this is because it is easier to calculate the position without considering a sign, and it would make no difference for the control system on the arm whether the position is represented by signed or unsigned numbers.
-Velocity as output and duty cycle as input is represented as a 16 bit signed twos-complement value.
+The memory layout is as seen in table \ref{tab:Memorymapping}. The position is represented by an unsigned bit, centered at 0x8000, this is because it is easier to calculate the position without considering a sign, and it would make no difference for the control system on the arm whether the position is represented by signed or unsigned numbers.
+Velocity output and duty cycle input is represented as a 16 bit signed twos-complement value.
 This is because the sign bit makes it easy to read what the desired motor direction is.
 The aux register reads position reset, and motor freerun command bits. It also sets two bits, representing whether the hall sensors indicate that the system is in zero position.
 
@@ -68,20 +67,20 @@ Address & Value \\
 
 
 The motor control block is split into 3 seperate modules.
-The PWM generator, the signed-to-magnitude splitter, and the Motor AUX control as seen on figure \ref{fig:pwmblock}.
-It takes a 16 bit signed integer and a control bit as input, indicating whether the motor should be driven by a pwm signal, or if it should be set in free run mode. 
-When the motor is not in free run, the enable pin on the H-bridge is high, and the pwm signal changes between the braking and running state. If the free run bit is set, the H-bridge is disabled and no pwm signal is generated.
+The PWM generator, the signed-to-magnitude splitter, and the Motor AUX control as seen on figure \ref{fig:PWMblock}.
+It takes a 16 bit signed integer and a control bit as input, indicating whether the motor should be driven by a PWM signal, or if it should be set in free run mode. 
+When the motor is not in free run, the enable pin on the H-bridge is high, and the PWM signal changes between the braking and running state. If the free run bit is set, the H-bridge is disabled and no PWM signal is generated.
 
 \begin{figure}[htb]
 \includegraphics[scale=0.6,clip,trim=0 250 10 250]{PWMblock.pdf}
 \caption{Block/signal layout of the Motor control block}
-\label{fig:pwmblock}
+\label{fig:PWMblock}
 \end{figure}
 
 \subsection{PWM generator}
 The PWM generator takes a clk signal and a duty cycle (15 bit unsigned value) as input. It also takes two generic parameters as input. A prescaler value to decrease the frequency, and a bit reduction parameter to increase it. These allows the PWM block to be configured for a desired frequency.
 
-Internally the pwm generator consists of a counter register that is decremented each tick as seen of figure \ref{fig:pwmchart}. If the counter is less than the input, the output is 1 otherwise it is zero.
+Internally the generator consists of a counter register that is decremented each tick as seen of figure \ref{fig:PWMchart}. If the counter is less than the input, the output is 1 otherwise it is zero.
 If the counter value underflows, it is set to the second highest value it can represent. This ensure that the PWM block is able to output high and low value dc if needed, at the cost of lacking an extra bit of resolution.
 
 The bit reduction parameter effectively reduces the amount of significant bits in the counter and value signals.
@@ -89,12 +88,12 @@ The prescaler is used to introduce a delay between each tick.
 
 The frequency of the PWM needs to be at around 20khz or above. If it is lower than that it is in the audible range of frequencies which would be an annoyance. If the frequency is too high, to much energy is lost in the transistors, not to mention the fact that an h-bridge has a switching time, which would distort the actual duty cycle output.
 
-For calculating the pwm frequency the following formula is used: 
+For calculating the PWM frequency the following formula is used: 
 \begin{equation}
-F_{pwm} = \frac{F_{xtal}}{2^{number of bits}}
+F_{PWM} = \frac{F_{xtal}}{2^{number of bits}}
 \end{equation}
 
-Without using prescaler and bit reduction values, the pwm frequency is calculated with 16 bit resolution and a 50 mhz internal clock, which gives a resulting frequency:
+Without using prescaler and bit reduction values, the PWM frequency is calculated with 16 bit resolution and a 50 mhz internal clock, which gives a resulting frequency:
 \begin{equation}
 \frac{50 mhz}{2^{15}} = 1525.88 hz
 \end{equation}
@@ -107,8 +106,8 @@ Which is just above the minimum frequency requirement.
 
 \begin{figure}[htb]
 \includegraphics[scale=0.6,clip,trim=10 330 10 330]{PWMexecution.pdf}
-\caption{Flowchart of the pwm generator}
-\label{fig:pwmchart}
+\caption{Flowchart of the PWM generator}
+\label{fig:PWMchart}
 \end{figure}
 
 \subsection{Signed-to-magnitude splitter}
@@ -117,7 +116,7 @@ The magnitude is computed as follows:
 If it positive, its just the 15 last bits, if it is negative the twos compliment value is the output.
 
 \subsection{AUX control}
-The aux control takes the direction, pwm and freerun signals as input, and output the pwm signal on either pin 1 or 2 of the h-bridge. If the freerun pin is not high, the enable pin is high, if the freerun pin is high, no pwm is output, and the enable pin is low.
+The aux control takes the direction, PWM and freerun signals as input, and output the PWM signal on either pin 1 or 2 of the h-bridge. If the freerun pin is not high, the enable pin is high, if the freerun pin is high, no PWM is output, and the enable pin is low.
 
 \section{Decoder system}
 The decoder system is responsible for reading the state of the pan/tilt system from the hall sensors mounted on the system, and the quadrature encoders on the motors. 
@@ -135,13 +134,11 @@ The decoder is split into 4 major components: The Input filtering, the quadratur
 
 
 \subsection{Input filtering}
-Since the input signal comes from the outside \"real\" world, unwanted noise must be removed for it to be used. However, the regulator depends on this signal, so care must be taken not to introduce an unwanted large delay, as that would make the signal  useless.
+Since the input signal comes from the world outside the FPGA, unwanted noise must be removed for it to be used. However, the regulator depends on this signal, so care must be taken not to introduce an unwanted large delay, as that would make the signal  useless.
 
-To remove noise, a simple de-bounce, with hysteresis is applied, it features a counter that, for every clock pulse counts up if the input signal is high and down if it is low.
+To remove noise, a simple debounce, with hysteresis is applied, it features a counter that, for every clock pulse counts up if the input signal is high and down if it is low.
 When ever the counter rises above a threshold, and the filter is outputting a low signal, it changes to high. The same opposite when counting down.
 The counter part of the process introduces a delay in output changes, so that a lot of switching back and forth between high and low, will not affect the output. The hysteresis helps negate short burst errors in the input. 
-
-The distance between the lowest value possible in the hysteresis counter, and the value that causes a switch to high the in output,
 
 The difference between the hysteresis counters lowest value and the rising edge value, or the highest value and the falling edge value, whichever is highest, determines the maximum frequency the input filter will let through, as well as the delay introduced in the position counter.
 
@@ -194,6 +191,6 @@ In the final application, there is no velocity estimator, since it is not needed
 
 
 \section{Watchdog}
-Since all control commands are buffered in the ram until updated again, the fpga has no way of knowing if the SPI link has been lost, either because of the ARM processor crashing, or cable failure etc. This means that in case the case of the link being lost, it will continue going if any velocity command has been issued before the connection died. To correct this problem, a watchdog is implemented. It outputs an enable signal as long as there is a link between the fpga and ARM. 
-To detect the link presence, two registers in the control register are constantly incremented, and the watchdog keeps a watch on them, should they fail to change within a set time, the watchdog will stop all motor activity.
+Since all control commands are buffered in the RAM until updated to new values, the FPGA has no way of knowing if the commands are still valid commands or they are erroneous commands due to either the ARM processor crashing, or cable failure etc. This means that in case the case of failure, the FPGA it will continue outputting a PWM signal if any velocity command has been issued before the meaningful communication died. To correct this problem, a watchdog is implemented. It outputs an enable signal as long as there is a link between the FPGA and ARM, and the ARM routinely updates its assosiated register. 
+To detect the link presence, two registers in the control register are constantly incremented, and the watchdog keeps a watch on them, should they fail to change within a set time, the watchdog will stop all motor activity and go to a velocity of zero.
 The watchdog module is not included in the final application due to time constraints.
