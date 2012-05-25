@@ -1,7 +1,7 @@
 %\usepackage{graphicx}
 
 \section{Project description}
-The purpose with the project work is to construct a Pan and Tilt system, for the  shown in figure \ref{fig:pantilysystem}, so that it is possible to control the system from one or more user inputs eg a joystick, a keyboard, buttons or via commands from a computer. In addition shall the system also give the user options for feedback of significant system parameters.
+The purpose of the project work is to construct a pan and tilt system, for the set up shown in figure \ref{fig:pantilysystem}, so that it is possible to control the system from one or more user inputs for example a joystick, a keyboard, buttons or via commands from a computer. In addition the system should also give the user options for feedback of significant system parameters.
 
 \begin{figure}[htb]
 	\centering
@@ -10,6 +10,7 @@ The purpose with the project work is to construct a Pan and Tilt system, for the
 	\label{fig:pantilysystem}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
+This is to be prioritized in the project:
 \begin{itemize}
 \item A system analysis and modulation of the systems individual elements.
 \item Analysis and design of the regulation loops in Matlab and Simulink.
@@ -18,38 +19,77 @@ The purpose with the project work is to construct a Pan and Tilt system, for the
 \item Test and verification of the system.
 \end{itemize}
 
-It is up to the project group to chose the regulator system og the regulator loops' characteristics.
+It is up to the project group to chose the regulator system and the regulator loops characteristics.
 
 \section{Requirements}
 
 The following conditions are set for the system:
 \begin{itemize}
-\item The regulators' must be implemented on a microprocessor.
+\item The controllers must be implemented on a microprocessor.
 \item SPI must be used in communication between the microprocessor and the FPGA.
-\item The FPGA shall control the PWM signals to the motors.
-\item The FPGA shall be used to determine the motors position via the encoders.
+\item The FPGA must control the PWM signals to the motors.
+\item The FPGA must be used to determine the motors position via the encoders.
 \end{itemize}
 
-\section{The physical system}
+\section{Overall System Design}
 
-The following is provided for the project:
+Thus the system will overall consist of four parts. As shown in figure \ref{fig:firstsystem} there is the psychical system \ref{sec:phsycicalsystem} connected with an FPGA \ref{sec:FPGA} which is connected with SPI to a microprocessor \ref{sec:microprocessor} which is connected to i/o devices \ref{sec:iodevices}.
 
-\begin{itemize}
-\item 2 pc. Pan and Tilt setup, that is to be shared between the project groups.
-\item Motor with built in encoder to every project group.
-\item Print with double H-bridge to every project group.
-\end{itemize}
+\begin{figure}[htb]
+	\centering
+	\includegraphics[scale=0.5,trim=400 400 400 400]{graphics/firstsystem} %trim=l b r t (can cut off from every side)
+	\caption{Overall view of the system}
+	\label{fig:firstsystem}			% figure labels are of the form \label{fig:*}
+\end{figure}
 
-For the rest of the system the following devices are used:
+\section{The physical system}\label{sec:phsycicalsystem}
 
-\begin{itemize}
-\item The microprocessor is a Stellaris LM3S6965 on an Evaluation Board, which is mounted on a test board with keypad, incremental rotary encoder, potentiometer and an LCD.
-\item All hardware for user interface is from the given ARM test board.
-\item The FPGA is a Xilinx Nexys 2 board with a Spartan-3E chip on board.
-\item The SPI connection is made by connecting wires between ports on the to boards.
-\end{itemize}
+The physical system is provided for the project. It consist of a pan/tilt system driven by two EMG30 \cite{emg30} motors with inbuilt encoders. The motors are driven by an H-bridge \cite{hbridge} with 12 volt dc supply connected. Thus the system are controlled trough the H-bridge and output is collected by the encoders.
 
-The physical system was set up as following as shown in figure \ref{fig:digitalsystem}. All the user interface mounted with the microprocessor, all the motor input and output at the FPGA and a SPI connection between the two:
+\begin{figure}[htb]
+	\centering
+	\includegraphics[scale=0.3,trim=200 200 200 200]{graphics/phsycicalsystem} %trim=l b r t (can cut off from every side)
+	\caption{Set up of the physical system}
+	\label{fig:phsysicalsystem}			% figure labels are of the form \label{fig:*}
+\end{figure}
+
+\section{FPGA system}\label{sec:FPGA}
+
+The FPGA is a Xilinx Nexys 2 board with a Spartan-3E chip on board. Multiple processes will have to run on the FPGA. It is controlling the motors, watching the encoders and communicating with the microprocessor. Thus the three main processes are the SPI communication, the motor PWM and the encoder. Both the PWM and encoder process are to run double because two motors are controlled. 
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[scale=0.3,trim=200 200 200 200]{graphics/FPGA} %trim=l b r t (can cut off from every side)
+	\caption{Setup of the FPGA processes}
+	\label{fig:FPGA}			% figure labels are of the form \label{fig:*}
+\end{figure}
+
+\section{Microprocessor}\label{sec:microprocessor}
+
+The microprocessor is a Stellaris LM3S6965 on an Evaluation Board. The microprocessor is both to run the control, the user interface\ref{chap:ui} and the communication with the SPI. By sharing the parameters between the tasks they have a standard interface and are all working with the same parameters. Because the microprocessor will run multiple tasks communicating with each other some sort of scheduler and intertask communication will be needed\ref{chap:os}.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[scale=0.3,clip,trim=0 300 0 300]{graphics/microprocessor} %trim=l b r t (can cut off from every side)
+	\caption{The microprocessors system}
+	\label{fig:microprocessor}			% figure labels are of the form \label{fig:*}
+\end{figure}
+
+\section{I/O devices}\label{sec:iodevices}
+
+When the microprocessor Evaluation Board was provided a test board was included. The I/O devices should make it possible to test the control system easily. There are two possible LCD's as output and a numpad, buttons, an incremental rotary encoder and a potentiometer as possible inputs. \label{chap:ui}
+%Thus the incremental rotary encoder is chosen as main input to avoid many different %inputs, though the numpad is also included for situations were the incremental %encoder cannot be used. The test boards LCD was chosen because it is bigger and %therefore it can easier show feedback.
+\begin{figure}[htb]
+	\centering
+	\includegraphics[scale=0.3,clip,trim=00 400 00 400]{graphics/iodevices} %trim=l b r t (can cut off from every side)
+	\caption{Setup of the I/O devices}
+	\label{fig:iodevices}			% figure labels are of the form \label{fig:*}
+\end{figure}
+
+
+\section{The complete system}
+
+The electrical system was set up as shown in figure \ref{fig:digitalsystem}. All the user interface mounted with the microprocessor, all the motor input and output at the FPGA and a SPI connection between the two.
 
 \begin{figure}[htb]
 	\centering
@@ -58,18 +98,13 @@ The physical system was set up as following as shown in figure \ref{fig:digitals
 	\label{fig:digitalsystem}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
-\section{Complete system}
 
-The complete system is shown in figure \ref{fig:completesystem}, here are all individual components that need to be created for the system. The exact number of tasks is not meant to be shown, but as a reference to understand the analysis of the system.
-
-(Diagrammet skal aendres!)
-
-Meningen er at der skal være en lille analyse af hvad der skal udvikles/ hvordan systemet skal se ud...
+The complete system is shown in figure \ref{fig:completesystem}, this shows the parts the system have been divided into. This is not meant to show the exact number of tasks, but as a reference to understand the components in the system.
 
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[scale=0.8,trim=100 130 100 250]{graphics/Project4GreaterPresentation3.pdf} %trim=l b r t (can cut off from every side)
-	\caption{Setup of the complete system. Orange are physical components. Red are variables. Blue are tasks. Green are RAM. }
+	\includegraphics[scale=0.8,trim=100 130 100 250]{graphics/Project4GreaterPresentation4.pdf} %trim=l b r t (can cut off from every side)
+	\caption{ The combined model of parts that the system will consist of. }
 	\label{fig:completesystem}			% figure labels are of the form \label{fig:*}
 \end{figure}

@@ -3,37 +3,32 @@
 
 \marginnote{Frederik}
 
-In the project-description it is stated that a microprocessor shall run a user interface, a regulation system and a SPI communication with the FPGA. This system will require the microprocessor to run multiple tasks and thus an operating system is necessary. It has been decided to use the lent ARM microprocessor so the operating system has to be available for this system.
+In the project description it is stated that a microprocessor shall run a user interface, a control system and SPI communication with the FPGA. This system will require the microprocessor to run multiple tasks and thus an operating system is necessary. It has been decided to use the provided microprocessor so the operating system has to be available for this system. The system has to run in real time to create a reliable environment for the regulation. Thus a real time OS was to be used.
 
-The system has to run in real time to create a reliable environment for the regulation. Thus a RTOS have to be used.
-
-The group have decided to use FreeRTOS both because it meets the requirements and is well documented, but also because the whole group have experience with FreeRTOS from the EMP course.
+It has been decided to use FreeRTOS both because it meets the requirements and is well documented, but also because the whole group has experience with FreeRTOS from the EMP course.
 
 \section{ Pre-emptive Scheduling }
 
-To secure that the specific tasks is run in real time pre-emptive scheduling will be implemented. This is implemented by giving tasks priority when they are declared. Thus all tasks which have to run in real time is given a high priority. If a task is scheduled to run, but a task is already running, new task has a higher priority it can temporarily stop the task. Run it's own task and resume the suspended task. That way a high priority task can be guaranteed to run at specific frequency or at certain interrupts.
-
-When every task has been set up, the function \texttt{vTaskStartScheduler()} will initiate 
+To ensure that the specific tasks is run in real time, pre-emptive \marginnote{Frederik} scheduling will be implemented. This is implemented by giving tasks priority when they are declared. Thus all tasks which have to run in real time is given a high priority. If a task is scheduled to run, but a task is already running, and the new task has a higher priority it can temporarily stop the task, run it's own task and resume the suspended task. That way a high priority task can be guaranteed to run at specific frequency or at certain interrupts. When every task has been set up, the function \texttt{vTaskStartScheduler()} will initiate the tasks and enter a super loop by starting an idle task.\marginnote{kan man kalde det et super loop?}
 
 
 \section{ Delays  }
 
-In the system tasks does either need to be blocked by a timer or an i/o port. In FreeRTOS the time delay is handled by to different calls. 
-To secure that tasks run regularly each task is blocked with either \texttt{vTaskDelay} or \texttt{vTaskDelayUntil}. These calls will insure a relatively or a precise frequency of operation respectively. \texttt{vTaskDelayUntil} is able to do this by the user saving current tick at resume-time and giving that as input to the function.
+For delays to occur in the system tasks does either need to be blocked by a timer or an i/o port. In FreeRTOS the time delay is handled by two different calls. To ensure that tasks run regularly each task is blocked with either \texttt{vTaskDelay} or \texttt{vTaskDelayUntil}. These calls will ensure a relatively or a precise frequency of operation respectively. \marginnote{Frederik} \texttt{vTaskDelayUntil} is able to do this by the user saving current tick at resume time and giving that as input to the function.
  
 \section{ Semaphores }
 
-To synchronize processes and avoid race conditions, FreeRTOS use semaphores. The standard semaphore for synchronization between tasks is a binary semaphore. In FreeRTOS semaphores is created by, like with tasks first creating a handler, using the function \texttt{( xSemaphoreHandle xSemaphore )}
+To synchronize processes and avoid race conditions, FreeRTOS uses semaphores. The standard semaphore for synchronization between tasks is a binary semaphore. In FreeRTOS semaphores are created by, like with tasks, first creating a handler. Using the function \texttt{xSemaphoreHandle xSemaphore}
 
-The FreeRTOS semaphore have two operations just like standard semaphores, the \texttt{wait()} and \texttt{signal()}. They are designed as \texttt{xSemaphoreTake} and \texttt{xSemaphoreGive}, respectively. The \texttt{xSemaphoreTake} checks if the semaphore is free and takes it if possible.
+The FreeRTOS semaphore has two operations just like standard semaphores, the \texttt{wait()} and \texttt{signal()}. They are designed as \texttt{xSemaphoreTake} and \texttt{xSemaphoreGive}, respectively. The \texttt{xSemaphoreTake} checks if the semaphore is free and takes it if possible.
 When obtained a semaphore can be released with \texttt{xSemaphoreGive}.
 
 \section{ Queues }
 
-In FreeRTOS queues are implemented as a mean for intertask communication. It works as an FIFO buffer where the different tasks can either push or pop from the buffer.
+In FreeRTOS queues are implemented as a method of intertask communication. It works as an FIFO buffer where the different tasks can either push or pop from the buffer.
 
 \section{ Suspend }
-It is also possible to suspend and resume tasks by function calls. If a task is suspended it will not get any CPU time independent of it's priority.
+It is also possible to suspend and resume tasks by function calls. If a task is suspended it will not get any CPU time regardless of it's priority.
 
 \section{Risks of faults}
 
@@ -59,18 +54,18 @@ to control. In either case race conditions must be considered.
 Free RTOS provides queues and semaphores for inter task communication (Frederik
 uddyber\ldots)
 
-\subsection{Requirements}
+\subsection{Requirements}\marginnote{Leon du må lige uddybe}
 In the considered pan-tilt system there are several paths requiring inter task
 communication. By default the shared data must be protected by mutual exclusion
-though it might be considered if data has to be reliable at all times.
+though it might be considered if data has to be reliable at all times. 
 
  It must be taken into consideration that some of the time critical tasks needs
  to access multiple parameters. For example the control task needs access to all
  system parameters to calculate the control signals.
  
  The inter task communication system should ensure low coupling to allow reuse
- of sourcecode in other projects. It should also be considered, that the code
- might run on other operating systems so the coupling to OS should also be kept
+ of source code in other projects. It should also be considered, that the code
+ might run on other operating systems so the coupling to the OS should also be kept
  low.
  
  Since multiple programmers will have to use the inter task communication
@@ -85,16 +80,16 @@ used to control the state of the internal system state machine.
 Events are used for presenting user inputs and timing events to the tasks and
 are signified in the message being deleted once read. Counters are also simple
 data structures and is in essence just another way of interfacing to a global
-variable. The reason for maintaining counters as a seperate interface is that
+variable. The reason for maintaining counters as a separate interface is that
 some systems provide hardware counters.
 
-Though advanced queues are provided by freRTOS, a simple version is justified by
+Though advanced queues are provided by FreeRTOS, a simple version is justified by
 remaining a low coupling between the peripheral modules and the operating
 system.
 
 \subsection{Discussion}
-A common way of sharing variables between tasks is to declare them globally and
-then letting the individual tasks obtain a mutex and access the variable either
+A common way of sharing variables between tasks is to declare them globally.
+Then letting the individual tasks obtain a mutex and access the variable, either
 directly or by calling a function providing some interface to the variable.
 
 The upside of this solution is that it is easily implemented. The downside is
@@ -103,7 +98,7 @@ depending upon knowledge of both the operating system to obtain the mutex and
 the methods to access the variables.
 
 Another solution would be to rely only on the queues and semaphores provided by
-freeRTOS. This resembles message passing, since the interface is provided by the
+FreeRTOS. This resembles message passing, since the interface is provided by the
 operating system. The upside of this solution is, that coupling is now only
 between the task and the operating system and could be further reduced by using
 the preprocessor to provide a low coupling interface to any queue or semaphore
