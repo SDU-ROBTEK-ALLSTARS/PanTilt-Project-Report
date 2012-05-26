@@ -29,13 +29,13 @@ The first function to be called under normal circumstances would be \texttt{spi\
 \begin{figure}[htb]
   \begin{subfigure}[b]{0.495\textwidth}
     \centering
-    \includegraphics[width=\textwidth,clip,trim=0 0 0 0]{content/04_communication/figures/spi_task_diagram_initial_1.pdf}
+    \includegraphics[width=\textwidth,clip,trim=10 -46 10 0]{content/04_communication/figures/spi_task_diagram_initial_1.pdf}
     \caption{Before the \texttt{spi\_register\_task} call.}
     \label{fig:spi_task_diagram_initial_1}
   \end{subfigure}
   \begin{subfigure}[b]{0.495\textwidth}
     \centering
-    \includegraphics[width=\textwidth,clip,trim=0 0 0 0]{content/04_communication/figures/spi_task_diagram_initial_2.pdf}
+    \includegraphics[width=\textwidth,clip,trim=10 0 10 0]{content/04_communication/figures/spi_task_diagram_initial_2.pdf}
     \caption{After the \texttt{spi\_register\_task} call.}
     \label{fig:spi_task_diagram_initial_2}
   \end{subfigure}
@@ -56,7 +56,7 @@ To understand how the implementation works, lets describe what goes on ``under t
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=\textwidth,clip,trim=0 15 0 15]{content/04_communication/figures/spi_task_diagram_running.pdf}
+  \includegraphics[width=0.94\textwidth,clip,trim=0 15 0 15]{content/04_communication/figures/spi_task_diagram_running.pdf}
   \caption{An overview of the SPI implementation.}
   \label{fig:spi_task_diagram}
 \end{figure}%trim=l b r t
@@ -74,6 +74,8 @@ The receiver task blocks on incoming data which is provided by \texttt{spi\_int\
 
 
 \subsection{Test}
+In order to test the stability and reliability of the SPI software, a test program was written. The 
+
 
 
 \subsection{Discussion?}
