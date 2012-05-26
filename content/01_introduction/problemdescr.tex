@@ -65,7 +65,7 @@ The FPGA is a Xilinx Nexys 2 board with a Spartan-3E chip on board. Multiple pro
 
 \section{Microprocessor}\label{sec:microprocessor}
 
-The microprocessor is a Stellaris LM3S6965 on an Evaluation Board. The microprocessor is both to run the control, the user interface\ref{chap:ui} and the communication with the SPI. By sharing the parameters between the tasks they have a standard interface and are all working with the same parameters. Because the microprocessor will run multiple tasks communicating with each other some sort of scheduler and intertask communication will be needed\ref{chap:os}.
+The microprocessor is an ARM Cortex M3 mounted on a Stellaris LM3S6965 Evaluation Board. The microprocessor is both to run the control, the user interface\ref{chap:ui} and the communication with the SPI. By sharing the parameters between the tasks they have a standard interface and are all working with the same parameters as seen in  \ref{tab:parameters}. Because the microprocessor will run multiple tasks communicating with each other some sort of scheduler and intertask communication will be needed\ref{chap:os}.
 
 \begin{figure}[htb]
 	\centering
@@ -73,6 +73,21 @@ The microprocessor is a Stellaris LM3S6965 on an Evaluation Board. The microproc
 	\caption{The microprocessors system}
 	\label{fig:microprocessor}			% figure labels are of the form \label{fig:*}
 \end{figure}
+
+
+\begin{table}[htb]				
+	\begin{center}
+	\begin{tabular}{l|c|c|c}			
+	Parameter & Format & ARM & FPGA \\		
+	\hline												
+pan pwm &16 bit signed & read/write & read \\
+tilt pwm & 16 bit signed  & read/write & read
+	\end{tabular}
+	\end{center}
+	\caption{Parameters that define the system}				
+	\label{tab:parameters}			
+\end{table}
+
 
 \section{I/O devices}\label{sec:iodevices}
 
