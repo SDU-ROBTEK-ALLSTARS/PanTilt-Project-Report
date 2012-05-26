@@ -69,11 +69,10 @@ The first approach was to design the protocol to carry just the information that
 Another approach to the protocol design was to make a protocol to synchronise a static sized memory between the two platforms. The idea was to take advantage of the 16bit x 8 FIFO on the ARM platform, so one package would fit exactly into it. The advantage would be that the ARM processor only needs to be interrupted when the FIFO was full. A similar solution would then be written in hardware to the FPGA, making this solution quite efficient. The large amount of data in one package would allow a CRC or checksum to be implemented without too much overhead. An example of how this protocol could be made is shown in figure \ref{fig:spi_protocol_format_memsync}.
 
 \begin{figure}[htb]
-	\begin{center}
-	\includegraphics[scale=0.6,trim=20 0 0 0]{graphics/spi_protocol_format_memsync.pdf} %trim=l b r t (can cut off from every side)
+	\centering
+	\includegraphics[width=0.96\textwidth,trim=0 0 0 0]{graphics/spi_protocol_format_memsync.pdf} %trim=l b r t (can cut off from every side)
 	\caption{An example of the protocol design with the memory synchronisation protocol approach}
-	\label{fig:spi_protocol_format_memsync}			% figure labels are of the form \label{fig:*}
-	\end{center}
+	\label{fig:spi_protocol_format_memsync}			% figure labels are of the form 
 \end{figure}
 
 The first four bits from the master decides what the slave shall respond. The next four bits describes what the master is sending to the slave. After the slave has received the first four bits, it immediately echoes the command followed by the requested data.
@@ -104,11 +103,10 @@ For synchronisation of clock and data on the signal lines, mode 0 was chosen. Mo
 % Depending on the address it can be read only, write only or read/write. 
 The general idea is that the SPI slave has a memory block, which the SPI master can read and write from. The list of addresses are determined by the hardware modules on the FGPA and can be found in table \ref{tab:Memorymapping}. The protocol itself is pretty straight forward. The MSB determines if it is a read or write operation, and the last 5 bits determines the address or function. The two bits in between are reserved for future use, and should always be set to zero. The five address bits in the current design gives access to 32 bytes of memory on the slave device, which is enough to hold the data for this project. The command structure is shown in figure \ref{fig:spi_protocol_cmd_structure}. Both reference devices supports a burst command, where a series of relevant data are sent as response of a single command. There was no need to implement such functionality in this design. How the reading and writing is done is described below.
 \begin{figure}[htb]
-	\begin{center}
-	\includegraphics[scale=0.65,trim=0 0 0 0]{graphics/spi_protocol_cmd_structure.pdf} %trim=l b r t (can cut off from every side)
+	\centering
+	\includegraphics[width=0.96\textwidth,trim=0 0 0 0]{graphics/spi_protocol_cmd_structure.pdf} %trim=l b r t (can cut off from every side)
 	\caption{Bit structure of the SPI command send from master to slave}
-	\label{fig:spi_protocol_cmd_structure}			% figure labels are of the form \label{fig:*}
-	\end{center}
+	\label{fig:spi_protocol_cmd_structure}			% figure labels are of the form 
 \end{figure}
 
 
@@ -117,7 +115,7 @@ When the master needs to read from the slave device it sends a byte with the MSB
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\textwidth]{graphics/spi_protocol_command_structure_read_wlabels.pdf} %trim=l b r t (can cut off from every side)
+	\includegraphics[width=0.96\textwidth]{graphics/spi_protocol_command_structure_read_wlabels.pdf} %trim=l b r t (can cut off from every side)
 	\caption{SPI communication when reading from the slave}
 	\label{fig:spi_protocol_command_structure_read}			% figure labels are of the form \label{fig:*}
 \end{figure}
@@ -128,7 +126,7 @@ The command send from the master device when writing to the slave device is simi
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\textwidth]{graphics/spi_protocol_command_structure_write_wlabels.pdf} %trim=l b r t (can cut off from every side)
+	\includegraphics[width=0.96\textwidth]{graphics/spi_protocol_command_structure_write_wlabels.pdf} %trim=l b r t (can cut off from every side)
 	\caption{SPI communication when writing to the slave}
 	\label{fig:spi_protocol_command_structure_write}			% figure labels are of the form \label{fig:*}
 \end{figure}
@@ -148,7 +146,7 @@ Before writing any code for the SPI hardware, a diagram of the needed hardware b
 
 \begin{figure}[htb] 
 	\centering
-	\includegraphics[scale=0.7,trim=0 270 0 270]{graphics/spi_protocol_fpga_blocks_final_design.pdf} %trim=l b r t (can cut off from every side)
+  \includegraphics[width=0.96\textwidth,clip,trim=0 270 0 270]{graphics/spi_protocol_fpga_blocks_final_design.pdf}%trim=l b r t
 	\caption{Blockdiagram for the SPI interface on the FPGA}
 	\label{fig:spi_protocol_fpga_blocks_final_design}			% figure labels are of the form \label{fig:*}
 \end{figure}
@@ -179,7 +177,7 @@ The "SPI protocol controller" is the state machine which controls the package fl
 
 \begin{figure}[htb] 
 	\centering
-	\includegraphics[scale=0.6,trim=0 100 0 100]{graphics/spi_protocol_controller_prettystates.pdf} %trim=l b r t (can cut off from every side)
+	\includegraphics[scale=0.6,clip,trim=0 100 0 100]{graphics/spi_protocol_controller_prettystates.pdf} %trim=l b r t (can cut off from every side)
 	\caption{State diagram for the SPI protocol controller}
 	\label{fig:spi_protocol_controller_prettystates}
 \end{figure}
