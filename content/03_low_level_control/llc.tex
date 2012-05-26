@@ -51,7 +51,9 @@ The actual derivative would be the change in value over the time since last entr
 In a faulty system it could be considered implementing a maximum on the differentiator to prevent wrong or noisy measurements of having too much impact on the system. As a start this is not implemented as to not solve the problem until it arise.
 
 \subsection{Adjusting the D-gain}
-Testing was done with a fixed P-gain of ten, I-gain of 0.05 with anti-windup at ten thousand. As a first guess the D-gain was set to
+Testing was done with a fixed P-gain of ten, I-gain of 0.05 with anti-windup at ten thousand. As a first guess the D-gain was set to 0.1 which made the system unstable. Further testing showed unstability starting around 0.08 and 0.05 was chosen.
+
+The system reacts faster when changing setpoint, but the D-term introduces some jitter when on hold. Though the system seems less robust, it reacts fine to applied external force.
 
 
 

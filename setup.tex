@@ -31,15 +31,42 @@
 \usepackage{url}
 \usepackage[normalem]{ulem}
 \usepackage{tocbibind}
+\usepackage{fancyhdr}
 
 % Bibliography
 \usepackage[style=numeric,natbib=true,sortcites=true,block=space,backend=biber]{biblatex}
 \bibliography{content/bibliography}
 % Use 'biber %' to build bibliography
 
+% Table of contents
+\setcounter{tocdepth}{2}
+
+% Headers and footers
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\lhead{\slshape \leftmark}
+\chead{}
+\rhead{\slshape \rightmark}
+\lfoot{}
+\cfoot{}
+\rfoot{\thepage}
+
 % marginnote package options
 \renewcommand*{\marginfont}{\color{red}\sffamily} %red, sans-serif
 \reversemarginpar %margin notes on left side
+
+% to justify typewriter monofont if used a lot in one place
+\newcommand*\justify{%
+  \fontdimen2\font=0.4em% interword space
+  \fontdimen3\font=0.2em% interword stretch
+  \fontdimen4\font=0.1em% interword shrink
+  \fontdimen7\font=0.1em% extra space
+  \hyphenchar\font=`\-% allowing hyphenation
+}
+
+% Define custom typewriter shorthands (uses \justify)
+\newcommand{\justtt}[1]{\texttt{\justify{\small #1}}}
+\newcommand{\smalltt}[1]{\texttt{{\small #1}}}
 
 % listings package settings
 \lstloadlanguages{Matlab,[ANSI]C}
@@ -58,7 +85,7 @@
   showspaces=false,
   showtabs=false,
   keywordstyle=\color{blue},
-  escapeinside={(*¤}{¤*)},
+  escapeinside={(*¤}{*¤)},
   %rangeprefix=,
   %rangesuffix=,
   includerangemarker=false,
@@ -119,7 +146,7 @@
   {10pt}%sep
   {\Huge}%before
 
-% make nomenclature and change its heading/toc text (see nomencl package)
+% make nomenclature and change its heading/ text (see nomencl package)
 \makenomenclature
 \renewcommand{\nomname}{Abbreviations}
 %

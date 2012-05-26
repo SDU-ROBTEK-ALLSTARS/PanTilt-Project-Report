@@ -73,7 +73,7 @@ Another approach to the protocol design was to make a protocol to synchronise a 
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[scale=0.7,trim=0 380 0 380]{graphics/spi_protocol_format_memsync.pdf} %trim=l b r t (can cut off from every side)
+	\includegraphics[width=\textwidth,clip,trim=0 380 0 380]{graphics/spi_protocol_format_memsync.pdf} %trim=l b r t (can cut off from every side)
 	\caption{An example of the protocol design with the memory synchronisation protocol approach. The upper line is data from master to slave, the next line is data from slave to master. The first four bits from the master decides what the slave shall respond. The next four bits describes what the master is sending to the slave. After the slave has received the first four bits, it immediately echoes the command followed by the requested data.}
 	\label{fig:spi_protocol_format_memsync}			% figure labels are of the form \label{fig:*}
 \end{figure}
@@ -104,7 +104,7 @@ For synchronisation of clock and data on the signal lines, mode 0 was chosen. Mo
 The general idea is that the SPI slave has a memory block, which the SPI master can read and write from. Depending on the address it can be read only, write only or read/write. The list of addresses and read/write permissions can be found in the device datasheet. The protocol itself is pretty straight forward. The MSB determines if it is a read or write operation, and the last 5 bits determines the address or function. The two bits in between are reserved for future use, and should always be set to zero. The five address bits in the current design gives access to 32 bytes of memory on the slave device, which is enough to hold the data for this project. The command structure is shown in figure \ref{fig:spi_protocol_cmd_structure}. Both reference devices supports a burst command, where a series of relevant data are sent as response of a single command. There was no need to implement such functionality in this design.
 \begin{figure}[htb]
 	\centering
-	\includegraphics[scale=0.7,trim=0 390 0 390]{graphics/spi_protocol_cmd_structure.pdf} %trim=l b r t (can cut off from every side)
+	\includegraphics[width=\textwidth,clip,trim=0 390 0 390]{graphics/spi_protocol_cmd_structure.pdf} %trim=l b r t (can cut off from every side)
 	\caption{Bit structure of the SPI command package send from master to slave. Each yellow box represents a bit, and has the number and function noted inside}
 	\label{fig:spi_protocol_cmd_structure}			% figure labels are of the form \label{fig:*}
 \end{figure}
@@ -115,7 +115,7 @@ When the master needs to read from the slave device it sends a byte with the MSB
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[scale=0.6,trim=0 0 0 0]{graphics/spi_protocol_command_structure_read_wlabels.pdf} %trim=l b r t (can cut off from every side)
+	\includegraphics[width=\textwidth]{graphics/spi_protocol_command_structure_read_wlabels.pdf} %trim=l b r t (can cut off from every side)
 	\caption{SPI communication when reading from the slave}
 	\label{fig:spi_protocol_command_structure_read}			% figure labels are of the form \label{fig:*}
 \end{figure}
@@ -126,7 +126,7 @@ The command send from the master device when writing to the slave device is simi
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[scale=0.6,trim=0 0 0 0]{graphics/spi_protocol_command_structure_write_wlabels.pdf} %trim=l b r t (can cut off from every side)
+	\includegraphics[width=\textwidth]{graphics/spi_protocol_command_structure_write_wlabels.pdf} %trim=l b r t (can cut off from every side)
 	\caption{SPI communication when writing to the slave}
 	\label{fig:spi_protocol_command_structure_write}			% figure labels are of the form \label{fig:*}
 \end{figure}
@@ -134,6 +134,8 @@ The command send from the master device when writing to the slave device is simi
 
 
 \section{Protocol ARM implementation}
+\input{content/04_communication/spi_arm.tex}
+
 \section{Protocol FPGA implementation}
 % Something about the memeory interface to the other hardware parts
 The SPI client interface on the FPGA needs to written in hardware language. As interface to other components in the FPGA it was chosen to use a true dual port RAM on the xilinx board. The RAM then has the responsibility of avoiding race conditions, and presenting an easy-to-use and known-to-work interface between the components. 
@@ -144,7 +146,7 @@ Before writing any code for the SPI hardware, a diagram of the needed sub compon
 
 \begin{figure}[htb] 
 	\centering
-	\includegraphics[scale=0.7,trim=0 270 0 270]{graphics/spi_protocol_fpga_blocks_final_design.pdf} %trim=l b r t (can cut off from every side)
+	\includegraphics[width=\textwidth,clip,trim=0 270 0 270]{graphics/spi_protocol_fpga_blocks_final_design.pdf} %trim=l b r t (can cut off from every side)
 	\caption{Sub component diagram for the SPI interface on the FPGA. Round shapes are signals, and squares are processes}
 	\label{fig:spi_protocol_fpga_blocks_final_design}			% figure labels are of the form \label{fig:*}
 \end{figure}
