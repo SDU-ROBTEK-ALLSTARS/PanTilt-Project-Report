@@ -1,17 +1,10 @@
-\documentclass[11pt,a4paper]{report}
-\usepackage[utf8]{inputenc}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
-\begin{document}
-
 \section{Precision of system}
 
 This experiment will test the precision of the complete system. 
 
 \subsection{Range}
 
-The position will shift between two different positions and the positions will be recorded when the controller believes the position is reached. When controller stops the position are marked, and the other position is set to the controller and this position are now marked etc. This is repeated ten times.
+The system will change between two different positions, and stop when it has reached as it best can. When controller stops the position are marked, and the other position is set to the controller which now converges to this position. When it reaches it the position are marked and it will begin moving to the former position etc. \dots This is done ten times.
 
 \subsection{Test Setup}
 
@@ -22,7 +15,7 @@ The test is performed by fastening a laser pointer on the pan/tilt system. A boa
 
 \subsection{Result}
 
-At both points the error was less than five centimetres and was two most of the time. This means that the system have an uncertainty between 0.658 and 3.293 degrees. This precision is reached with overshoot.
+At both points the error was less than five centimetres and at most of the time less than two. This means that the system have an uncertainty between 0.658 and 3.293 degrees. This precision is reached with overshoot.
 
 \[ \frac{2.0}{3.03687} = 0.658 \]
 
@@ -30,7 +23,6 @@ At both points the error was less than five centimetres and was two most of the 
 
 \subsection{Conclusion}
 
-It is a very high precision that have been observed, at times the uncertainty is so small that it possible comes from uncertainty in the system. The system is though not able to hit the position without overshooting. But as precision and not speed was our objective this is a satisfying result, but it is also showing that better precision can be reached. 
-
-
-\end{document}
+The system itself, when no account is taking the elasticity, have a precision of af third degree.
+\[ \frac{1080.0}{360} = 3 \]
+It is a high precision that have been observed, at times the uncertainty is so small that it comes from uncertainty in the system. The system is though not able to hit the position without overshooting. But as precision and not speed was our objective this is a satisfying result, but it is also showing that better precision can be obtained.
