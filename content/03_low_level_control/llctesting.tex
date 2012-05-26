@@ -1,69 +1,126 @@
-\chapter{Motor Interface testing}
-Each subsytem in motor interface section is encapsulated in a seperate module.
-Each module is tested seperately before being assembled in the main memory interface block, and this chapter will deal with the individual module tests, as well as the final test.
+\section{Motor Interface testing} \label{sec:llctest}
+Each sub block in motor interface section is encapsulated in a separate module.
+Each module is tested separately before being assembled in the main memory interface block, and this chapter will deal with the individual module tests, as well as the final test.
 The test consists of a testbench file and an associated evaluation.
 
 \section{PWM generator}
-Range:                  PWM Generator (PWMv1.vhd)
-Testbench: 				pwmtester.vhd
-Search area:            Can a duty cycle be set, and will it produce a corresponding correct output?
-						If the input is all zero or max value, will the module output dc ?
-Expectations:           The expectations are that all of the above will work.
-Result:                 It worked
-Conclusion:             The FPGA can control the motor. 
+This is a test of the PWM module.\\
+File: PWMv1.vhd\\
+Testbench: pwmtester.vhd
+\subsection{Range}
+This is a test of the following: Can a duty cycle be set, and will it produce a corresponding correct output?
+If the input is all zero or max value, will the module output dc ?
+\subsection{Test setup}
+The Generator is applied an integer and clock signal as input, the output is plotted. The input integer is slowly incremented.
+\subsection{Result}
+The observed duty cycle was consistent with the input.
+\subsection{Conclusion}
+The PWM generator can correctly generate a duty cycle based on the input.
+
+
 
 \section{Signed to magnitude}
-Range:                  Signed int to magnitude and sign splitter (SignedToMagnitude.vhd)
-Testbench: 				signtest.vhd
-Search area:            Every possible(18 bit) integer is input, and the output is examined.
-Expectations:           That the magnitude of the number is on the output pins, as well as the sign.
-Result:                 The correct results for all integers, except for the most negative, which was truncated to maximum magnitude.
-Conclusion:             The splitter works as intended, and can be used to direct the duty cycle input. 
+This is a test of the signed to magnitude splitter.\\
+File: SignedToMagnitude.vhd\\
+Testbench: signtest.vhd
 
-\section{Controlblock}
-Range:                  Top motor control module(ControlBlockTop.vhd)
-Testbench: 				motor\_control\_block\_test.vhd
-Search area:            Can the module generate a PWM signal based on a signed integer, switch to freerun and brake ?
-Expectations:           It is expected that the module works as described.
-Result:                 The module works
-Conclusion:             The pan/tilt system can be convieniently controlled by a signed integer and a control bit.
+\subsection{Range}
+This test will verify whether the block outputs a correct output based on its input.
+\subsection{Test setup}
+The block is applied every 16 bit integer combination, and the output is compared.
+\subsection{Result}
+Every single output matches the input in magnitude, except the largest negative number, which is truncated to the largest positive number.
+\subsection{Conclusion}
+The block correctly decodes the sign and magnitude, and therefore meets its requirements.
+
+\section{Control block}
+This is a test of the top motor control block.\\
+File: ControlBlockTop.vhd\\
+Testbench: motor\_control\_block\_test.vhd
+\subsection{Range}
+This test is a test of the control blocks ability to generate the correct control signals based on torque input. Also whether the block correctly reacts to freerun commands.
+\subsection{Test setup}
+The block is applied an input number which slowly increases from the lowest possible to the larges possible value, the free run bit is toggled after a long time period and the output is plotted.
+\subsection{Result}
+The block produces a duty cycle corresponding to the magnitude of the input, the output pin of the PWM signal corresponds to that of the sign of the input number. The freerun bit completely shuts off the output and switches the enable pin.
+\subsection{Conclusion}
+The control block meets the design requirements and works as intended.
 
 \section{Input filter}
-Range:                  Input filter(Hysteresis.vhd)
-Testbench: 				inputfiltertest.vhd
-Search area:            Does the input filter, filter out high frequency noise.
-Expectations:           It filters out noise and the signal had a slight delay.
-Result:                 Noise was removed and the signal was delayed by a couple of nano seconds.
-Conclusion:             Disturbances was removed from the signal reliably, and the signal can be used as decoder input.
+This is a test of the input signal filter.\\
+File: Hysteresis.vhd\\
+Testbench: inputfiltertest.vhd
+\subsection{Range}
+This tests the input filters ability to remove a high frequency noise signal from the input signal.
+\subsection{Test setup}
+A correct low frequency signal and a high frequency noise is mixed together and applied to the filter. The output is plotted.
+\subsection{Result}
+The high frequency signal is removed, and the low frequency signal is slightly delayed.
+\subsection{Conclusion}
+The filter correctly removes high frequency noise.
 
 \section{Quadrature decoder}
-Range:                  Quadrature decoder module (FourXDecoderV2.vhd)
-Testbench: 				decoder\_v2\_testb.vhd
-Search area:            Can the decoder correctly keep track of a position, when a pule train is applied to the inputs.	
-Expectations:           The decoder counts up/down with the given input signal.
-Result:                 The decoder counted correctly.
-Conclusion:             The decoder can be used to keep track of the pan/tilt position.
+This is a test of the quadrature decoder block.\\
+File: FourXDecoderV2.vhd\\
+Testbench: decoder\_v2\_testb.vhd
+\subsection{Range}
+This is a test of the decoders ability to track a position based on quadrature encoder output.
+\subsection{Test setup}
+The decoder is applied two pulse trains 90 degrees out of phase, corresponding to an ideal encoder output. The output number is plotted.
+\subsection{Result}
+The decoder counted up for each change in the input signal.
+\subsection{Conclusion}
+The decoder can correctly track a position.
 
 \section{Velocity estimator using secant method}
-Range:                  Velocity approximations(dxdt)
-Testbench: 				velocity\_test\_secant.vhd
-Search area:            Can the velocity estimator \"guess\" the velocity, when applied a changing position.	
-Expectations:           A reasonable velocity.
-Result:                 Garbage output.
-Conclusion:             It would have been nice if this module worked, but it is not strictly needed and therefore it does not matter that it did not work.
+This is a test of the first of the two velocity estimators, using the secant method.\\
+File: dxdt.vhd\\
+Testbench: velocity\_test\_secant.vhd
+\subsection{Range}
+This test measure the ability of the estimator to give a velocity based on an increasing position.
+\subsection{Test setup}
+An integer is applied to the input, which is slowly incremented. The output is plotted.
+\subsection{Result}
+The output was mostly random numbers.
+\subsection{Conclusion}
+The module did not work, as the output did not in any way correspond meaningfully to the input.
 
 \section{velocity estimator avg}
-Range:                  Velocity approximations(dvdtv2)
-Testbench: 				velocity\_test\_avg.vhd
-Search area:            Can the velocity estimator \"guess\" the velocity, when applied a changing position.
-Expectations:           A reasonable velocity.
-Result:                 Garbage output.
-Conclusion:             It would have been nice if this module worked, but it is not strictly needed and therefore it does not matter that it did not work.
+This is a test of the second of the two velocity estimators, using the running.\\
+File: dvdtv2.vhd\\
+Testbench: velocity\_test\_avg.vhd
+\subsection{Range}
+This test measure the ability of the estimator to give a velocity based on an increasing position.
+\subsection{Test setup}
+An integer is applied to the input, which is slowly incremented. The output is plotted.
+\subsection{Result}
+The output was mostly random numbers.
+\subsection{Conclusion}
+As with the previous estimator, the module did not work, as the output did not in any way correspond meaningfully to the input.
 
 \section{Watchdog}
-Range:                  (Which system part is tested?) module file
-Testbench: 				watchdog\_test.vhd
-Search area:            Can the watchdog maintain an \"alive\" signal when an alternating input is applied, and will the output be low when the input dies.
-Expectations:           The above.
-Result:                 It works perfectly, the output dies a short time after the input.
-Conclusion:             The watchdog can be used in the project.
+This is a test of the watchdog block.\\
+File: watchdog.vhd\\
+Testbench: watchdog\_test.vhd
+\subsection{Range}
+This test measure the watchdogs ability to correctly maintain an alive signal, based on the given input.
+\subsection{Test setup}
+The block is applied a constantly changing signal, and after a period a contant signal. The output is plotted.
+\subsection{Result}
+The block output was high as long as the input was changing. The output fell to low shortly after the input stopped changing.
+\subsection{Conclusion}
+The watchdog worked as specified.
+
+\section{Motor memory interface}
+This is a test of the combined motor interface module.\\
+File: Motor\_memory\_interface.vhd\\
+Testbench: MMI\_test.vhd + (1\_BLINK.COE)
+\subsection{Range}
+This final test, will test whether the whole system can correctly read and write to the RAM block, and also act on the read data.
+\subsection{Test setup}
+An input signal is applied to all of the used pins of port JC, in a manner imitating a real signal that would be found in the actual test setup. Also a memory image with velocity commands are loaded in the ram block.
+
+\subsection{Result}
+A pwm signal on the output pins is observed, and position/velocity data is recorded in the RAM block.
+\subsection{Conclusion}
+The MMI block functions as expected and can be used in the project.

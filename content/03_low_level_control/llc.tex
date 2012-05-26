@@ -1,10 +1,9 @@
-\chapter{Low level control GENOVERVEJ OVERSKRIFT !!!!,FLYT MUTEX DEL TIL RAM DELEN}\label{chap:llc}
-
-
+\chapter{Low level control}\label{chap:llc}
 Before the ARM core can control the physical system, an interpreting layer needs to be added, that can receive torque commands and control the physical system based on them, and report position and velocity of the physical system back as useful values.
 This part of the system is situated on the FPGA, and architecturally, it is split in two nearly independent systems, one being the SPI driver and the other being the motor control.
 The SPI driver acts as the link between the ARM processor and the FPGA and is described in chapter \ref{chap:comm}, the motor control section is described in this chapter.
 The two subsystems communicate through a shared RAM block using the method described in chapter \ref{chap:comm}, but functions otherwise completely independent of each other.
+No attempts to lock the RAM is made, even though race conditions can occur between the two sub blocks, they will exist for a very short time, as the SPI block transmits with one mHz and the RAM updates in 6 clock cycles, which is several magnitudes faster than the regulator task using these values.
 
 
 \section{Motor interface}
@@ -24,7 +23,7 @@ The input pins of the decoder system comes from the index pins of the hall senso
 
 \includegraphics[scale=0.6,clip,trim=135 270 135 270]{FPGAmotorarchitecture.pdf}
 
-\caption{FPGA architecture, from the motor interface perspective}
+\caption{FPGA architecture, from the motor interface perspective, it should function without concern for the SPI part of the system}
 \label{fig:FPGAMotorArchitecture}
 \end{figure}
 
@@ -194,3 +193,6 @@ In the final application, there is no velocity estimator, since it is not needed
 Since all control commands are buffered in the RAM until updated to new values, the FPGA has no way of knowing if the commands are still valid commands or they are erroneous commands due to either the ARM processor crashing, or cable failure etc. This means that in case the case of failure, the FPGA it will continue outputting a PWM signal if any velocity command has been issued before the meaningful communication died. To correct this problem, a watchdog is implemented. It outputs an enable signal as long as there is a link between the FPGA and ARM, and the ARM routinely updates its assosiated register. 
 To detect the link presence, two registers in the control register are constantly incremented, and the watchdog keeps a watch on them, should they fail to change within a set time, the watchdog will stop all motor activity and go to a velocity of zero.
 The watchdog module is not included in the final application due to time constraints.
+
+\section{Conclusion}
+The individual blocks are tested and proven working, with the exception of the velocity estimators, in chapter \ref{chap:experiments} section \ref{sec:llctest}. This means that the FPGA motor control block meets all of the requirements, for it to be used in the control system. 
