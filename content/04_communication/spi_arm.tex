@@ -26,24 +26,24 @@ The interface quite simply consists of the four functions \texttt{spi\_init}, \t
 
 The first function to be called under normal circumstances would be \texttt{spi\_init}. It initializes the hardware SPI peripheral for use such as described in [ref freescale etc.]. Also, it creates two tasks; a transmitter and a receiver as well as associated queues and semaphores.
 
-For at task to be able to use the SPI link, it will have to first make a call to the function \texttt{spi\_register\_task}. That is because resources are allocated dynamically (described in \ref{sec:spi_underthehood}.). Figure \ref{fig:spi_register_task} shows a user task using the register function and getting queues allocated to it. 
-
 \begin{figure}[htb]
-  \begin{subfigure}{0.49\textwidth}
+  \begin{subfigure}[b]{0.495\textwidth}
     \centering
-    \includegraphics[width=\textwidth,clip,trim=90 480 90 150]{content/04_communication/figures/spi_task_diagram_initial_1.pdf}
+    \includegraphics[width=\textwidth,clip,trim=0 0 0 0]{content/04_communication/figures/spi_task_diagram_initial_1.pdf}
     \caption{Before the \texttt{spi\_register\_task} call.}
     \label{fig:spi_task_diagram_initial_1}
   \end{subfigure}
-  \begin{subfigure}{0.49\textwidth}
+  \begin{subfigure}[b]{0.495\textwidth}
     \centering
-    \includegraphics[width=\textwidth,clip,trim=90 480 90 150]{content/04_communication/figures/spi_task_diagram_initial_2.pdf}
+    \includegraphics[width=\textwidth,clip,trim=0 0 0 0]{content/04_communication/figures/spi_task_diagram_initial_2.pdf}
     \caption{After the \texttt{spi\_register\_task} call.}
     \label{fig:spi_task_diagram_initial_2}
   \end{subfigure}
   \caption{A user task registering with the SPI interface.}
   \label{fig:spi_register_task}
 \end{figure}%trim=l b r t
+
+For at task to be able to use the SPI link, it will have to first make a call to the function \texttt{spi\_register\_task}. That is because resources are allocated dynamically (described in \ref{sec:spi_underthehood}.). Figure \ref{fig:spi_register_task} shows a user task using the register function and getting queues allocated to it. 
 
 When a user task has been successfully registered with the SPI software it is allowed use of the \texttt{spi\_write\_from\_task}- and \texttt{spi\_read\_from\_task}-functions to read and write to and from its private queues. With only those two functions used frequently during runtime, the second design goal is considered fulfilled.
 
@@ -56,7 +56,7 @@ To understand how the implementation works, lets describe what goes on ``under t
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=\textwidth,clip,trim=90 110 90 110]{content/04_communication/figures/spi_task_diagram_running.pdf}
+  \includegraphics[width=\textwidth,clip,trim=0 15 0 15]{content/04_communication/figures/spi_task_diagram_running.pdf}
   \caption{An overview of the SPI implementation.}
   \label{fig:spi_task_diagram}
 \end{figure}%trim=l b r t
