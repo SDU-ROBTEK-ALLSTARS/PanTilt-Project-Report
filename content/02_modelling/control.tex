@@ -5,7 +5,7 @@ This chapter concerns implementation of a regulator for the pan tilt system. The
 SISO\footnote{Single input, single output}-control systems can be sketched the following way:
 \begin{figure}[htb]
 	\begin{center}
-	\includegraphics[scale=1,trim=0 0 0 0]{graphics/control_sketch.pdf} %trim=l b r t (can cut off from every side)
+	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/control_sketch.pdf} %trim=l b r t (can cut off from every side)
 	\caption{This figure illustrates a sketch of a general control system.}
 	\label{fig:control_sketch}			% figure labels are of the form \label{fig:*}
 	\end{center}
@@ -24,7 +24,7 @@ where $K_p$, $K_i$, and $K_d$ are constants for the proportional, integral, and 
 Though various methods are available for deriving the optimal parameters, the approach chosen here is to do a mathematical simulation of the system. Since the transfer functions have already been derived, a Simulink model can be developed. Since the system is decoupled, it can be represented as shown in \ref{fig:control_sketch}
 \begin{figure}[htb]
 	\begin{center}
-	\includegraphics[scale=1,trim=0 0 0 0]{graphics/Simulink.pdf} %trim=l b r t (can cut off from every side)
+	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/Simulink.pdf} %trim=l b r t (can cut off from every side)
 	\caption{This figure illustrates the simulink model.}
 	\label{fig:control_sketch}			% figure labels are of the form \label{fig:*}
 	\end{center}
@@ -36,7 +36,7 @@ The goal of the simulation is to find the values providing the most dynamic syst
 
 \begin{figure}[htb]
 	\begin{center}
-	\includegraphics[scale=1,trim=0 0 0 0]{graphics/rlocus_plot.pdf} %trim=l b r t (can cut off from every side)
+	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/rlocus_plot.pdf} %trim=l b r t (can cut off from every side)
 	\caption{Shows the root locus plot the pan and tilt systems.}
 	\label{fig:rlocus_plot}			% figure labels are of the form \label{fig:*}
 	\end{center}
@@ -63,7 +63,7 @@ D-gain tilt& 0 & 100** & 0.7 & 1\\
 
 \begin{figure}[htb]
 	\begin{center}
-	\includegraphics[scale=1,trim=0 0 0 0]{graphics/screensh_pid.jpg} %trim=l b r t (can cut off from every side)
+	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/screensh_pid.jpg} %trim=l b r t (can cut off from every side)
 	\caption{Simulation of chosen gain values. Angle [rad] plottet with respect to time [s] when initial position is zero and a setpoint of 20 is given as step.}
 	\label{fig:chosen_plot}			% figure labels are of the form \label{fig:*}
 	\end{center}
@@ -76,9 +76,12 @@ When run the control task saves the value of the tick counter and when finished,
 
 For calculating the error, a common format is needed. The parameter server holds the setpoint in degrees and the actual position in ticks. To be able to use some intuition about the control algorithm, degrees are chosen and the position in degrees is calculated by using a ticks to degrees factor calculated from knowing the gears and the number of ticks per motor round.
 \begin{equation}
-1 \ tilt \ revolution \ * 30:1 \ planet \ gear \ * 3:1 \ belt \ gear = 90 \ motor \ rounds \\ 90 \ motor \ rounds * 12 \ ticks/round = 1080 \ ticks/tilt \ revolution 
+1 \ tilt \ revolution \ * 30:1 \ planet \ gear \ * 3:1 \ belt \ gear = 90 \ motor \ rounds
 \end{equation}
-This number is then used to calculate the ratio of degrees to ticks:
+\begin{equation}
+ 90 \ motor \ rounds * 12 \ ticks/round = 1080 \ ticks/tilt \ revolution
+\end{equation}
+This number is then used to calculate the ratio of degrees to ticks, keeping in mind that degrees have an implicit decimal:
 
 \begin{equation}
 \frac{360 \ deg \times 10}{1080 \ ticks} = 3.34\ deg/tick 
