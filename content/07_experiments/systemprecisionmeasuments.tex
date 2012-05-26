@@ -1,0 +1,36 @@
+\documentclass[11pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\begin{document}
+
+\section{Precision of system}
+
+This experiment will test the precision of the complete system. 
+
+\subsection{Range}
+
+The position will shift between two different positions and the positions will be recorded when the controller believes the position is reached. When controller stops the position are marked, and the other position is set to the controller and this position are now marked etc. This is repeated ten times.
+
+\subsection{Test Setup}
+
+The test is performed by fastening a laser pointer on the pan/tilt system. A board is placed next to the system and two positions were the pointer is on the board are chosen. The laser pointer is placed 174 cm and 180.5 from each point. Thus each degree is at around 3 centimetres wide.
+
+\[ \frac{\Pi*2*174}{360} = 3.03687 \]
+
+
+\subsection{Result}
+
+At both points the error was less than five centimetres and was two most of the time. This means that the system have an uncertainty between 0.658 and 3.293 degrees. This precision is reached with overshoot.
+
+\[ \frac{2.0}{3.03687} = 0.658 \]
+
+\[ \frac{10.0}{3.03687} = 3.293 \]
+
+\subsection{Conclusion}
+
+It is a very high precision that have been observed, at times the uncertainty is so small that it possible comes from uncertainty in the system. The system is though not able to hit the position without overshooting. But as precision and not speed was our objective this is a satisfying result, but it is also showing that better precision can be reached. 
+
+
+\end{document}
