@@ -68,7 +68,7 @@ When the motor is not in free run, the enable pin on the H-bridge is high, and t
 
 \begin{figure}[htb]
 \centering
-\includegraphics[scale=0.6,clip,trim=0 250 10 250]{PWMblock.pdf}
+\includegraphics[width=\textwidth,clip,trim=0 250 0 250]{PWMblock.pdf}
 \caption{Block/signal layout of the Motor control block}
 \label{fig:pwmblock}
 \end{figure}
@@ -125,7 +125,7 @@ The decoder is split into 4 major components: The Input filtering, the quadratur
 
 \begin{figure}[htb]
 \centering
-\includegraphics[scale=0.6,clip,trim=2 250 2 230]{decoderblock.pdf}
+\includegraphics[width=\textwidth,clip,trim=2 250 2 230]{decoderblock.pdf}
 \caption{Block/signal layout of the decoder system}
 \label{fig:decoderblock}
 \end{figure}
@@ -159,7 +159,7 @@ These values give a maximum input delay of 16 clock ticks(320 ns) which is suffi
 The quadrature encoders job is to convert the two decoded signals from the motor, to a relative position. The signal is generated from two hall sensors that are positioned 90 degrees apart. Giving 4 different output states, each state indicating what quadrant the motor is positioned in, an example of the signal can be seen in figure \ref{fig:decodersignal}.
 \begin{figure}[htb]
 \centering
-\includegraphics[scale=0.6,clip,trim=0 0 0 0]{ddecodersignal.pdf}
+\includegraphics[width=0.9\textwidth,clip,trim=0 0 0 0]{ddecodersignal.pdf}
 \caption{Example decoder output from a motor with constant speed}
 \label{fig:decodersignal}
 \end{figure}

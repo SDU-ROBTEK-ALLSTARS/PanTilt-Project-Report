@@ -4,11 +4,10 @@ This chapter concerns implementation of a regulator for the pan tilt system. The
 \section{Design}
 SISO\footnote{Single input, single output}-control systems can be sketched the following way:
 \begin{figure}[htb]
-	\begin{center}
+	\centering
 	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/control_sketch.pdf} %trim=l b r t (can cut off from every side)
 	\caption{This figure illustrates a sketch of a general control system.}
 	\label{fig:control_sketch}			% figure labels are of the form \label{fig:*}
-	\end{center}
 \end{figure}
 Figure \ref{fig:control_sketch} show a system with a feedback loop, $G(s)$ is theplant and $H(s)$ is the regulator. When designing a regulator ($H(s)$) is derived and since the system is SISO, a PID regulator can be designed.
 
@@ -23,11 +22,10 @@ where $K_p$, $K_i$, and $K_d$ are constants for the proportional, integral, and 
 \end{equation}
 Though various methods are available for deriving the optimal parameters, the approach chosen here is to do a mathematical simulation of the system. Since the transfer functions have already been derived, a Simulink model can be developed. Since the system is decoupled, it can be represented as shown in \ref{fig:control_sketch}
 \begin{figure}[htb]
-	\begin{center}
+	\centering
 	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/Simulink.pdf} %trim=l b r t (can cut off from every side)
 	\caption{This figure illustrates the simulink model.}
 	\label{fig:control_sketch}			% figure labels are of the form \label{fig:*}
-	\end{center}
 \end{figure}
 The top system represent the pan part of the system, while the lower part represent the tilt.
 
@@ -35,11 +33,10 @@ The top system represent the pan part of the system, while the lower part repres
 The goal of the simulation is to find the values providing the most dynamic system, while still remaining stable and robust. To obtain a first guess of the P-term, the root locus method is applied. The root locus plot can be seen in \ref{fig:rlocus_plot}. Aiming to minimize the energy needed to move the system, equal magnitudes of real and imaginary parts are chosen, leading to the base gain denoted in \ref{tab:gain_values}.
 
 \begin{figure}[htb]
-	\begin{center}
-	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/rlocus_plot.pdf} %trim=l b r t (can cut off from every side)
+	\centering
+	\includegraphics[width=\textwidth,trim=0 270 0 270]{graphics/rlocus_plot.pdf} %trim=l b r t (can cut off from every side)
 	\caption{Shows the root locus plot the pan and tilt systems.}
 	\label{fig:rlocus_plot}			% figure labels are of the form \label{fig:*}
-	\end{center}
 \end{figure}
 
 The simulation is run with various parameters to find the range of values in \ref{tab:gain_vaues}. \ref{chosen_plot} shows a plot of the chosen values, where the system settles within five seconds.
@@ -62,11 +59,10 @@ D-gain tilt& 0 & 100** & 0.7 & 1\\
 \end{table}
 
 \begin{figure}[htb]
-	\begin{center}
+	\centering
 	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/screensh_pid.jpg} %trim=l b r t (can cut off from every side)
 	\caption{Simulation of chosen gain values. Angle [rad] plottet with respect to time [s] when initial position is zero and a setpoint of 20 is given as step.}
 	\label{fig:chosen_plot}			% figure labels are of the form \label{fig:*}
-	\end{center}
 \end{figure}
 
 \section{Implementation}

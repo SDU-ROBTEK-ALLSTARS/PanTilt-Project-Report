@@ -213,11 +213,10 @@ The \textbf{A}-matrix in equation \ref{eq:super_ss_model} got the following eige
 \end{equation}
 Eigenvalues in equation \ref{eq:super_eig_val} indicate the the model in equation \ref{eq:super_ss_model} is stable which is expectable as the system is driven by motors which has a limitation in speed. A plot of the coupled system is shown in figure \ref{fig:good_step}.
 \begin{figure}[htb]
-	\begin{center}
-	\includegraphics[scale=1,trim=0 0 0 0]{graphics/GoodSim.pdf} %trim=l b r t (can cut off from every side)
+	\centering
+	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/GoodSim.pdf} %trim=l b r t (can cut off from every side)
 	\caption{This figure illustrates the open-loop step response of the system in equation \ref{eq:super_ss_model}}
 	\label{fig:good_step}			% figure labels are of the form \label{fig:*}
-	\end{center}
 \end{figure}
 In figure \ref{fig:good_step} a simulation of the open-loop step response is represented, the top graph is the pan part and the lower graph is the tilt. The amplitude is representing angular velocity of the motors, the system have been excited with a $12V$ step on the motor which controls the tilt part, notice that the pan is affected of the tilt accelerating to about $30\sfrac{rad}{s}$ which is not far from $22.57\sfrac{rad}{s}$ which was measured and shown in figure \ref{fig:measured_step_tilt}. The offset can be explained by all the omitted dynamic such as friction in the system. This offset can be adjusted with an overall gain. The gain can be found the following way:
 \begin{equation}
@@ -239,13 +238,12 @@ The calculated gain can be put into the \textbf{C}-matrix of the model in the fo
 \end{equation}
 The state space model can now be formed from equation \ref{eq:super_ss_model} and \ref{eq:output_ss_model}. The output have been plotted in the graph below, the blue line is the open-loop response of the state-space model with a gain of $1$ and the green is the response of the model with the calculated gain from equation \ref{eq:gain_constant}.
 \begin{figure}[htb]
-	\begin{center}
-	\includegraphics[scale=1,trim=0 0 0 0]{graphics/ZoomOpenLoop.pdf} %trim=l b r t (can cut off from every side)
+	\centering
+	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/ZoomOpenLoop.pdf} %trim=l b r t (can cut off from every side)
 	\caption{This figure a comparison between the actual model made and the adjusted model.}
 	\label{fig:zoom_step}			% figure labels are of the form \label{fig:*}
-	\end{center}
 \end{figure}
-On figure \ref{fig:zoom_step} it is seen that the coupling between pan and tilt is insignificant, this means that the system can be decoupled such that the pan does not affect the the tilt and visa versa. This conclusion make the state-space model a major overkill as a simple transfer functions can de derived by equation \ref{eq:model_model} the following way:
+On figure \ref{fig:zoom_step} it is seen that the coupling between pan and tilt is insignificant, this means that the system can be decoupled such that the pan does not affect the tilt and visa versa. This conclusion make the state-space model a major overkill as a simple transfer functions can de derived by equation \ref{eq:model_model} the following way:
 \begin{align}
 	U(s) &= \frac{L J_L}{K_T} s^2 \Omega(s) + \frac{R J_L}{K_T} s \Omega(s) + K_B \Omega(s) \Rightarrow\\
 	H(s) &= \frac{\Omega(s)}{U(s)} = \frac{1}{\frac{L J_L}{K_T} s^2 + \frac{R J_L}{K_T} s + K_B}\label{eq:transfer_function}
