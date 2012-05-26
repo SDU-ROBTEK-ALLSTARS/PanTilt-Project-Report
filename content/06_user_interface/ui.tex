@@ -27,7 +27,7 @@ The  menu structure displayed in figure \ref{fig:menu_structure} must be impleme
 
 \begin{figure}[htb]
 	\centering
-	%\includegraphics[scale=1,trim=0 0 0 0]{graphics/menu_structure.pdf} 
+	\includegraphics[scale=1,trim=0 0 0 0]{graphics/menu_structure.pdf} 
 	\caption{Structure of the menu system}
 	\label{fig:ui_task_diagram}
 \end{figure}
@@ -55,7 +55,7 @@ Implementing a menu based state machine can be split into two parts. One
 concerns the user navigating the menus and the other concerns having the menus or inputs to them
 control the rest of the system. 
 
-To make the system easy to reconfigure, the menus and their functionalities are based uponthe configuration file menu\_setup.c. A menu concists of two lines of menu text and a number of fields to shuffle through using the dreh impuls geber. 
+To make the system easy to reconfigure, the menus and their functionalities are based uponthe configuration file menu_setup.c. A menu concists of two lines of menu text and a number of fields to shuffle through using the dreh impuls geber. 
 
 The menu task has the responsibility of handling the systems inputs and outputs based on the rules given by the menu items. Normally it would be preferred to have the task block on a queue or a semaphore, but in this case since there are two types of input to be handled another approach is needed.  Input from the user and updated values from the SPI connection must both be handled by the menu task, but the updates come at fixed intervals at all times and the user inputs are events happening at random times.
 
@@ -64,13 +64,13 @@ Normally it would be preferred to split the task into two sub tasks, each respon
 The reason for the frequent updates is to provide accurate data for the control algorithm, but there is no need to update the display this often. This is he reason for not dividing the menu task. Instead the task runs every five milliseconds, which is sufficient to service both inputs and outputs without the user noticing any delays. Some operating systems support blocking on multiple conditions, but this is not supported by FreeRTOS so on this system blocking on time is the best solution.
 
 \subsection{Task diagram}
-Layers....
+The user interface can be split into three layer as seen in \ref{fig:ui_task_diagram}. The layers reside between the pan tilt system and the hardware. A number of service tasks handle the hardware and parses data between the inter task communication modules and the hardware. The menu task then handles the inputs and events parsing to and from the system parameters.
 
 The menu task first handles inputs from the dreh impuls geber and updates current menu based on this. It then checks whether any of the fields in the current menu takes input and handles theese updating relevant parameters. Then the display buffer is updated to contain the two lines provided by the current menu and data from any output fields are written to the buffer before yielding. The system state is held entirely in the menu item, thus reducing the menu task to a piece of sequential code.
 
 \begin{figure}[htb]
 	\centering
-	%\includegraphics[scale=1,trim=0 0 0 0]{graphics/task_diagram_user_interface.pdf} 
+	\includegraphics[scale=1,trim=0 0 0 0]{graphics/task_diagram_user_interface.pdf} 
 	\caption{Task diagram for the user interface}
 	\label{fig:ui_task_diagram}
 \end{figure}
@@ -86,19 +86,37 @@ The peripherals provided by the EMP board are each assigned a service task. Thee
 The lcd task works on a mutex protected buffer and simply runs through the buffer checking the dirty bit and the blink bit of every character in the buffer. If the dirty bit is set, the corresponding character on the lcd display is updated. If the blink bit is set and the blink state is active, the preset blink character is displayed instead of the buffer character.
 
 \subsection{Dreh task}
+\begin{figure}[htb]
+	\centering
+	\includegraphics[scale=1,trim=0 0 0 0]{graphics/dreh_task_fsm.pdf} 
+	\caption{State transition diagram for the dreh task}
+	\label{fig:task_dreh_fsm}
+\end{figure}
 The dreh impuls geber also known as a digiswitch is an electrical component that outputs a pair of phase shifted pulse trains when turned. The pulses are used to determine the turning direction as well as the number of clicks. The rod on the dreh impuls geber can also be pushed and thus functions like any button.
 
-The driver software for the dreh impuls geber is based on a finite state machine shown in fig XXX. When run the task compares the current state of the three input pins with the saved states. If there are differences, it generates an event based on the pins.
+The driver software for the dreh impuls geber is based on a finite state machine shown in\ref{fig:task_dreh_fsm}. When run the task compares the current state of the three input pins with the saved states. If there are differences, it generates an event based on the pins.
 
 \subsection{Numpad task}
+\begin{figure}[htb]
+	\centering
+	\includegraphics[scale=1,trim=0 0 0 0]{graphics/numpad_task_fsm.pdf} 
+	\caption{Structure of the menu system}
+	\label{fig:task_numpad_fsm}
+\end{figure}
 The numpad is a three by four matrix wired so that horisontal lines can be powered so that a pushed button will close a connection and thus the state of the four pins connected to the vertical lines will read high if pressed an low otherwise.
 
 Since the numpad and lcd display share some common pins theese pins are protected by a mutual exclusion.
 
-Numpad task is based on a Mealy finite state machine, following the diagram in figure XXX.  Some flicker was experienced and thus a flicker catch was implemented to delay the chance of state until thirty consecutive tests have confirmed the release of the button.
+Numpad task is based on a Mealy finite state machine, following the diagram in \ref{fig:task_numpad_fsm}.  Some flicker was experienced and thus a flicker catch was implemented to delay the chance of state until thirty consecutive tests have confirmed the release of the button.
 
 \subsection{Blink task}
-The blink task controls the blinking characters on the display and is implemented as a Moore finite state machine. It runs every 350 milliseconds and changes the state according to the previous state. The state machine diagram in\ref{fig:blink_fsm_diagram} shows the transition between the on and off states.
+\begin{figure}[htb]
+	\centering
+	\includegraphics[scale=1,trim=0 0 0 0]{graphics/blink_task_fsm.pdf} 
+	\caption{Structure of the menu system}
+	\label{fig:blink_task_fsm}
+\end{figure}
+The blink task controls the blinking characters on the display and is implemented as a Moore finite state machine. It runs every 350 milliseconds and changes the state according to the previous state. The state machine diagram in\ref{fig:blink_task_fsm} shows the transition between the on and off states.
 
 \subsection{Tuning the tasks}
 The tasks were all implemented as yielding tasks with idle priority, since none of them are time critical. Yield time of the tasks can be seen in table \ref{tab:ui_task_timing}.
