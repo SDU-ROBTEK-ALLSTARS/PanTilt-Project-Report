@@ -39,22 +39,22 @@ The goal of the simulation is to find the values providing the most dynamic syst
 	\label{fig:rlocus_plot}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
-The simulation is run with various parameters to find the range of values in \ref{tab:gain_vaues}. \ref{chosen_plot} shows a plot of the chosen values, where the system settles within five seconds.
+The simulation is run with various parameters to find the range of values in \ref{tab:gain_vaues}. \ref{chosen_plot} shows a plot of the step response using autotuned parameters.
 
 \begin{table}[htb]				
 	\begin{center}
-	\begin{tabular}{l|c|c|c|c}			
-	Term & Base & Maximum & Auto tune & Chosen \\			
+	\begin{tabular}{l|c|c|c}			
+	Term & Base & Maximum & Auto tune \\			
 	\hline												
-P-gain pan& 6 & 450 & 37.2 & 30\\
-P-gain tilt& 6 & 450 & 39.2 & 30\\
-I-gain pan& 0 & 250* & 19.9  & 20\\
-I-gain tilt& 0 & 350* & 20.43 & 20\\
-D-gain pan& 0 & 70** & 1.9 & 1\\
-D-gain tilt& 0 & 100** & 0.7 & 1\\
+P-gain pan& 6 & 450 & 19,48\\
+P-gain tilt& 6 & 450 & 36.79 \\
+I-gain pan& 0 & 250* & 11.14  \\
+I-gain tilt& 0 & 350* & 21,32 \\
+D-gain pan& 0 & 70** & 0,84 \\
+D-gain tilt& 0 & 100** & 0,95\\
 	\end{tabular}
 	\end{center}
-	\caption{Gain values derived from simulation. *@P=30 and D=0. **@P=30 and I=0}				
+	\caption{Gain values derived from simulation. *@ P=30 and D=0. **@ P=30 and I=0}				
 	\label{tab:gain_values}			
 \end{table}
 
@@ -66,9 +66,17 @@ D-gain tilt& 0 & 100** & 0.7 & 1\\
 \end{figure}
 
 \section{Implementation}
-The control algorithm is implemented in the control task. All parameters are provided from the parameter server but are cast as single precision floating point values for exact calculations.
+The control algorithm is implemented in the control task. All parameters are provided from the parameter server but are cast as  floating point values for exact calculations.
 
 When run the control task saves the value of the tick counter and when finished, it uses the FreeRTOS \texttt{vTaskDelayUntil} API to calculate when to unblock. As a starting point the control task runs at one hundred hertz frequency.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/flowchart.pdf}
+	\caption{Shows a flowchart of the implemented control algorithm}
+	\label{fig:pid_flow}			
+	\end{center}
+\end{figure}
 
 For calculating the error, a common format is needed. The parameter server holds the setpoint in degrees and the actual position in ticks. To be able to use some intuition about the control algorithm, degrees are chosen and the position in degrees is calculated by using a ticks to degrees factor calculated from knowing the gears and the number of ticks per motor round.
 \begin{equation}
@@ -85,8 +93,34 @@ This number is then used to calculate the ratio of degrees to ticks, keeping in 
 
 The error is then calculated as the difference between setpoint and actual position and is thus a signed value in degrees.
 
+To compare simulated values to actual values it is necessary to convert the gains so that \label{eq:conv1} and \label{eq:conv2} becomes equal. 
+\begin{equation}
+error \ [rad] * gain = input \ [V]
+\label{eq:conv1}
+\end{equation}
+\begin{equation}
+error \ [deg] * gain = input \ [pwm]
+\label{eq:conv2}
+\end{equation}
+
+To convert from $rad$ to $deg$ the ratio is found
+\begin{equation}
+\frac{3600 \ deg}{2 \ \Pi \ rad} = 573 \ deg/rad
+\label{eq:conv3}
+\end{equation}
+To convert from $[V]$ to $pwm$ the ratio is found
+\begin{equation}
+\frac{27.000 \ pwm}{12 \ V} = 2250 \ pwm/V
+\label{eq:conv4}
+\end{equation}
+From \ref{eq:conv3} and \ref{eq:conv4} a conversion factor for the gain can be derived.
+\begin{equation}
+\frac{573}{2250} = 0,25
+\label{eq:conv}
+\end{equation}
+
 \subsection{Implementing proportionality gain}
-A first guess for the proportionality gain is to make an error of ten degrees resemble a ten percent PWM signal and an error of a hundred degrees resemble full speed. The PWM signal range from five thousand, where the motor barely moves up to the maximum of a 16 bit signed, where the motor runs full speed.
+A first intuitive guess for the proportionality gain is to make an error of ten degrees resemble a ten percent PWM signal and an error of a hundred degrees resemble full speed. The PWM signal range from five thousand, where the motor barely moves up to the maximum of a 16 bit signed, where the motor runs full speed.
 \begin{equation}
 2^{15} = 32.767 \Rightarrow 
 32.767 - 5000 = 27.767 \Rightarrow 
@@ -98,31 +132,39 @@ A first guess for the proportionality gain is to make an error of ten degrees re
 10x = 5000 + (10 * 270) => x = \frac{7770}{10} \approx  8
 	\label{eq:P-term}
 \end{equation}
-This in within the range found from simulation so the system should remain stable. Since it is possible to get PWM values out of the range specified in (REFERENCE!), a maximum function is implemented, so that absolute values out of range are corrected to the maximum value.
+This in within the range found from simulation and close to the autotune values, so the system should remain stable. Since it is possible to get PWM values out of the range specified in (REFERENCE!), a maximum function is implemented, so that absolute values out of range are corrected to the maximum value.
 
 Since PWM values below a certain minimum does not make the motor move, a bias is added so that non-zero values are added with the bias value. A tresholdl is implemented so that values inside the +/- treshold area is zeroed before the bias is added. If this was not done even the smallest error would be biased.
 
-\subsection{Adjusting the P-gain}
-Testing of the system confirms that the proportionality factor works well and the system tracks the given position. Testing on only the tilt part of the system shows, that at proportionality gain values above 22, the system becomes unstable. The maximum stable value is at 16 but this makes the system less robust, resulting in instability when the system is stressed, so a value around 10 seems fit.
+Adjusting the P-gain is done empirically and is thus encompassed in \ref{sec:pid_experiments_p}.
 
-\subsection{Integrator}
-Since the error grows smaller as the goal is approached, movement almost halt when approaching the goal area, making the system less accurate and slower. Therefore an integration term is implemented by adding the errror to the integration value on each run. Thereby in the situation where the error is too small to make the system move, the integration term will rise and thus add to the input. 
+\subsection{Integrator}\label{sec:integrator}
+As seen in \ref{sec:conlusion_p} the system needs an integrator. Since the error grows smaller as the goal is approached, movement almost halt when approaching the goal area, making the system less accurate and slower. Therefore an integration term is implemented by adding the errror to the integration value on each run. Thereby in the situation where the error is too small to make the system move, the integration term will rise and thus add to the input. 
 
-Normally an integration would mean the product of the value and the time since last sample, but presuming that this time is nearly constant it can be calculated as part of the I-term. 
+Normally an integration would mean the product of the value and the time since last sample, but presuming that this time is nearly constant it can be included in I-term. 
 
 To keep the integration from going to infinity, an anti wind up filter is implemented. Wind up happens for example when the system is stopped while not at the setpoint and the integration reaches high values that has to be overcome when the system resumes.
 
-\subsection{Adjusting the I-gain}
-Testing was done with a fixed P-gain of ten and integrator windup max at ten thousand. As a first guess the I-gain was set to 1 which made the system unstable. Additional testing showed that values a hundred times less were more appropriate. The system becomes unstable around 0.1 and a value of 0.05 was chosen.
-
-Testing showed that the tracking ability of the system had substantially increased and the speed has increased especially when close to the goal. Only after changing setpoint, the system seems slow. This suggest implementing a differentiator term.
+As with the P-gain, adjusting the I-gain is done empirically and is thus encompassed in \ref{sec:pid_experiments_i}.
 
 \subsection{differentiator}
-By saving the error at each entry it is possible to calculate the change in the error. This term will be particularly large just after changing the setpoint, and can thus help improve the acceleration.
+By saving the error at each entry it is possible to calculate the change in the error. This term will be particularly large just after changing the setpoint, and can thus help improve the acceleration. 
 
-The actual derivative would be the change in value over the time since last entry, but as for the integrator, this can be omitted presuming that it is constant.
+The actual derivative would be the change in value over the time since last entry, but as for the integrator, this can be omitted presuming that it is constant. Since the point is to oppose the changes, the D-term of the pwm calculation is subtracted to keep the gain a positive value.
 
-In a faulty system it could be considered implementing a maximum on the differentiator to prevent wrong or noisy measurements of having too much impact on the system. As a start this is not implemented as to not solve the problem until it arise.
+As with the P- and I-gain, adjusting the D-gain is done empirically and is thus encompassed in \ref{sec:pid_experiments_i}
 
-\subsection{Adjusting the D-gain}
-Testing was done with a fixed P-gain of ten, I-gain of 0.05 with anti-windup at ten thousand. As a first guess the D-gain was set to
+
+
+.
+
+
+
+
+
+
+
+
+
+
+
