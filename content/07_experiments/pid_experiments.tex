@@ -1,73 +1,147 @@
 \section{PID experiments}\label{sec:pid_experiments}
-Since adjusting the PID gain values is a somewhat empiric process, the observations are described in the following as multiple tests although they were done consecutive.
+Since adjusting the PID gain values is a somewhat empiric process, the
+observations are described in the following as multiple tests although they were
+done consecutive.
 
-\section{Adjusting the P-gain}\label{sec:pid_experiments_p}
-The purpose of this test is to find suitable values for the P-gain and to verify the values found in simulation.
+\subsection{Adjusting the P-gain}\label{sec:pid_experiments_p}
+The purpose of this test is to find suitable values for the P-gain and to verify
+the values found in simulation.
 
-\subsection{Setup}
-The test was performed using the setup described in (REFERENCE TIL FREDERIKS OPSTILLING). The system is given two positions and runs in automode between them.
+\subsection*{Setup} The test was performed using the setup described in
+\ref{subsec:precisionofsystem}. The system is given two positions and runs in
+automode between them. First the P-gain was increased until the system became
+unstable, in this test meaning unable to come to rest at the given position.
 
-\subsection{Procedure}
-First the P-gain was increased until the system became unstable, in this test meaning unable to come to rest at the given position.
+\subsection*{Results} From \ref{eq:conv} the gains found in simulation can be
+converted to the actual system and be compared to the results. The converted
+values can be seen in \ref{tab:actual_gain_values}. At P-gain of 600 the gear
+belts of the system starts to notch over teeths, while still being stable, so
+testing at higher gains were omitted.
 
-\subsection{Results}
-From \ref{eq:conv} the gains found in simulation can be converted to the actual system and be compared to the results. The converted values can be seen in \ref{tab:actual_gain_values}. At P-gain of 600 the gear belts of the system starts to notch over teeths, while still being stable, so testing at higher gains were omitted.
+It was observed that the system has difficulties reaching
+the goal position. This is due to the error becoming smaller and smaller on
+approaching the position. The P-gain values found in simulation worked for the
+system.
 
-\subsection{Discussion}
-It was observed that the system has difficulties reaching the goal position. This is due to the error becoming smaller and smaller on approaching the position. The P-gain values found in simulation worked for the system, but seemed low.
-
-\subsection{Conclusion}
-Testing of the system confirms that the control algorithm works well and the system tracks the given position. The difficulties reaching the position suggests an I-term should be added.
+\subsection*{Conclusion} Testing of the system confirms that the control
+algorithm works well and the system tracks the given position. The difficulties
+reaching the position suggests an I-term should be added.
 
 \subsection{Adjusting the I-gain}\label{sec:pid_experiments_i}
-The purpose of this test is to find suitable values for the I-gain and to verify the values found in simulation.
+The purpose of this test is to find suitable values for the I-gain and to verify
+the values found in simulation.
 
-\subsection{Setup}
-The test was performed using the setup described in (REFERENCE TIL FREDERIKS OPSTILLING). The system is given two positions and runs in automode between them. During the test the P-gain was kept at 20.
+\subsection*{Setup} The test was performed using the setup described in
+\ref{subsec:precisionofsystem}. The system is given two positions and runs in
+automode between them. During the test the P-gain was kept at 20.
 
-\subsection{Procedure}
-First the I-gain was increased until the system became unstable, in this test meaning unable to come to rest at the given position. 
+First the I-gain was increased until the system became
+unstable, in this test meaning unable to come to rest at the given position.
 
-From \ref{eq:conv} the gains found in simulation can be converted to the actual system and be compared to the results. The converted values can be seen in \ref{tab:actual_gain_values}. At I-gain of 4 the gear belts of the system starts to notch over teeths, while still being stable, so testing at higher gains were omitted.
+From \ref{eq:conv} the gains found in simulation can be converted to the actual
+system and be compared to the results. The converted values can be seen in
+\ref{tab:actual_gain_values}. 
 
-\subsection{Discussion}
-The sytem reaches the position, but after the overshoot, especially the tilt halts for a while. This is due to the integrator being at minimum when passing the setpoint and therefore it takes a while before the positive error is summed up to a positive contribution to the input. This suggests adding a D-term at least to the tilt. The problem is insignificant on the pan due to the relatively small errors compared to the tilt.
+\subsection*{Results} 
+At I-gain of 4 the gear belts of the system starts
+to notch over teeths, while still being stable, so testing at higher gains were
+omitted.
 
-The values found from autotune in simulation made the system unstable. This was the case wether the values were used as is or were converted as suggested in \ref{sec:integrator}.
+The sytem reaches the position, but after the overshoot,
+especially the tilt halts for a while. This is due to the integrator being at
+minimum when passing the setpoint and therefore it takes a while before the
+positive error is summed up to a positive contribution to the input. This
+suggests adding a D-term at least to the tilt. The problem is insignificant on
+the pan due to the relatively small errors compared to the tilt.
 
-\subsection{Conclusion}
-Testing showed that the tracking ability of the system had substantially increased and the speed has increased especially when close to the goal. Though the simulated values did not work, it was possible to find suitable values for the I-term. A D-term should be added to get faster recovery after overshoot.
+\subsection*{Conclusion} Testing showed that the tracking ability of the system
+had substantially increased and the speed has increased especially when close to
+the goal. The values found from autotune in the simulation works well, but the
+system seems to react fine with even higher values, but a  D-term should be
+added to get faster recovery after overshoot.
 
 \subsection{Adjusting the D-gain}\label{sec:pid_experiments_d}
-The purpose of this test is to find suitable values for the D-gain and to verify the values found in simulation.
+The purpose of this test is to find suitable values for the D-gain and to verify
+the values found in simulation.
 
-\subsection{Setup}
-The test was performed using the setup described in (REFERENCE TIL FREDERIKS OPSTILLING). The system is given two positions and runs in automode between them. During the test the P-gain was kept at 20 and the I-gain at 2.
+\subsection*{Setup}
+The test was performed using the setup described in
+\ref{subsec:precisionofsystem}. The system is given two positions and runs in automode between them. During the test
+the P-gain was kept at 20 and the I-gain at 2.
 
-\subsection{Procedure}
-First the D-gain was increased until the system became unstable, in this test meaning unable to come to rest at the given position. 
+First the D-gain was increased until the system became unstable, in this test
+meaning unable to come to rest at the given position.
 
-From \ref{eq:conv} the gains found in simulation can be converted to the actual system and be compared to the results. The converted values can be seen in \ref{tab:actual_gain_values}. At D-gain of 90 the system becomes unstable.
+From \ref{eq:conv} the gains found in simulation can be converted to the actual
+system and be compared to the results. The converted values can be seen in
+\ref{tab:actual_gain_values}. 
 
-\subsection{Discussion}
-The system reaches the position, but it takes a couple of seconds to finetune into position. The D-gain values obtained from simulation had little effect while used as is, but made the system unstable if converted as suggested in \ref{sec:integrator}.
+\subsection*{Results}
+At D-gain of 90 the system becomes unstable.
 
-\subsection{Conclusion}
-The PID-regulator now works well and is able to reach a given position. Some fine-tuning is needed to get perfect parameters.
+The D-gain values obtained from simulation worked fine, but it takes a couple of
+seconds to finetune into position.
 
-\begin{table}[htb]				
+\subsection*{Conclusion}
+The PID-regulator now works well and is able to reach a given position. Some
+fine-tuning is needed to get perfect parameters.
+
+\begin{table}[htb]
 	\begin{center}
-	\begin{tabular}{l|c|c|c|c}			
-	Term & Simulated unstable & Simulated autotune & Measured unstable & Good performance  \\	\hline								P-gain pan & 112,5  & 4,25 & 600 & 20 \\
-	P-gain tilt   & 112,5 & 9,20 & 600 & 20 \\
-	I-gain pan & 62,5 & 2,79 & 4 & 2 \\
-	I-gain tilt   & 87,5 & 5,33 & 4 & 2 \\
-	D-gain pan & 17,5 & 0,21 & 90 & 1 \\
-	D-gain tilt   & 25,0 & 0,24 & 90 & 1 \\
+	\begin{tabular}{l|c|c|c}			
+	Term & Simulation autotune & Measured maximum & Best performance  \\	\hline								
+	P-gain pan & 36,25 & 600 & 40 \\
+	P-gain tilt   & 18,50 & 600 & 20 \\
+	I-gain pan  & 0,78 & 4 & 1,5 \\
+	I-gain tilt   & 0,40  & 4 & 0,5 \\
+	D-gain pan & 78,25 & 90 & 0,5 \\
+	D-gain tilt   & 40,50 & 90 & 2 \\
 	\end{tabular}
 	\end{center}
-	\caption{P-gain values derived from testing}				
+	\caption{P-gain values converted to be used in the control algorithm and the values measured on the system}				
 	\label{tab:actual_gain_values}			
 \end{table}
 
+\subsection{Tuning the PID parameters}
+The purpose of this test is to increase the accuracy of the system by changing
+the drive belt and retune the parameters of the PID.
 
+\subsection*{Setup}
+The test was performed using the setup described in \ref{subsec:precisionofsystem}. The
+system is given two positions and runs in automode between them while tuning the
+parameters of the PID.
+
+\subsection*{Results}
+The drive belt on the pan was replaced.
+
+The PID parameters were tuned slightly, reducing the D-gain and increasing the
+I-gain to obtain better precision. The new values can be found in
+\ref{tab:actual_gain_values} under best performance. Small changes were made to
+parts of the control algorithm concerned with evaluating when the position is reached.
+
+The precision of the system was raised to a level where this test can no
+longer be used to measure the inaccuracy. 
+
+A periodic error was observed as the small drive wheel on the motor sometimes
+jumps a tooth and after a while jumps back. The belt seems fine, but
+the teeths of the drive wheel is worn
+
+\subsection*{Conclution}
+The performance of the system has been gratly improved and new tests should be
+performed with greater distance between the pan-tilt and the board. 
+
+If the error with the drive belt continues, the drive wheel should be replaced.
+
+
+\subsection{Verification of the control frequency}
+The purpose of this test is to verify that the control task actually runs at 100 Hz.
+
+\subsection*{Setup}
+At the entry of control task a pin is set, and at the end of the control task it
+is cleared. An oscilloscope is connected to the pin. While the system is running, the period between rising edges is measured using the oscilloscope.
+
+\subsection*{Results}
+The results vary between 9,80 and 9,90 ms. This is equal to between 101,01 Hz and 102,04 Hz, meaning an error of less than 2 percent.
+
+\subsection*{Conclusion}
+The control task runs close to 100 Hz and therefor jitter should not be a problem.
