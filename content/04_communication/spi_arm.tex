@@ -57,7 +57,7 @@ To understand how the implementation works, lets describe what goes on ``under t
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.94\textwidth,clip,trim=0 15 0 15]{content/04_communication/figures/spi_task_diagram_running.pdf}
-  \caption{An overview of the SPI implementation during normal operation.}
+  \caption{An overview of the SPI software implementation during normal operation.}
   \label{fig:spi_task_diagram}
 \end{figure}%trim=l b r t
 
@@ -65,22 +65,8 @@ A doubly linked list is used to keep track of tasks using the SPI implementation
 
 Two tasks are used to provide the transmit and receive functionality required: One for transmission and one for reception. When a user task places data in its private transmission-queue, the user task can do no more than to wait for it to appear in its private reception-queue. It is the transmit task's responsibility to make sure the data items get sent, and it is the receiver task's responsibility to direct incoming data to the appropriate tasks reception queue.
 
-Suppose a user task has placed a unit of data in its transmission-queue. At the same time, it must ``give''\footnote{Using FreeRTOS terminology, the functions to unlock resources protected my semaphores are all called \texttt{*SemaphoreGive*}} the binary semaphore \texttt{user\_task\_waiting\_to\_transmit}, which, when given, will un-block the transmit task. This is to avoid having the transmit task spending all of its scheduled time polling the user task transmit queues. When the transmit task is no longer blocked by the \texttt{user\_task\_waiting\_to\_transmit} semaphore, the kernel runs it soon after. When the task runs, it finds a user-task queue which contains items to send and places those items in the hardware transmit FIFO. At the same time, it saves the number of items sent in the variable contained in the linked list. The order in which different user tasks transmit and receive is kept track of by placing them in the queue \texttt{intern\_waiting\_to\_receive.queue} as shown in figure \ref{fig:spi_task_diagram}.
+Suppose a user task has placed a unit of data in its transmission-queue. At the same time, it must ``give''\footnote{Using FreeRTOS terminology, the functions to unlock resources protected by semaphores are all called \texttt{*SemaphoreGive*}} the binary semaphore \texttt{user\_task\_waiting\_to\_transmit}, which, when given, will un-block the transmit task. This is to avoid having the transmit task spending all of its scheduled time polling the user task transmit queues. When the transmit task is no longer blocked by the \texttt{user\_task\_waiting\_to\_transmit} semaphore, the kernel runs it soon after. When the task runs, it finds a user-task queue which contains items to send and places those items in the hardware transmit FIFO. At the same time, it saves the number of items sent in the variable contained in the linked list. The order in which different user tasks transmit and receive is kept track of by placing them in the queue \texttt{intern\_waiting\_to\_receive.queue} as shown in figure \ref{fig:spi_task_diagram}.
 
 The receiver task blocks on incoming data which is provided by \texttt{spi\_int\_handler} ISR. When it receives a unit of data, it will look in the \texttt{intern\_waiting\_to\_receive.queue} to determine what task the incoming data is for. The data is then placed in that particular user-tasks receive-queue, which the user-task can read at will, more or less. It must be read frequently enough to keep up with the speed at which it the user task transmits, though.
 
 \nomenclature{ISR}{Interrupt Service Routine}
-
-
-
-\subsection{Test}
-Experiments chapter.
-
-
-
-\subsection{Discussion?}
-Pros/cons\\
-Possible optimization\\
-Is it inefficient?\\
-Overhead linearly proportional with amounts transmitted/received?\\
-Tasks transmission priority is decided by the order in which they use \texttt{spi\_register\_task()}

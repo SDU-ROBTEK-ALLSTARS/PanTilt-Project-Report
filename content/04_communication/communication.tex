@@ -202,6 +202,22 @@ The protocol has been designed so the data can be abstracted away. Meaning that 
 
 The SPI software was implemented with one of the main requirements being, that it should be support multiple tasks using the SPI simultaneously. In the final implementation, only one task uses the SPI: The task which updates parameters to the control system. When only one task uses the SPI connection, software for handling multiple tasks is redundant and increases processing overhead. However, a watchdog software implementation\footnote{Found on the Git tree in the \texttt{watchdog\_impl} branch}, which must use SPI independently of the control parameter task, is under development. 
 
+Using dynamic memory allocation\footnote{Memory management is discussed in detail in section \ref{sec:memoryman}} in the SPI software implementation was a deliberate choice made because of the wish to support an unknown number of user tasks. In the current state of the microcontroller application, that would not have been necessary however. The downside of using dynamically allocated memory is a slightly slower execution time and more error-prone code. The FreeRTOS kernel uses dynamically allocated memory for all of its task creation- and intertask communication API already though \cite{website:freertos-memory}, so opting for only static allocation would be meaningless unless another kernel were used; SafeRTOS for example \cite[13]{safertos}.
+% REF TIL TEST
+
+%
+%\subsection{Test}
+%Experiments chapter.
+%
+%
+%
+%\subsection{Discussion?}
+%Pros/cons\\
+%Possible optimization\\
+%Is it inefficient?\\
+%Overhead linearly proportional with amounts transmitted/received?\\
+%Tasks transmission priority is decided by the order in which they use \texttt{spi\_register\_task()}
+
 The implementation process of the SPI on the FPGA saved a lot of time. The idea of first having a working model in the simulation environment and then build to the platform, spared a lot of on-hardware debugging and synthesising time. The testing was done with a device known to work with SPI, enabling the FPGA SPI part to be tested before it was fully implemented on the ARM.
 
 On the FPGA, a 32byte dual port RAM has been used as interface between SPI and motor controller. This has been a great advantage during design and testing, as the parts where able to be tested separately and afterwards be put together.
