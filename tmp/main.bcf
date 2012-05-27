@@ -294,6 +294,15 @@
     <bcf:datasource type="file" datatype="bibtex">content/bibliography.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
+    <bcf:citekey>emg30</bcf:citekey>
+    <bcf:citekey>hbridge</bcf:citekey>
+    <bcf:citekey>SPI_ADNS</bcf:citekey>
+    <bcf:citekey>SPI_ADIS</bcf:citekey>
+    <bcf:citekey>XILINX_MEM</bcf:citekey>
+    <bcf:citekey>website:freertos-memory</bcf:citekey>
+    <bcf:citekey>safertos</bcf:citekey>
+    <bcf:citekey>lm3s6965</bcf:citekey>
+    <bcf:citekey>dlmalloc</bcf:citekey>
     <bcf:citekey>*</bcf:citekey>
   </bcf:section>
 </bcf:controlfile>
