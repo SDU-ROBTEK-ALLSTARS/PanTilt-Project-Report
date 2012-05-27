@@ -1,5 +1,5 @@
-\chapter{Low level control}\label{chap:llc}
-The low level control is all implemented on a Digilent Nexys 2 test kit, featuring a spartan 3 fpga from Xilinx.
+\chapter{Motor control}\label{chap:llc}
+The Motor control is implemented on a Digilent Nexys 2 test kit, featuring a spartan 3 fpga from Xilinx.
 Architecturally, it is split in two nearly independent systems, one being the SPI driver and the other being the motor control.
 They communicate through a shared RAM (uddyb type) block, but functions otherwise completely independant of each other.
 
@@ -197,11 +197,12 @@ Since all control commands are buffered in the ram until updated again, the fpga
 To detect the link presence, two registers in the control register are constantly incremented, and the watchdog keeps a watch on them, should they fail to change within a set time, the watchdog will stop all motor activity.
 The watchdog module is not included in the final application due to time constraints.
 
+\section{Discussion}
+The main design and implementation strategy for the motor control block, has been to divide the problems into small almost trivial modules, designed for maximum re-usability. This strategy demands a lot of time in setting up individual test environments for each block, and extra coding time for the inclusion process (as this is not a trivial task in the VHDL language). The result however was that instead of having a single large hard task to complete, there were several small easy tasks to complete. Also debugging individual elements proved to be trivial, as a testbench was developed along the block description.
+As can be read in chapter \ref{chap:experiments}, all the modules were functional except the velocity estimators, these were the lowest priority in the development process, since it was uncertain whether they were needed until very late in the project. Luckily they were not needed, and therefore it is not a problem that they did not work.
 
-
-
-
-
+\section{Conclusion}
+The motor control block met all its final design criteria, and can be used in the project.
 
 
 
