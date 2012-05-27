@@ -54,7 +54,7 @@ Selection the right protocol design for a project greatly depends on the require
 
 Because the data only needs to travel a short distance, noise and security is not considered as a problem in this project. Even if noise should occur, a lot of things could be done to the physical parts to solve this without involving redesign of the protocol (Ex. paired and shielded cables). 
 The protocol are using SPI, so there is no need for synchronising the packages, as this can be done by the SS signal line. This eliminates the needs for overhead such as start or stop flags on packages. 
-\marginnote{Read and comment if it's good enough}The ARM runs the SPI connection at a speed of 1MHz. Each clock pulse transmits 1bit, so 1MHz will carry 1Mbps = 128KBps. With this transmission rate, it will be possible to read or write an entire 32byte memory block at a rate of $\frac{128KBps}{32B} \approx 4KHz$. The ARM is capable of running the SPI at much greater speeds then 1MHz, and a update rate of 4KHz is a lot more then needed, considered physical speed limitations of the \marginnote{pan/tilt}{pan/tilt} system.
+\marginnote{Read and comment if it's good enough}The ARM runs the SPI connection at a speed of 1MHz. Each clock pulse transmits 1bit, so 2MHz will carry 2Mbps = 256KBps. With this transmission rate, it will be possible to read or write an entire 32byte memory block at a rate of $\frac{32B}{256KBps} \approx 8KHz$. The ARM is capable of running the SPI at much greater speeds then 2MHz, and a update rate of 8KHz is a lot more then needed, considered physical speed limitations of the \marginnote{pan/tilt}{pan/tilt} system.
 
 
 \section{Protocol ideas}
@@ -197,6 +197,28 @@ It the received command was a read command, the next state "Read mem init" will 
 
 Another possible way through the states in the state machine, is that a write command was received in the "Wait for command" state. When the write command is received the requested write address is set on the memory block and continues to the "Write mem init" state. In the "Write mem init" state it waits for the \texttt{from\_spi\_valid} to go low, so the SPI is ready to receive next transmission. Next it goes to the "Wait for next byte" state, where it waits for the \texttt{from\_spi\_valid} to go high again, which will happen when the next transmission occur. Now it will set the "write" signal high on the memory, so the data will be saved to RAM. It then goes to the state "Mem delay" where it set the "write" signal low again, and continues to the "Clean up" state.
 %Scaleability
+
+
+\section{Discussion}
+The protocol has been designed to carry 8 bit data sizes. This may cause a problem it a 16-bit value is transmitted, and only 8 bit has arrived when the data i read. Though if the high byte always is written first, the error is not that great. If bigger values need to be transmitted, several solutions could be considered: Increasing the size of transmitted data at once. This will be fairly easy as the ARM already supports up to max 16-bit sized data frames, and the FPGA hardware is written so it done by changing a few parameters. Another solution would be to implement a command in the protocol for reading writing bigger data sizes.
+
+The protocol has been designed so the data can be abstracted away. Meaning that the protocol does not care about what data is transmitted, but just works as a carrier. If more data needs to be exchanged between the two points, it is easily done by just writing to an empty address in the memory, where the hardware is able to read it.
+
+The SPI software was implemented with one of the main requirements being, that it should be support multiple tasks using the SPI simultaneously. In the final implementation, only one task uses the SPI: The task which updates parameters to the control system. When only one task uses the SPI connection, software for handling multiple tasks is redundant and increases processing overhead. However, a watchdog software implementation\footnote{Found on the Git tree in the \texttt{watchdog\_impl} branch}, which must use SPI independently of the control parameter task, is under development. 
+
+The implementation process of the SPI on the FPGA saved a lot of time. The idea of first having a working model in the simulation environment and then build to the platform, spared a lot of on-hardware debugging and synthesising time. The testing was done with a device known to work with SPI, enabling the FPGA SPI part to be tested before it was fully implemented on the ARM.
+
+On the FPGA, a 32byte dual port RAM has been used as interface between SPI and motor controller. This has been a great advantage during design and testing, as the parts where able to be tested separately and afterwards be put together.
+
+The protocol and FPGA hardware was tested for reliability, which are described in \ref{sec:spi_rel_test} (..)
+
+
+
+
+
+
+\section{Conclusion}
+
 
 
 % Block overview / hardware planning
