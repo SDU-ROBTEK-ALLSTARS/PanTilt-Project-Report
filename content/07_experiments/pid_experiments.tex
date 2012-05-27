@@ -87,9 +87,10 @@ The PID-regulator now works well and is able to reach a given position. Some
 fine-tuning is needed to get perfect parameters.
 
 \begin{table}[htb]
-	\begin{center}
-	\begin{tabular}{l|c|c|c}			
-	Term & Simulation autotune & Measured maximum & Best performance  \\	\hline								
+	\centering
+	\begin{tabular}{lccc}			
+	Term & Simulation autotune & Measured maximum & Best performance  \\
+	\midrule								
 	P-gain pan & 36,25 & 600 & 40 \\
 	P-gain tilt   & 18,50 & 600 & 20 \\
 	I-gain pan  & 0,78 & 4 & 1,5 \\
@@ -97,8 +98,7 @@ fine-tuning is needed to get perfect parameters.
 	D-gain pan & 78,25 & 90 & 0,5 \\
 	D-gain tilt   & 40,50 & 90 & 2 \\
 	\end{tabular}
-	\end{center}
-	\caption{P-gain values converted to be used in the control algorithm and the values measured on the system}				
+	\caption{P-gain values converted to be used in the control algorithm and the values measured on the system.}				
 	\label{tab:actual_gain_values}			
 \end{table}
 

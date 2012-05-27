@@ -50,10 +50,10 @@ The goal of the simulation is to find the values providing the most dynamic syst
 The simulation is run with various parameters to find the range of values in \ref{tab:gain_vaues}. \ref{chosen_plot} shows a plot of the step response using autotuned parameters with response time 0,0175 s.
 
 \begin{table}[htb]				
-	\begin{center}
-	\begin{tabular}{l|c|c|c}			
+	\centering
+	\begin{tabular}{lccc}			
 	Term & Base & Maximum & Auto tune \\			
-	\hline												
+	\midrule												
 P-gain pan& 6 & 450 & 145,87\\
 P-gain tilt& 6 & 450 & 74,75 \\
 I-gain pan& 0 & 250* & 315,36  \\
@@ -61,7 +61,6 @@ I-gain tilt& 0 & 350* & 160,79 \\
 D-gain pan& 0 & 70** & 3,13 \\
 D-gain tilt& 0 & 100** & 1,62\\
 	\end{tabular}
-	\end{center}
 	\caption{Gain values derived from simulation. *@ P=30 and D=0. **@ P=30 and I=0}				
 	\label{tab:gain_values}			
 \end{table}
@@ -88,8 +87,8 @@ When run the control task saves the value of the tick counter and when finished,
 
 \begin{figure}[htb]
 	\begin{center}
-	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/flowchart.pdf}
-	\caption{Shows a flowchart of the implemented control algorithm}
+	\includegraphics[draft,width=\textwidth,trim=0 0 0 0]{blank} %{graphics/flowchart.pdf}
+	\caption{Shows a flowchart of the implemented control algorithm.}
 	\label{fig:pid_flow}			
 	\end{center}
 \end{figure}
@@ -121,7 +120,7 @@ error \ [deg] * gain = input \ [pwm]
 
 To convert from $rad$ to $deg$ the ratio is found
 \begin{equation}
-\frac{3600 \ deg}{2 \ \Pi \ rad} = 573 \ deg/rad
+\frac{3600 \ deg}{2 \ \pi \ rad} = 573 \ deg/rad
 \label{eq:conv3}
 \end{equation}
 To convert from $[V]$ to $pwm$ the ratio is found
@@ -164,7 +163,7 @@ As with the P- and I-gain, adjusting the D-gain is done empirically and is thus 
 
 
 \subsection{Discussion}
-The implemented PID regulator performes very well as seen from \{sec:precisionofsystem2} and the performance is almost at the theoretical limit with respect to precision. More could be done in terms of speed and setting time, but it could not be improved without knowing the explicit purpose of the system and further refinement is thus outside the scope of this project.
+The implemented PID regulator performes very well as seen from \ref{sec:precisionofsystem2} and the performance is almost at the theoretical limit with respect to precision. More could be done in terms of speed and setting time, but it could not be improved without knowing the explicit purpose of the system and further refinement is thus outside the scope of this project.
 
 \subsection{Conclusion}
 The decision to abandon the full state feedback regulator has been proved right, since optimal results were obtained by using a much simpler approach.

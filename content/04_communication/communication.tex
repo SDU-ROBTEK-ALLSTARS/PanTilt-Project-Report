@@ -71,7 +71,7 @@ Another approach to the protocol design was to make a protocol to synchronise a 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.96\textwidth,trim=0 0 0 0]{graphics/spi_protocol_format_memsync.pdf} %trim=l b r t (can cut off from every side)
-	\caption{An example of the protocol design with the memory synchronisation protocol approach}
+	\caption{An example of the protocol design with the memory synchronisation protocol approach.}
 	\label{fig:spi_protocol_format_memsync}			% figure labels are of the form 
 \end{figure}
 
@@ -105,7 +105,7 @@ The general idea is that the SPI slave has a memory block, which the SPI master 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.96\textwidth,trim=0 0 0 0]{graphics/spi_protocol_cmd_structure.pdf} %trim=l b r t (can cut off from every side)
-	\caption{Bit structure of the SPI command send from master to slave}
+	\caption{Bit structure of the SPI command send from master to slave.}
 	\label{fig:spi_protocol_cmd_structure}			% figure labels are of the form 
 \end{figure}
 
@@ -116,7 +116,7 @@ When the master needs to read from the slave device it sends a byte with the MSB
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.96\textwidth]{graphics/spi_protocol_command_structure_read_wlabels.pdf} %trim=l b r t (can cut off from every side)
-	\caption{SPI communication when reading from the slave}
+	\caption{SPI communication when reading from the slave.}
 	\label{fig:spi_protocol_command_structure_read}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
@@ -127,7 +127,7 @@ The command send from the master device when writing to the slave device is simi
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.96\textwidth]{graphics/spi_protocol_command_structure_write_wlabels.pdf} %trim=l b r t (can cut off from every side)
-	\caption{SPI communication when writing to the slave}
+	\caption{SPI communication when writing to the slave.}
 	\label{fig:spi_protocol_command_structure_write}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
@@ -147,7 +147,7 @@ Before writing any code for the SPI hardware, a diagram of the needed hardware b
 \begin{figure}[htb] 
 	\centering
   \includegraphics[width=0.96\textwidth,clip,trim=0 270 0 270]{graphics/spi_protocol_fpga_blocks_final_design.pdf}%trim=l b r t
-	\caption{Blockdiagram for the SPI interface on the FPGA}
+	\caption{Blockdiagram for the SPI interface on the FPGA.}
 	\label{fig:spi_protocol_fpga_blocks_final_design}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
@@ -178,7 +178,7 @@ The "SPI protocol controller" is the state machine which controls the package fl
 \begin{figure}[htb] 
 	\centering
 	\includegraphics[scale=0.6,clip,trim=0 100 0 100]{graphics/spi_protocol_controller_prettystates.pdf} %trim=l b r t (can cut off from every side)
-	\caption{State diagram for the SPI protocol controller}
+	\caption{State diagram for the SPI protocol controller.}
 	\label{fig:spi_protocol_controller_prettystates}
 \end{figure}
 

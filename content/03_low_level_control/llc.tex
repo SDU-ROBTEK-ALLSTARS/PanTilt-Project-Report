@@ -19,11 +19,10 @@ The output pins of the PWM controller A and B, is connected to the three pins of
 The input pins of the decoder system comes from the index pins of the hall sensors mounted on the pan/tilt system and the decoder A and B signal from the two output pins on the motors.
 
 \begin{figure}[htb]
-
-\includegraphics[scale=0.6,clip,trim=135 270 135 270]{FPGAmotorarchitecture.pdf}
-
-\caption{FPGA architecture, from the motor interface perspective}
-\label{fig:FPGAMotorArchitecture}
+  \centering
+  \includegraphics[scale=0.6,clip,trim=135 270 135 270]{FPGAmotorarchitecture.pdf}
+  \caption{FPGA architecture, from the motor interface perspective.}
+  \label{fig:FPGAMotorArchitecture}
 \end{figure}
 
 \subsection{Memory layout}
@@ -36,10 +35,9 @@ The aux register reads position reset, and motor freerun command bits. It also s
 
 \begin{table}[htb]
 \centering
-\begin{tabular}{|l|r|}
-\hline
+\begin{tabular}{lr}
 Address & Value \\
-\hline
+\midrule
 0x02 & DUTY A MSB \\
 0x03 & DUTY A LSB\\
 0x04 & DUTY B MSB\\
@@ -54,9 +52,8 @@ Address & Value \\
 0x0d & VEL A LSB\\
 0x0e & AUX FROM ARM\\
 0x0f & AUX TO ARM\\
-\hline 
 \end{tabular}
-\caption{Memory locations of control registers}
+\caption{Memory locations of control registers.}
 \label{tab:Memorymapping}
 \end{table}
 
@@ -70,8 +67,9 @@ It takes a 16 bit signed integer and a control bit as input, indicating whether 
 When the motor is not in free run, the enable pin on the H-bridge is high, and the PWM signal changes between the braking and running state. If the free run bit is set, the H-bridge is disabled and no PWM signal is generated.
 
 \begin{figure}[htb]
-\includegraphics[scale=0.6,clip,trim=0 250 10 250]{PWMblock.pdf}
-\caption{Block/signal layout of the Motor control block}
+\centering
+\includegraphics[width=\textwidth,clip,trim=0 250 10 250]{PWMblock.pdf}
+\caption{Block/signal layout of the Motor control block.}
 \label{fig:PWMblock}
 \end{figure}
 
@@ -103,8 +101,9 @@ This is way to low, and therefore the amount of used bits are reduced by four gi
 Which is just above the minimum frequency requirement.
 
 \begin{figure}[htb]
-\includegraphics[scale=0.6,clip,trim=10 330 10 330]{PWMexecution.pdf}
-\caption{Flowchart of the PWM generator}
+\centering
+\includegraphics[width=0.94\textwidth,clip,trim=10 330 10 330]{PWMexecution.pdf}
+\caption{Flowchart of the PWM generator.}
 \label{fig:PWMchart}
 \end{figure}
 
@@ -125,8 +124,9 @@ The decoder is split into 4 major components: The Input filtering, the quadratur
 
 
 \begin{figure}[htb]
-\includegraphics[scale=0.6,clip,trim=2 250 2 230]{decoderblock.pdf}
-\caption{Block/signal layout of the decoder system}
+\centering
+\includegraphics[width=\textwidth,clip,trim=2 250 2 230]{decoderblock.pdf}
+\caption{Block/signal layout of the decoder system.}
 \label{fig:decoderblock}
 \end{figure}
 
@@ -156,8 +156,9 @@ These values give a maximum input delay of 16 clock ticks(320 ns) which is suffi
 \subsection{Quadrature encoder}
 The quadrature encoders job is to convert the two decoded signals from the motor, to a relative position. The signal is generated from two hall sensors that are positioned 90 degrees apart. Giving 4 different output states, each state indicating what quadrant the motor is positioned in, an example of the signal can be seen in figure \ref{fig:decodersignal}.
 \begin{figure}[htb]
-\includegraphics[scale=0.6,clip,trim=0 0 0 0]{ddecodersignal.pdf}
-\caption{Example decoder output from a motor with constant speed}
+\centering
+\includegraphics[width=0.96\textwidth,clip,trim=0 0 0 0]{ddecodersignal.pdf}
+\caption{Example decoder output from a motor with constant speed.}
 \label{fig:decodersignal}
 \end{figure}
 The decoding process can be thought of as a state machine (with the encoder output being the state variable), where a state transition corresponds to a movement step in one of two directions.
@@ -166,6 +167,7 @@ Overflow is not handled in this module, as it is not its job to know anything ab
 The situation where the input pins both change in one clock cycle is not handled by the system.
 
 \begin{figure}[htb]
+\centering
 \includegraphics[scale=0.6,clip,trim=130 330 130 330]{decoderstates.pdf}
 \caption{State diagram of the decoder module, the stipled arrows indicate a negative clockwise, the solid indicate a counter-clockwise or vice verca.}
 \label{fig:decoderstate}

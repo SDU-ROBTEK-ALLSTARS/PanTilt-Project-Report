@@ -176,11 +176,10 @@ The eigenvalues of the A matrix is calculated in MATLAB to be:
 \end{equation}
 Looking at the values in \ref{eq:crap_eig_val} show that the last value of the vector is really close to zero which mean that the system is close to marginal stable. The open-loop response of the system is plotted in figure \ref{fig:crap_step}.
 \begin{figure}[htb]
-	\begin{center}
-	\includegraphics[scale=1,trim=0 0 0 0]{graphics/CrapSim.pdf} %trim=l b r t (can cut off from every side)
-	\caption{This figure illustrates the open-loop step response of the system in equation \ref{eq:crap_ss_model}}
+	\centering
+	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/CrapSim.pdf} %trim=l b r t (can cut off from every side)
+	\caption{This figure illustrates the open-loop step response of the system in equation \ref{eq:crap_ss_model}.}
 	\label{fig:crap_step}			% figure labels are of the form \label{fig:*}
-	\end{center}
 \end{figure}
 The step response in figure \ref{fig:crap_step} show some instability as a steady state response is never achieved.  compared to the figure, so the parameters from earlier experiments can not be used. The top graph of figure \ref{fig:crap_step} represent the pan part and the lower graph represent the tilt part. Same procedure is made with the calculated set of parameters, the parameters are $R = 5.124\Omega$, $L = 6.471mH$, and $K_B = K_T = 401.1 \frac{mV}{\sfrac{rad}{s}}$. $J_{Pan}$, $J_{Tilt}$, $I_{Pan}$, and $I_{Tilt}$ can be found in appendix \ref{app:dynamics_calc}.
 These parameters leads to the following model:
@@ -211,11 +210,11 @@ The \textbf{A}-matrix in equation \ref{eq:super_ss_model} got the following eige
    - 35.0842
  \end{bmatrix}\label{eq:super_eig_val}
 \end{equation}
-Eigenvalues in equation \ref{eq:super_eig_val} indicate the the model in equation \ref{eq:super_ss_model} is stable which is expectable as the system is driven by motors which has a limitation in speed. A plot of the coupled system is shown in figure \ref{fig:good_step}.
+Eigenvalues in equation \ref{eq:super_eig_val} indicate the model in equation \ref{eq:super_ss_model} is stable which is expectable as the system is driven by motors which has a limitation in speed. A plot of the coupled system is shown in figure \ref{fig:good_step}.
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/GoodSim.pdf} %trim=l b r t (can cut off from every side)
-	\caption{This figure illustrates the open-loop step response of the system in equation \ref{eq:super_ss_model}}
+	\caption{This figure illustrates the open-loop step response of the system in equation \ref{eq:super_ss_model}.}
 	\label{fig:good_step}			% figure labels are of the form \label{fig:*}
 \end{figure}
 In figure \ref{fig:good_step} a simulation of the open-loop step response is represented, the top graph is the pan part and the lower graph is the tilt. The amplitude is representing angular velocity of the motors, the system have been excited with a $12V$ step on the motor which controls the tilt part, notice that the pan is affected of the tilt accelerating to about $30\sfrac{rad}{s}$ which is not far from $22.57\sfrac{rad}{s}$ which was measured and shown in figure \ref{fig:measured_step_tilt}. The offset can be explained by all the omitted dynamic such as friction in the system. This offset can be adjusted with an overall gain. The gain can be found the following way:

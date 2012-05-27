@@ -5,7 +5,7 @@ The purpose of the project work is to construct a pan and tilt system, for the s
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\textwidth]{graphics/pantiltsystem.png} %trim=l b r t
-	\caption{The given pant tilt system.}
+	\caption{The given pan tilt system.}
 	\label{fig:pantilysystem}
 \end{figure}
 
@@ -36,8 +36,8 @@ Thus the system will overall consist of four parts. As shown in figure \ref{fig:
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[scale=0.6,trim=400 400 400 400]{graphics/firstsystem} %trim=l b r t (can cut off from every side)
-	\caption{Overall view of the system}
+	\includegraphics[scale=0.6,trim=400 380 400 380]{graphics/firstsystem} %trim=l b r t (can cut off from every side)
+	\caption{Overall view of the system.}
 	\label{fig:firstsystem}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
@@ -48,7 +48,7 @@ The physical system is provided for the project. It consist of a pan/tilt system
 \begin{figure}[htb]
 	\centering
 	\includegraphics[scale=0.4,trim=200 200 200 200]{graphics/phsycicalsystem} %trim=l b r t (can cut off from every side)
-	\caption{Set up of the physical system}
+	\caption{Set up of the physical system.}
 	\label{fig:phsysicalsystem}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
@@ -59,7 +59,7 @@ The FPGA is a Xilinx Nexys 2 board with a Spartan-3E chip on board. Multiple pro
 \begin{figure}[htb]
 	\centering
 	\includegraphics[scale=0.42,trim=200 200 200 200]{graphics/FPGA} %trim=l b r t (can cut off from every side)
-	\caption{Setup of the FPGA processes}
+	\caption{Setup of the FPGA processes.}
 	\label{fig:FPGA}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
@@ -70,21 +70,20 @@ The microprocessor is an ARM Cortex M3 mounted on a Stellaris LM3S6965 Evaluatio
 \begin{figure}[htb]
 	\centering
 	\includegraphics[scale=0.5,clip,trim=0 300 0 300]{graphics/microprocessor} %trim=l b r t (can cut off from every side)
-	\caption{The microprocessors system}
+	\caption{The microprocessors system.}
 	\label{fig:microprocessor}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
 
 \begin{table}[htb]				
-	\begin{center}
-	\begin{tabular}{l|c|c|c}			
+	\centering
+	\begin{tabular}{lccc}			
 	Parameter & Format & ARM & FPGA \\		
-	\hline												
+	\midrule												
 pan pwm &16 bit signed & read/write & read \\
 tilt pwm & 16 bit signed  & read/write & read
 	\end{tabular}
-	\end{center}
-	\caption{Parameters that define the system}				
+	\caption{Parameters that define the system.}				
 	\label{tab:parameters}			
 \end{table}
 
@@ -96,7 +95,7 @@ When the microprocessor Evaluation Board was provided a test board was included.
 \begin{figure}[htb]
 	\centering
 	\includegraphics[scale=0.5,clip,trim=00 400 00 400]{graphics/iodevices} %trim=l b r t (can cut off from every side)
-	\caption{Set up of the I/O devices}
+	\caption{Set up of the I/O devices.}
 	\label{fig:iodevices}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
