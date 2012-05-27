@@ -210,15 +210,12 @@ The implementation process of the SPI on the FPGA saved a lot of time. The idea 
 
 On the FPGA, a 32byte dual port RAM has been used as interface between SPI and motor controller. This has been a great advantage during design and testing, as the parts where able to be tested separately and afterwards be put together.
 
-The protocol and FPGA hardware was tested for reliability, which are described in \ref{sec:spi_rel_test} (..)
-
-
-
+The protocol and FPGA hardware was tested for reliability, which are described in \ref{sec:spi_rel_test}. In the test it is concluded that the protocol and hardware can transmit without errors with cables lengths up to 25cm.
 
 
 
 \section{Conclusion}
-
+A protocol for communication between the ARM and FPGA has been designed. The protocol has been implemented on the ARM as software and hardware on the FPGA. Test shows that the protocol and the implementation can work with a error rate of 0\% in a normal environment with short cables.
 
 
 % Block overview / hardware planning
