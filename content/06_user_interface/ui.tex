@@ -136,3 +136,12 @@ Blink task & 350 ms \\
 	\label{tab:ui_task_timing}				
 \end{table}
 
+\subsection{Discussion}
+The user interface was developed with respect to low coupling to both the operating system and amongst the modules. This means that the code is easy to reuse on other hardware setups and under less advanced operating systems. 
+
+Another objective for the user interface was to be user friendly and easy to reconfigure. Both are hard to measure, but since menus are well known from practically any embedded system the approach is at least approved. The extra level of abstraction added by the menus being configured outside the code makes it at least easier to reconfigure than having held everything inside the code.
+
+Though not a primary objective of the user interface, the consistent use of inter task communication and blocking has lead to efficient use of the hardware as seen in (REFERENCE TIL KIMS PERFORMANCE TEST)
+
+\subsection{Conclusion}
+The system works well, is low coupled and must be considered both user friendly and easy to reconfigure.

@@ -69,15 +69,17 @@ D-gain tilt& 0 & 100** & 1,62\\
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/screensh_pid.jpg} %trim=l b r t (can cut off from every side)
-	\caption{Simulation of the autotune parameters. Angle [rad] plottet with respect to time [s] when initial position is zero and a setpoint of 20 is given as step.}
+	\caption{Simulation of the autotune parameters. Angle[rad] plottet with respect to time[s] when initial position is zero and a setpoint of 20 is given as step.}
 	\label{fig:chosen_plot}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
 \subsection{Discussion}
+The simulation of the was an easy and fast way of finding parameters for the PID regulator. Since the system has some limitations, this way of finding the range of parameters save the system from wear and tear. The autotune functionality of simulink and the ease of descretising the system also comes as credit for this approach.
 
 \subsection{Conclusion}
+The initial parameters for the PID regulator was found in an easy and safe way.
 
-% START OF IMPLEMENTATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+% START OF IMPLEMENTATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 \section{Implementation of PID control}
 The control algorithm is implemented in the control task. All parameters are provided from the parameter server but are cast as  floating point values for exact calculations.
@@ -162,10 +164,10 @@ As with the P- and I-gain, adjusting the D-gain is done empirically and is thus 
 
 
 \subsection{Discussion}
-
+The implemented PID regulator performes very well as seen from \{sec:precisionofsystem2} and the performance is almost at the theoretical limit with respect to precision. More could be done in terms of speed and setting time, but it could not be improved without knowing the explicit purpose of the system and further refinement is thus outside the scope of this project.
 
 \subsection{Conclusion}
-.
+The decision to abandon the full state feedback regulator has been proved right, since optimal results were obtained by using a much simpler approach.
 
 
 
