@@ -243,7 +243,7 @@ The state space model can now be formed from equation \ref{eq:super_ss_model} an
 	\caption{This figure a comparison between the actual model made and the adjusted model.}
 	\label{fig:zoom_step}			% figure labels are of the form \label{fig:*}
 \end{figure}
-On figure \ref{fig:zoom_step} it is seen that the coupling between pan and tilt is insignificant, this means that the system can be decoupled such that the pan does not affect the tilt and visa versa. This conclusion make the state-space model a major overkill as a simple transfer functions can de derived by equation \ref{eq:model_model} the following way:
+On figure \ref{fig:zoom_step} it is seen that the coupling between pan and tilt is insignificant, this means that the system can be decoupled such that the pan does not affect the tilt and visa versa, forming two simple transfer functions as shown in \ref{eq:model_model} the following way:
 \begin{align}
 	U(s) &= \frac{L J_L}{K_T} s^2 \Omega(s) + \frac{R J_L}{K_T} s \Omega(s) + K_B \Omega(s) \Rightarrow\\
 	H(s) &= \frac{\Omega(s)}{U(s)} = \frac{1}{\frac{L J_L}{K_T} s^2 + \frac{R J_L}{K_T} s + K_B}\label{eq:transfer_function}
@@ -254,5 +254,10 @@ If parameters for pan and tilt are inserted into equation \ref{eq:transfer_funct
 	G_{Tilt}(s) &= \frac{1}{15.65 \cdot 10^{-6} s^2 + 12.39 \cdot 10^{-3} s + 0.4011}\label{eq:transfer_function_tilt}
 \end{align}
 
-\section{Summary}
-From models developed throughout this chapter and analysis made on measurements of the actual system, it can be concluded that using a state-space model for simulating the system is a plain overkill, it is like shooting birds with cannons. Therefore two transfer functions have been derived instead for further analysis of the control system. Decoupling the system was done due to the almost non-existent mutual effect expressed in figure \ref{fig:zoom_step}. 
+\section{Discussion}
+From models developed throughout this chapter and analysis made on measurements of the actual system, it has been proved that using a state-space model for the pan-tilt system is unnecessary. Therefore two transfer functions have been derived for further analysis of the control system. Decoupling the system was done due to the almost non-existent mutual effect expressed in figure \ref{fig:zoom_step}.
+
+The only still expected gain from using state-space is the possibility of regulating the velocity of the system. This however would only contribute to the settling time of the system and not the precision and is therefore irrelevant according to the purpose of this project.
+
+\subsection{Conclution}
+The perspective in developing a state space model was to use it for a full state feedback regulator, but due to the low coupling between the pan and the tilt, this plan is abandoned. This decision has some influence on the other parts of the system, since the need for estimating the velocity is no longer present. Furthermore a classic PID regulator must be developed for each subsystem.
