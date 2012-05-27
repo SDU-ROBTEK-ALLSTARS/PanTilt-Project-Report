@@ -9,7 +9,8 @@ It has been decided to use FreeRTOS both because it meets the requirements and i
 
 \section{ Pre-emptive Scheduling }
 
-To ensure that the specific tasks is run in real time, pre-emptive \marginnote{Frederik} scheduling will be implemented. This is implemented by giving tasks priority when they are declared. Thus all tasks which have to run in real time is given a high priority. If a task is scheduled to run, but a task is already running, and the new task has a higher priority it can temporarily stop the task, run it's own task and resume the suspended task. That way a high priority task can be guaranteed to run at specific frequency or at certain interrupts. When every task has been set up, the function \texttt{vTaskStartScheduler()} will initiate the tasks and enter a super loop by starting an idle task.\marginnote{kan man kalde det et super loop?}
+
+To ensure that the specific tasks is run in real time FreeRTOS use pre-emptive scheduling, this will be used. This is implemented by giving tasks priority when they are declared. Thus all tasks which have to run in real time is given a high priority. If a task is scheduled to run, but a task is already running, and the new task has a higher priority it can temporarily stop the task, run it's own task and resume the suspended task. That way a high priority task can be guaranteed to run at specific frequency or at certain interrupts. When every task has been set up, the function \texttt{vTaskStartScheduler()} will initiate the tasks and start an idle task to ensure that at least one tasks run.
 
 
 \section{ Delays  }
@@ -30,16 +31,14 @@ In FreeRTOS queues are implemented as a method of intertask communication. It wo
 \section{ Suspend }
 It is also possible to suspend and resume tasks by function calls. If a task is suspended it will not get any CPU time regardless of it's priority.
 
-\section{Risks of faults}
-
-FreeRTOS does not do any work for error prevention. Does it is up to the developer to 
-
-Is there a possibility of 
-Data corruption
-Deadlocks
-Priority inversion
-
-
+%\section{Risks of faults}
+%
+%FreeRTOS does not do any work for error prevention. Does it is up to the developer %to 
+%
+%Is there a possibility of 
+%Data corruption
+%Deadlocks
+%Priority inversion
 
 \section{Inter task communication}\marginnote{Leon}
 When multiple cooperating tasks run under the same system, some service must be
@@ -50,9 +49,6 @@ passing mechanisms.
 The main difference between the to ways is that while message passing must be
 provided by the operating system, shared memory is entirely up to the programmer
 to control. In either case race conditions must be considered.
-
-Free RTOS provides queues and semaphores for inter task communication (Frederik
-uddyber\ldots)
 
 \subsection{Requirements}\marginnote{Leon du må lige uddybe}
 In the considered pan-tilt system there are several paths requiring inter task

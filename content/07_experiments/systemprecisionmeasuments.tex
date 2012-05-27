@@ -1,6 +1,6 @@
 \section{Precision of system}\label{sec:precisionofsystem}
 
-This experiment will test the precision of the complete system. 
+This experiment will test the precision of the complete system with the parameters found in \ref{section:}
 
 \subsection{Range}
 
@@ -31,6 +31,34 @@ At both points the error was less than five centimetres and at most of the time 
 
 \subsection{Conclusion}
 
-The system itself, when no account is taking the elasticity, have a precision of af third degree.
-\[ \frac{1080.0}{360} = 3 \]
-It is a high precision that have been observed, at times the uncertainty is so small that it comes from uncertainty in the system. The system is though not able to hit the position without overshooting. But as precision and not speed was our objective this is a satisfying result, but it is also showing that better precision can be obtained.
+The system itself, have a precision of af third degree.
+\[ \frac{360}{160} = 1/3 \]
+
+It is a high precision that have been observed, at times the uncertainty is as small as the precision of the system. Though it does also show that a higher precision can be obtained. Overshooting was though occurring in the control.
+
+\section{Precision of new parameters}\label{sec:precisionofsystem2}
+
+This experiment will test the PID values found at \ref{sec:}
+
+\subsection{Range}
+
+Here the system will change between two position but only one of the positions are marked. This is repeated ten times.
+
+\subsection{Test Setup}
+
+The setup will be the same as the above \ref{sec:precisionofsystem}, see Figure \ref{fig:systemtestsetup}, with the exception that only one point is measured at the distance 370 centimetres. Thus each degree is 6.458 centimetres wide.
+
+\[ \frac{\Pi*2*370}{360} = 6.458 \]
+
+\subsection{Result}
+
+In this test the precision of the pan and tilt were recorded to be quite different. For the tilt was the points precision 7 centimetres were all the points at the tilt was inside two centimetres. Thus the pan/tilt system have reached precision of respectively 0.310 degrees and 1.083 degrees.
+
+
+\[ \frac{2}{6.458} = 0.310 \]
+
+\[ \frac{7}{6.458} = 1.083 \]
+
+\subsection{Conclusion}
+
+Thus the pan have reached a constant precision on par with the systems precision of a third. The tilt part have also become more precise, but it should be possible to make it more precise. It could be that because the tilt is affected by gravity it is harder to control and thus the harder to control.  The system is though not able to hit the position without overshooting. But as precision and not speed was our objective this is a very satisfying result.
