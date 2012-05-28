@@ -9,7 +9,7 @@ The system will consist of four parts overall. As shown in figure \ref{fig:first
 \begin{figure}[htb]
 \centering
 \includegraphics[scale=0.56,trim=400 380 400 380]{graphics/firstsystem.pdf} %trim=l b r t
-\caption{Overall view of the system.}
+\caption{View of the overall system.}
 \label{fig:firstsystem}	
 \end{figure}
 
@@ -25,7 +25,7 @@ The physical system provided for the project consist of a pan/tilt system driven
 
 \section{FPGA system}\label{sec:FPGA}
 
-The FPGA is a Xilinx Nexys 2 board with a Spartan-3E chip on board \cite{nexys2}. Multiple processes will have to run on the FPGA. It is controlling the motors, watching the encoders and communicating with the microprocessor. The three main processes are the SPI communication, the motor PWM and the encoder. Both the PWM and encoder process are to run double because two motors are controlled. 
+The FPGA is a Xilinx Nexys 2 board based on the Spartan-3E chip \cite{nexys2}. Multiple processes will have to run on the FPGA. It is controlling the motors, watching the encoders and communicating with the microprocessor. The three main processes are the SPI communication, the motor PWM and the encoder. Both the PWM and encoder process are to run double because two motors are controlled. 
 
 \begin{figure}[htb]
 	\centering
@@ -69,7 +69,7 @@ Tilt setpoint  & 32 bit signed & 1/10 deg & r/w & - & -109441 & 109441 \\
 
 
 \section{I/O devices}\label{sec:iodevices}
-When the microprocessor evaluation board was provided, an additional test board, incorporating more I/O peripherals, was included. The I/O devices should make it possible to input data to, and receive output from, the control system easily. There are two LCD's usable as output and a numeric keypad, buttons, an incremental rotary encoder and a potentiometer as possible inputs.
+When the microprocessor evaluation board was provided, an additional test board, incorporating more I/O peripherals, was included. The I/O devices should make it possible to input data to, and receive output from, the control system easily. There is a LCD and OLED display, usable as output, and a numeric keypad, buttons, an incremental rotary encoder and a potentiometer as possible inputs.
 %Thus the incremental rotary encoder is chosen as main input to avoid many different %inputs, though the numpad is also included for situations were the incremental %encoder cannot be used. The test boards LCD was chosen because it is bigger and %therefore it can easier show feedback.
 \begin{figure}[htb]
 	\centering
@@ -91,7 +91,7 @@ The electrical system was set up as shown in figure \ref{fig:digitalsystem}. All
 \end{figure}
 
 
-The complete system is shown in figure \ref{fig:completesystem}, this shows the parts the system have been divided into. This is not meant to show the exact number of tasks, but as a reference to understand the components in the system.
+The complete system is shown in figure \ref{fig:completesystem}. This shows the parts the system have been divided into. This is not meant to show the exact number of tasks, but as a reference to understand the components in the system.
 
 
 \begin{figure}[htb]

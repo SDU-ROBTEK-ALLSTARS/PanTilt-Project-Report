@@ -235,7 +235,7 @@ Eigenvalues in equation \ref{eq:super_eig_val} indicate the model in equation \r
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/GoodSim.pdf} %trim=l b r t (can cut off from every side)
-	\caption{This figure illustrates the open-loop step response of the system in equation \ref{eq:super_ss_model}.}
+	\caption{The open-loop step response of the system in equation \ref{eq:super_ss_model}.}
 	\label{fig:good_step}			% figure labels are of the form \label{fig:*}
 \end{figure}
 In figure \ref{fig:good_step} a simulation of the open-loop step response is represented, the top graph is the pan part and the lower graph is the tilt. The amplitude is representing angular velocity of the motors, the system have been excited with a $12V$ step on the motor which controls the tilt part, notice that the pan is affected of the tilt accelerating to about $30\sfrac{rad}{s}$ which is not far from $22.57\sfrac{rad}{s}$ which was measured and shown in figure \ref{fig:measured_step_tilt}. The offset can be explained by all the omitted dynamic such as friction in the system. This offset can be adjusted with an overall gain. The gain can be found the following way:
