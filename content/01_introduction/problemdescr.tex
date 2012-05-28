@@ -82,7 +82,7 @@ The microprocessor is an ARM Cortex M3 mounted on a Stellaris LM3S6965 Evaluatio
 	\midrule										
 Pan pwm (DUTY A) &16 bit signed & none & read/write & read & -32.767 &  32.768  \\
 Tilt pwm (DUTY B) & 16 bit signed  & none&read/write & read & -32.767 &  32.768 \\
-Pan position (POS A) & 16 bit unsigned&ticks & read & write & 32.544 & 32.976
+Pan position (POS A) & 16 bit unsigned&ticks & read & write & 32.544 & 32.976 \\
 Tilt position (POS B) & 16 bit unsigned&ticks & read & write & 0 & 65535 \\
 Pan velocity (VEL A) & 16 bit unsigned&ticks/s & read & write & 0 & 65535 \\
 Tilt velocity (VEL B) & 16 bit unsigned & ticks/s&read & write & 0 & 65535 \\
@@ -103,7 +103,7 @@ When the microprocessor Evaluation Board was provided a test board was included.
 %Thus the incremental rotary encoder is chosen as main input to avoid many different %inputs, though the numpad is also included for situations were the incremental %encoder cannot be used. The test boards LCD was chosen because it is bigger and %therefore it can easier show feedback.
 \begin{figure}[htb]
 	\centering
-	\includegraphics[scale=0.5,clip,trim=00 400 00 400]{graphics/iodevices} %trim=l b r t (can cut off from every side)
+	\includegraphics[scale=0.6,clip,trim=00 400 00 400]{graphics/iodevices} %trim=l b r t (can cut off from every side)
 	\caption{Set up of the I/O devices.}
 	\label{fig:iodevices}			% figure labels are of the form \label{fig:*}
 \end{figure}

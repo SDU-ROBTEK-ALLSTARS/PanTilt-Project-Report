@@ -18,10 +18,11 @@ an integrator, to raise the type of the system, so at least the regulatior shoul
 \subsection{Design}
 SISO\footnote{Single input, single output}-control systems can be sketched the
 following way:
-\begin{figure}[htb] \centering \includegraphics[width=\textwidth,trim=0 0 0
-0]{graphics/control_sketch.pdf} %trim=l b r t (can cut off from every side)
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=\textwidth,clip,trim=0 10 0 10]{graphics/control_sketch.pdf} %trim=l b r t
 	\caption{This figure illustrates a sketch of a general control system.}
-	\label{fig:control_sketch}			% figure labels are of the form \label{fig:*}
+	\label{fig:control_sketch}
 \end{figure}
 Figure \ref{fig:control_sketch} show a system with a feedback loop, $G(s)$ is
 the plant and $H(s)$ is the regulator. When designing a regulator ($H(s)$) is
@@ -40,11 +41,12 @@ Though various methods are available for deriving the optimal parameters, the
 approach chosen here is to do a mathematical simulation of the system. Since the
 transfer functions have already been derived, a Simulink model can be developed.
 
-Since the system is decoupled, it can be represented as shown in figure \ref{fig:control_sketch} \begin{figure}[htb]
+Since the system is decoupled, it can be represented as shown in figure \ref{fig:control_sketch}
+\begin{figure}[htb]
 	\centering
 	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/Simulink.pdf} %trim=l b r t (can cut off from every side)
 	\caption{This figure illustrates the simulink model.}
-	\label{fig:control_sketch}			% figure labels are of the form \label{fig:*}
+	\label{fig:control_simulink}			% figure labels are of the form \label{fig:*}
 \end{figure}
 The top system represent the pan part of the system, while the lower part represent the tilt.
 
@@ -58,7 +60,7 @@ The goal of the simulation is to find the values providing a qickly responding s
 	\label{fig:rlocus_plot}			
 \end{figure}
 
-The simulation is run with various parameters to find the range of values in table \ref{tab:gain_vaues}. Figure \ref{chosen_plot} shows a plot of the step response using autotuned parameters with response time 0,0175 s.
+The simulation is run with various parameters to find the range of values in table \ref{tab:gain_values}. Figure ??\marginnote{Undefined REF} shows a plot of the step response using autotuned parameters with response time 0,0175 s.
 
 \begin{table}[htb]				
 	\centering
@@ -100,7 +102,7 @@ When run the control task saves the value of the tick counter and when finished,
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/flowchart.pdf}
+	\includegraphics[draft,width=\textwidth,trim=0 0 0 0]{blank}
 	\caption{Shows a flowchart of the implemented control algorithm}
 	\label{fig:pid_flow}			
 \end{figure}
@@ -120,7 +122,7 @@ This number is then used to calculate the ratio of degrees to ticks, keeping in 
 
 The error is then calculated as the difference between setpoint and actual position and is thus a signed value in degrees.
 
-To compare simulated values to actual values it is necessary to convert the gains so that \label{eq:conv1} and \label{eq:conv2} becomes equal. 
+To compare simulated values to actual values it is necessary to convert the gains so that \ref{eq:conv1} and \ref{eq:conv2} becomes equal. 
 \begin{equation}
 error \ [rad] * gain = input \ [V]
 \label{eq:conv1}
@@ -175,7 +177,7 @@ As with the P- and I-gain, adjusting the D-gain is done empirically and is thus 
 
 
 \subsection{Discussion}
-The implemented PID regulator performes very well as seen from \{sec:precisionofsystem2} and the performance is almost at the theoretical limit with respect to precision. More could be done in terms of speed and setting time, but it could not be improved without knowing the explicit purpose of the system and further refinement is thus outside the scope of this project.
+The implemented PID regulator performs very well as seen from \ref{sec:precisionofsystem2} and the performance is almost at the theoretical limit with respect to precision. More could be done in terms of speed and setting time, but it could not be improved without knowing the explicit purpose of the system and further refinement is thus outside the scope of this project.
 
 \subsection{Conclusion}
 The decision to abandon the full state feedback regulator has been proved right, since optimal results were obtained by using a much simpler approach. Though the implemented regulator is somewhat rough, it works well and provides a base for further development.
