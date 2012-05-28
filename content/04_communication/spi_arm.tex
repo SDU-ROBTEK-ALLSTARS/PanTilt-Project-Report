@@ -24,7 +24,12 @@ The topmost layer of the implementation is the interface between the SPI impleme
 
 The interface quite simply consists of the four functions \texttt{spi\_init}, \texttt{spi\_register\_task}, \texttt{spi\_write\_from\_task} and \texttt{spi\_read\_from\_task}. The \texttt{\_task}-suffix signifies that the function is meant to be called from within a task (and will otherwise have no effect).
 
-The first function to be called under normal circumstances would be \texttt{spi\_init}. It initializes the hardware SPI peripheral for use such as described in [ref freescale etc.]. Also, it creates two tasks; a transmitter and a receiver as well as associated queues and semaphores.
+The first function to be called under normal circumstances would be \texttt{spi\_init}. It initializes the hardware SPI peripheral for use such as described in
+\\
+MANGLER REFERENCE!!!!!
+
+\\
+ Also, it creates two tasks; a transmitter and a receiver as well as associated queues and semaphores.
 
 \begin{figure}[htb]
   \begin{subfigure}[b]{0.495\textwidth}
@@ -43,7 +48,7 @@ The first function to be called under normal circumstances would be \texttt{spi\
   \label{fig:spi_register_task}
 \end{figure}%trim=l b r t
 
-For at task to be able to use the SPI link, it will have to first make a call to the function \texttt{spi\_register\_task}. That is because resources are allocated dynamically (described in \ref{sec:spi_underthehood}.). Figure \ref{fig:spi_register_task} shows a user task using the register function and getting queues allocated to it. 
+For a task to be able to use the SPI link, it will have to first make a call to the function \texttt{spi\_register\_task}. That is because resources are allocated dynamically, described in section \ref{sec:spi_underthehood}. Figure \ref{fig:spi_register_task} shows a user task using the register function and getting queues allocated to it. 
 
 When a user task has been successfully registered with the SPI software it is allowed use of the \texttt{spi\_write\_from\_task}- and \texttt{spi\_read\_from\_task}-functions to read and write to and from its private queues. With only those two functions used frequently during runtime, the second design goal is considered fulfilled.
 

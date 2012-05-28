@@ -77,11 +77,20 @@ The microprocessor is an ARM Cortex M3 mounted on a Stellaris LM3S6965 Evaluatio
 
 \begin{table}[htb]				
 	\centering
-	\begin{tabular}{lccc}			
-	Parameter & Format & ARM & FPGA \\		
-	\midrule												
-pan pwm &16 bit signed & read/write & read \\
-tilt pwm & 16 bit signed  & read/write & read
+	\begin{tabular}{llccccc}			
+	Parameter & Format & Unit & ARM & FPGA & Min value & Max value\\		
+	\midrule										
+Pan pwm (DUTY A) &16 bit signed & none & read/write & read & -32.767 &  32.768  \\
+Tilt pwm (DUTY B) & 16 bit signed  & none&read/write & read & -32.767 &  32.768 \\
+Pan position (POS A) & 16 bit unsigned&ticks & read & write & 32.544 & 32.976
+Tilt position (POS B) & 16 bit unsigned&ticks & read & write & 0 & 65535 \\
+Pan velocity (VEL A) & 16 bit unsigned&ticks/s & read & write & 0 & 65535 \\
+Tilt velocity (VEL B) & 16 bit unsigned & ticks/s&read & write & 0 & 65535 \\
+Aux (AUX) & 16 bit unsigned &binary& read/write & read/write & 0 & 65.535 \\
+Pan current & 32 bit signed & 1/10 deg & read/write & - & -900 & 900 \\
+Tilt current  & 32 bit signed & 1/10 deg & read/write & - & -109.441 & 109.441 \\
+Pan setpoint  & 32 bit signed & 1/10 deg & read/write & - & -900 & 900 \\
+Tilt setpoint  & 32 bit signed & 1/10 deg & read/write & - & -109.441 & 109.441 \\
 	\end{tabular}
 	\caption{Parameters that define the system.}				
 	\label{tab:parameters}			
