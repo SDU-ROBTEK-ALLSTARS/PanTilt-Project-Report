@@ -3,7 +3,7 @@
 \section{UI}
 This chapter concerns building an application providing a user interface to the
 pan-tilt system. The application runs on the ARM Cortex M3 based EMP-board
-(Reference ???)
+as mentioned in \ref{sec:microprocessor}.
 
 \subsection{Requirements}
 The UI must allow the user to see a numerical expression
@@ -23,7 +23,9 @@ interesting, so a versatile and easily adaptable system is required.
 Though the system will be used mainly by people with some programming
 experience, it must provide an easy way of configuring and altering the functionalities of the system. Since it is a faily complex system it should be separated and organized to ensure as little focus on programming as possible while configuring and testing the system.
 
-The  menu structure displayed in figure \ref{fig:menu_structure} must be implemented ...
+A secondary objective for the software in general is to form a base for further development of the system, so modules should remain low coupled and implementations should be done in a none terminal way.
+
+The  menu structure displayed in figure \ref{fig:menu_structure} will be implemented as a start.
 
 \begin{figure}[htb]
 	\centering
@@ -144,4 +146,4 @@ Another objective for the user interface was to be user friendly and easy to rec
 Though not a primary objective of the user interface, the consistent use of inter task communication and blocking has lead to efficient use of the hardware as seen in (REFERENCE TIL KIMS PERFORMANCE TEST)
 
 \subsection{Conclusion}
-The system works well, is low coupled and must be considered both user friendly and easy to reconfigure.
+The system works well, is low coupled and must be considered both user friendly and easy to reconfigure. It provides a fine base for further developing the system.
