@@ -20,7 +20,7 @@ SISO\footnote{Single input, single output}-control systems can be sketched the
 following way:
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=\textwidth,clip,trim=0 10 0 10]{graphics/control_sketch.pdf} %trim=l b r t
+  \includegraphics[width=\textwidth,clip,trim=0 15 0 15]{graphics/control_sketch.pdf} %trim=l b r t
 	\caption{This figure illustrates a sketch of a general control system.}
 	\label{fig:control_sketch}
 \end{figure}
@@ -44,7 +44,7 @@ transfer functions have already been derived, a Simulink model can be developed.
 Since the system is decoupled, it can be represented as shown in figure \ref{fig:control_sketch}
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/Simulink.pdf} %trim=l b r t (can cut off from every side)
+	\includegraphics[width=\textwidth,trim=0 15 0 15]{graphics/Simulink.pdf} %trim=l b r t (can cut off from every side)
 	\caption{This figure illustrates the simulink model.}
 	\label{fig:control_simulink}			% figure labels are of the form \label{fig:*}
 \end{figure}
@@ -55,7 +55,7 @@ The goal of the simulation is to find the values providing a qickly responding s
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\textwidth,clip,trim=60 270 60 270]{graphics/rlocus_plot.pdf} %trim=l b r t (can cut off from every side)
+	\includegraphics[width=\textwidth,clip,trim=80 270 80 270]{graphics/rlocus_plot.pdf} %trim=l b r t (can cut off from every side)
 	\caption{Shows the root locus plot the pan and tilt systems.}
 	\label{fig:rlocus_plot}			
 \end{figure}
@@ -131,7 +131,6 @@ error \ [rad] * gain = input \ [V]
 error \ [deg] * gain = input \ [pwm]
 \label{eq:conv2}
 \end{equation}
-
 To convert from $rad$ to $deg$ the ratio is found
 \begin{equation}
 \frac{3600 \ deg}{2 \ \Pi \ rad} = 573 \ deg/rad

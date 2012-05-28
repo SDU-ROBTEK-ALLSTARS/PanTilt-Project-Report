@@ -2,10 +2,10 @@
 This appendix will contain calculations for the chapter concerning dynamics of the system.
 
 \section{Inertia of the pan/tilt}
-A sketch of the pan/tilt system is shown in the figure below.
+A sketch of the pan/tilt system is shown in figure \ref{fig:pan_tilt_sketch}.
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\textwidth]{graphics/pan_tilt_sketch.pdf} %trim=l b r t (can cut off from every side)
+	\includegraphics[width=\textwidth,trim=0 20 0 10]{graphics/pan_tilt_sketch.pdf} %trim=l b r t (can cut off from every side)
 	\caption{Simple sketch of the pan/tilt system with measurements. The dimension of the profile is 40 x 40 mm. The profile that is used weigh $1.565\sfrac{kg}{m}$.}
 	\label{fig:pan_tilt_sketch}			% figure labels are of the form \label{fig:*}
 \end{figure}
@@ -43,7 +43,7 @@ J_{Tilt} &= 0.097 kg \cdot m^{2}\label{eq:tilt_inertia}
 The load at the motors are the reflected inertia through the gears plus the inertia of the rotor in the motor, the rotors inertia is omitted. The two gears are connected together and then connected between the motor and the inertia. The gearing system is equal on the pan and the tilt. Figure \ref{fig:app_gears} show a simplification of the gearing.
 \begin{figure}[htb]
 	\centering
-	\includegraphics[scale=1,trim=0 0 0 0]{graphics/gears.pdf} %trim=l b r t (can cut off from every side)
+	\includegraphics[scale=1,trim=0 20 0 10]{graphics/gears.pdf} %trim=l b r t (can cut off from every side)
 	\caption{Simplification of the gears in the pan/tilt system. (a) Show a simplification of a planetary gear which has, according to the datasheet of the motor which is included on the CD, a gearing of $N = 30:1$. (b) The gearing of the belt driven gear is experimental measured and calculated to be $N = 1:3$.}
 	\label{fig:app_gears}			% figure labels are of the form \label{fig:*}
 \end{figure}

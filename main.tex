@@ -11,7 +11,7 @@
 \input{content/00_frontmatter/abstract.tex}
 %
 % Preface (un-numbered chapter)
-\input{content/00_frontmatter/preface.tex}
+%\input{content/00_frontmatter/preface.tex}
 %
 % Table of contents, figures, tables, listings and abbreviations
 \tableofcontents
@@ -27,11 +27,11 @@
 \input{content/01_introduction/introduction.tex}
 \input{content/01_introduction/problemdescr.tex}
 \input{content/02_modelling/dynamics.tex}
-\input{content/02_modelling/control.tex}
 \input{content/03_low_level_control/llc.tex}
-\input{content/04_communication/communication.tex}
 \input{content/05_operating_system/os.tex}
+\input{content/04_communication/communication.tex}
 \input{content/06_user_interface/ui.tex}
+\input{content/02_modelling/control.tex}
 \input{content/07_experiments/experiments.tex}
 \input{content/08_discussion/discussion.tex}
 \input{content/09_conclusion/conclusion.tex}
@@ -44,10 +44,11 @@
 % Appendix
 \appendix %all sections below are numbered A, B, C,...
 \input{content/10_appendix/dynamics_calc.tex}
-\input{content/10_appendix/control_calc.tex}
+%\input{content/10_appendix/control_calc.tex}
 \input{content/03_low_level_control/llctesting.tex}
+\input{content/10_appendix/runtime.tex}
 \input{content/04_communication/tests.tex}
 \input{content/04_communication/spi_test.tex}
-\input{content/10_appendix/runtime.tex}
+\input{content/07_experiments/pid_experiments.tex}
 %
 \end{document}

@@ -29,7 +29,7 @@ The  menu structure displayed in figure \ref{fig:ui_menu_structure} will be impl
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/menu_structure.pdf} 
+	\includegraphics[width=\textwidth,clip,trim=10 15 10 15]{graphics/menu_structure.pdf} 
 	\caption{Structure of the menu system.}
 	\label{fig:ui_menu_structure}
 \end{figure}
@@ -71,10 +71,10 @@ The user interface can be split into three layer as seen in figure \ref{fig:ui_t
 The menu task first handles inputs from the dreh impuls geber and updates the current menu based on this. It then checks whether any of the fields in the current menu takes input and handles theese updating relevant parameters. Then the display buffer is updated to contain the two lines provided by the current menu and data from any output fields are written to the buffer before yielding. The system state is held entirely in the menu item, thus reducing the menu task to a piece of sequential code.
 
 \begin{figure}[htb]
-	\centering
-	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/task_diagram_user_interface.pdf} 
-	\caption{Task diagram for the user interface.}
-	\label{fig:ui_task_diagram}
+  \centering
+  \includegraphics[width=\textwidth,clip,trim=0 5 0 0]{graphics/task_diagram_user_interface.pdf} 
+  \caption{Task diagram for the user interface.}
+  \label{fig:ui_task_diagram}
 \end{figure}
 
 The menus are implemented as a linked list to make it possible to add menus from a serial connection or from the user interface. Position setpoints can then be implemented as menu point to make it possible to cycle through any number of user defined positions in any order.
@@ -90,7 +90,7 @@ The lcd task works on a mutex protected buffer and simply runs through the buffe
 \subsection{Dreh task}
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/dreh_task_fsm.pdf} 
+	\includegraphics[width=\textwidth,clip,trim=0 15 0 15]{graphics/dreh_task_fsm.pdf} 
 	\caption{State transition diagram for the dreh task.}
 	\label{fig:task_dreh_fsm}
 \end{figure}
@@ -101,7 +101,7 @@ The driver software for the dreh impuls geber is based on a finite state machine
 \subsection{Numpad task}
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/numpad_task_fsm.pdf} 
+	\includegraphics[width=\textwidth,trim=0 15 0 15]{graphics/numpad_task_fsm.pdf} 
 	\caption{Structure of the menu system.}
 	\label{fig:task_numpad_fsm}
 \end{figure}
@@ -114,7 +114,7 @@ Numpad task is based on a Mealy finite state machine, following the diagram in f
 \subsection{Blink task}
 \begin{figure}[htb]
 	\centering
-	\includegraphics[scale=0.9,trim=0 0 0 0]{graphics/blink_task_fsm.pdf} 
+	\includegraphics[scale=0.9,trim=0 15 0 15]{graphics/blink_task_fsm.pdf} 
 	\caption{Structure of the menu system.}
 	\label{fig:blink_task_fsm}
 \end{figure}

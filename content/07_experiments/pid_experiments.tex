@@ -1,18 +1,18 @@
-\section{PID experiments}\label{sec:pid_experiments}
+\chapter{PID experiments}\label{sec:pid_experiments}
 Since adjusting the PID gain values is a somewhat empiric process, the
 observations are described in the following as multiple tests although they were
 done consecutive.
 
-\subsection{Adjusting the P-gain}\label{sec:pid_experiments_p}
+\section{Adjusting the P-gain}\label{sec:pid_experiments_p}
 The purpose of this test is to find suitable values for the P-gain and to verify
 the values found in simulation.
 
-\subsection*{Setup} The test was performed using the setup described in
+\section*{Setup} The test was performed using the setup described in
 section \ref{subsec:precisionofsystem}. The system is given two positions and runs in
 automode between them. First the P-gain was increased until the system became
 unstable, in this test meaning unable to come to rest at the given position.
 
-\subsection*{Results} From equation \ref{eq:conv} the gains found in simulation can be
+\section*{Results} From equation \ref{eq:conv} the gains found in simulation can be
 converted to the actual system and be compared to the results. The converted
 values can be seen in table \ref{tab:actual_gain_values}. At P-gain of 600 the gear
 belts of the system starts to notch over teeths, while still being stable, so
@@ -23,15 +23,15 @@ the goal position. This is due to the error becoming smaller and smaller on
 approaching the position. The P-gain values found in simulation worked for the
 system.
 
-\subsection*{Conclusion} Testing of the system confirms that the control
+\section*{Conclusion} Testing of the system confirms that the control
 algorithm works well and the system tracks the given position. The difficulties
 reaching the position suggests an I-term should be added.
 
-\subsection{Adjusting the I-gain}\label{sec:pid_experiments_i}
+\section{Adjusting the I-gain}\label{sec:pid_experiments_i}
 The purpose of this test is to find suitable values for the I-gain and to verify
 the values found in simulation.
 
-\subsection*{Setup} The test was performed using the setup described in
+\section*{Setup} The test was performed using the setup described in
 section \ref{subsec:precisionofsystem}. The system is given two positions and runs in
 automode between them. During the test the P-gain was kept at 20.
 
@@ -42,7 +42,7 @@ From equation \ref{eq:conv} the gains found in simulation can be converted to th
 system and be compared to the results. The converted values can be seen in
 table \ref{tab:actual_gain_values}. 
 
-\subsection*{Results} 
+\section*{Results} 
 At I-gain of 4 the gear belts of the system starts
 to notch over teeths, while still being stable, so testing at higher gains were
 omitted.
@@ -54,17 +54,17 @@ positive error is summed up to a positive contribution to the input. This
 suggests adding a D-term at least to the tilt. The problem is insignificant on
 the pan due to the relatively small errors compared to the tilt.
 
-\subsection*{Conclusion} Testing showed that the tracking ability of the system
+\section*{Conclusion} Testing showed that the tracking ability of the system
 had substantially increased and the speed has increased especially when close to
 the goal. The values found from autotune in the simulation works well, but the
 system seems to react fine with even higher values, but a  D-term should be
 added to get faster recovery after overshoot.
 
-\subsection{Adjusting the D-gain}\label{sec:pid_experiments_d}
+\section{Adjusting the D-gain}\label{sec:pid_experiments_d}
 The purpose of this test is to find suitable values for the D-gain and to verify
 the values found in simulation.
 
-\subsection*{Setup}
+\section*{Setup}
 The test was performed using the setup described in
 section \ref{subsec:precisionofsystem}. The system is given two positions and runs in automode between them. During the test
 the P-gain was kept at 20 and the I-gain at 2.
@@ -76,13 +76,13 @@ From equation \ref{eq:conv} the gains found in simulation can be converted to th
 system and be compared to the results. The converted values can be seen in
 table \ref{tab:actual_gain_values}. 
 
-\subsection*{Results}
+\section*{Results}
 At D-gain of 90 the system becomes unstable.
 
 The D-gain values obtained from simulation worked fine, but it takes a couple of
 seconds to finetune into position.
 
-\subsection*{Conclusion}
+\section*{Conclusion}
 The PID-regulator now works well and is able to reach a given position. Some
 fine-tuning is needed to get perfect parameters.
 
@@ -102,16 +102,16 @@ fine-tuning is needed to get perfect parameters.
 	\label{tab:actual_gain_values}			
 \end{table}
 
-\subsection{Tuning the PID parameters}
+\section{Tuning the PID parameters}
 The purpose of this test is to increase the accuracy of the system by changing
 the drive belt and retune the parameters of the PID.
 
-\subsection*{Setup}
+\section*{Setup}
 The test was performed using the setup described in section \ref{subsec:precisionofsystem}. The
 system is given two positions and runs in automode between them while tuning the
 parameters of the PID.
 
-\subsection*{Results}
+\section*{Results}
 The drive belt on the pan was replaced.
 
 The PID parameters were tuned slightly, reducing the D-gain and increasing the
@@ -126,24 +126,24 @@ A periodic error was observed as the small drive wheel on the motor sometimes
 jumps a tooth and after a while jumps back. The belt seems fine, but
 the teeths of the drive wheel is worn
 
-\subsection*{Conclusion}
+\section*{Conclusion}
 The performance of the system has been gratly improved and new tests should be
 performed with greater distance between the pan-tilt and the board. 
 
 If the error with the drive belt continues, the drive wheel should be replaced.
 
 
-\subsection{Verification of the control frequency}\label{subsec:control_freq}
+\section{Verification of the control frequency}\label{subsec:control_freq}
 The purpose of this test is to verify that the control task actually runs at 100 Hz.
 
-\subsection*{Setup}
+\section*{Setup}
 At the entry of control task a pin is set, and at the end of the control task it
 is cleared. An oscilloscope is connected to the pin. While the system is running, the period between rising edges is measured using the oscilloscope.
 
-\subsection*{Results}
+\section*{Results}
 The results vary between 9,80 and 9,90 ms. This is equal to between 101,01 Hz and 102,04 Hz, meaning an error of less than 2 percent.
 
-\subsection*{Conclusion}
+\section*{Conclusion}
 The control task runs close to 100 Hz and therefor jitter should not be a problem.
 
 
