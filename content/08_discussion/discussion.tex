@@ -1,1 +1,18 @@
 \chapter{Discussion}\label{chap:discussion}
+The main approach in this project, has been to divide the assignment into specialized manageable tasks, with defined interfaces.  This has given each member of the group a chance to specialize in their given assignment area, without the need to worry about the larger picture of the project.
+
+In this project, no practical application, fx a tracking system, was to be implemented using the system.
+This made it the scope of this project to build an interface, to show the efficiency of the control system. Thus it was not possible to define all the systems requirements.
+
+In contrast with previous projects, where the group have attempted to use responsibility based work models, specifically the Belbin model, this time an expertise focused model was used, where each individual group member primarily focused on their own practical field, and all other assignment were handled as they came naturally. 
+
+Instead of having a lot of meetings, the group used a central log. This was an open Google document, where most of the  group communication took place. This freed up a lot of time, that would otherwise have been spent on meetings for the sake of coordination. And thus time could be, and was, used more constructively. The log could also guaranteed that each group member quickly could get a clear picture of the status of the project, and what small assignments were pending.
+
+Even though the project resulted in a successful system, there have been several areas where improvements could be made. For instance the velocity estimators on the FPGA, together with the control model that used them.
+Also some of the initial solutions proposed, turned out to be more than sufficient, but hard to implement, and therefore a simpler solution was implemented. The statespace model was proposed in the simulation chapter, but it ended up with a simple S-domain transfer function. These areas were all explored a bit, but was ultimately cut, due to the fact that it was prioritized to have a working system by the deadline, instead of a non working, but more advanced system.
+
+Due to the architecture of the system having an extremely low coupling, additions and replacements could be easily made and interfaced, without requiring a complete redesign. The test of the CPU load also shows that a more complicated control algorithm could be implemented without requiring new hardware, or redesign of other modules.
+
+!!!test vs debug!!!
+
+!!!coupling from L to the Eon!!!
