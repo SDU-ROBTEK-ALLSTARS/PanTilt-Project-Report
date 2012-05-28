@@ -1,11 +1,11 @@
 \chapter{Dynamics}\label{chap:dynamics}
-This chapter contains an analysis of the dynamics of the pan/tilt system which will result in a mathematical model. Calculations made throughout this chapter resides in appendix \ref{app:dynamics_calc}. Identifying and understanding the relevant dynamics of a system is important as this will lead to an as accurate theoretical model as needed for the application. Ideally a perfect model would somewhat be preferred, but it would be a very difficult and tedious task to derive a perfect model and completely unnecessary. The reason for that is some of the dynamics are insignificant to the behaviour of the system, others might have a little impact on the behaviour and can be omitted due to more dominating dynamics. The response of electrical circuits are often much quicker than the response of a mechanical system. This response delay is encoded into the poles of a system, making the poles of the system very interesting to analyse. The poles of the system tell if it is stable, and if any dynamics in the system possibly can be omitted due to its relatively fast response compared to the rest of the system which acts slower.
+This chapter contains an analysis of the dynamics of the pan/tilt system which will result in a mathematical model. Calculations made throughout this chapter resides in appendix \ref{app:dynamics_calc}. Identifying and understanding the relevant dynamics of a system is important as this will lead to an as accurate theoretical model as needed for the application. Ideally a perfect model would somewhat be preferred, but it would be a very difficult and tedious task to derive a perfect model and therefore completely unnecessary. The reason for this is that some of the dynamics are insignificant to the behaviour of the system, others might have a little impact on the behaviour and can be omitted due to more dominating dynamics. The response of electrical circuits are often much quicker than the response of a mechanical system. This response delay is encoded into the poles of a system, making the poles of the system very interesting to analyse. The poles of the system tell if it is stable, and if any dynamics in the system possibly can be omitted due to its relatively fast response compared to the rest of the system which acts slower.
 
 A system can always be constructed of first order systems and second order systems in a cascade. These two types of systems define a time constant. For first order systems the time constant can be derived from the zeroth order term and in second order systems it can be derived from the first order term. From a physical point of view the time constant defines the point in time where the system reaches $1 - \sfrac{1}{e} \approx 63.2\%$ of its final energy state, below in figure \ref{fig:energy_systems} is illustrated a step response on a first and a second order system.
 \begin{figure}[htb]
 	\centering
 	\includegraphics[scale=1,trim=0 0 0 0]{graphics/energy_systems.pdf} %trim=l b r t (can cut off from every side)
-	\caption{(a) Illustrates the step response of a first order system. (b) Illustrates a step response of a second order system. Both will raise in time and reach some asymptotic value provided that the systems are stable, $\tau$ denotes the time constant.}
+	\caption{(a) Step response of a first order system. (b) Step response of a second order system. Both will raise in time and reach an asymptotic value provided that the systems are stable, $\tau$ denotes the time constant.}
 	\label{fig:energy_systems}			% figure labels are of the form \label{fig:*}
 \end{figure}
 In figure \ref{fig:energy_systems}(b), notice the transient which seems more inert compared to (a). This is due to some mass in the system if the second order differential equation which represents the system is a mechanical equation. The transient response of a system is encoded into the poles of the system, which is defined by the time constant the following way:
@@ -16,7 +16,7 @@ where $\zeta$ is the dampening ratio and $\omega_{n}$ is the undampened natural 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[scale=1,clip,trim=0 20 0 20]{graphics/splane.pdf} %trim=l b r t (can cut off from every side)
-	\caption{This figure illustrates a pole in the s-plane and the relation between poles and time constants.}
+	\caption{A pole in the s-plane and the relation between poles and time constants.}
 	\label{fig:s_plane}			% figure labels are of the form \label{fig:*}
 \end{figure}
 In figure \ref{fig:s_plane} the real part of the pole is given by 
@@ -27,17 +27,17 @@ and the imaginary part is given by
 \begin{equation}
 	Im(p) = j\omega_{n}\sqrt{1 - \zeta^{2}} = j\omega_{n}\sin(\varphi)
 \end{equation}
-Considering equation \ref{eq:time_constant} and figure \ref{fig:s_plane} it can be seen that the real part of a pole directly relates to the time constant. Systems with one pole can therefore have their time constant calculated from the reciprocal of the real part of the pole. Systems consisting of more than one pole can have their time constant calculated from the super positioning the reciprocal of the real part of the poles. Equation \ref{eq:time_constant} show an example.
+Considering equation \ref{eq:time_constant} and figure \ref{fig:s_plane} it can be seen that the real part of a pole directly relates to the time constant. Systems with one pole can therefore have their time constant calculated from the reciprocal of the real part of the pole. Systems consisting of more than one pole can have their time constant calculated by super positioning the reciprocal of the real part of the poles. Equation \ref{eq:super_time_constant} show an example.
 \begin{equation}
 	\tau = \frac{1}{Re(p_{1})} + \frac{1}{Re(p_{2})} + \frac{1}{Re(p_{3})} + ... + \frac{1}{Re(p_{N})}\label{eq:super_time_constant}
 \end{equation}
-As the time constant is defined as the reciprocal of the real part of the pole, then poles far away from the imaginary axis will not add that much to the total time constant as poles located near the imaginary axis. Therefore the following can be concluded, much \textit{faster} poles in a system containing \textit{slower} poles can be omitted from the model of the system.
+As the time constant is defined as the reciprocal of the real part of the pole, poles far away from the imaginary axis will not add much to the total time constant in respect to poles located near the imaginary axis. Therefore the following can be concluded, much \textit{faster} poles in a system containing \textit{slower} poles can be omitted from the model of the system.
 
 \section{Overview of pan/tilt}
-The following will give an overview of the physical aspects of the pan/tilt system and also define the mathematics which is tied to the system. The pan/tilt is assembled from two motors, a set of gears connected to each motor. Each motor can rotate a mass individually by transferring torque from the motors, through the gears, to the masses which are connected to the gears. A model of the motors are needed, along with a model of the reflected inertia through the gears, and other dynamics might be relevant to, but are discussed later in this section.
+The following will give an overview of the physical aspects of the pan/tilt system and also define the mathematics which is tied to the system. The pan/tilt is assembled from two motors, a set of gears connected to each motor. Each motor can rotate a mass individually by transferring torque from the motors, through the gears, to the masses which are connected to the gears. A model of the motors are needed, along with a model of the reflected inertia through the gears, other dynamics might be relevant to, but are discussed later in this section.
 
 \subsection{Motor}
-The motor converts electrical energy to mechanical energy as a voltage is supplied to the motor. This voltage make the motor turn and this turning motion deliver torque through some gears to a mass which then spins up to some maximum speed. A simplification of a DC motors circuit can be seen in figure \ref{fig:motor_circuit}, from this a mathematical model of the motor can be derived.
+The motor converts electrical energy to mechanical energy as a voltage is supplied to the motor. This voltage make the motor turn and this turning motion deliver torque through some gears to a mass which then spins up to some maximum speed. A simplification of a DC motors circuit can be seen in figure \ref{fig:motor_circuit}, and from this a mathematical model of the motor can be derived.
 \begin{figure}[htb]
 	\centering
 	\includegraphics[scale=1,clip,trim=0 10 0 10]{graphics/motor_circuit.pdf} %trim=l b r t (can cut off from every side)
@@ -57,7 +57,7 @@ where $K_T$ is the torque constant.	The mechanical torque can be expressed in th
 \begin{equation}
 	\tau = J_L\frac{d\omega}{dt}\label{eq:mechanical_torque}
 \end{equation}
-where $J_L$ is the inertial load on the motor, $\frac{d\omega}{dt}$ is the time derivative of the angular velocity of the motor. Equation \ref{eq:electrical_torque} and \ref{eq:mechanical_torque} equals each other if it is assumed that the energy is conserved in the transfer from electrical to mechanical torque. The following expression is obtained then obtained from equation \ref{eq:electrical_torque} and \ref{eq:mechanical_torque}:
+where $J_L$ is the inertial load on the motor, $\frac{d\omega}{dt}$ is the time derivative of the angular velocity of the motor. Equation \ref{eq:electrical_torque} and \ref{eq:mechanical_torque} equals each other if it is assumed that the energy is conserved in the transfer from electrical to mechanical torque. The following expression is obtained, then from equation \ref{eq:electrical_torque} and \ref{eq:mechanical_torque} the following can be obtained :
 \begin{align}
 	K_Ti &= J_L\frac{d\omega}{dt} \Leftrightarrow\\
 	i &= \frac{J_L}{K_T} \frac{d\omega}{dt}\label{eq:electrical_mechanical_torque}
@@ -80,14 +80,14 @@ When a body rotates around an axis the phenomenon of precession occurs. The torq
 \begin{figure}[htb]
 	\centering
 	\includegraphics[scale=1,trim=0 0 0 0]{graphics/precession.pdf} %trim=l b r t (can cut off from every side)
-	\caption{Shows the concept of of the torque-induced precession.}
+	\caption{Concept of the torque-induced precession.}
 	\label{fig:precession}			% figure labels are of the form \label{fig:*}
 \end{figure}
 This torque is given by:
 \begin{equation}
 	\tau = I\alpha\label{eq:induced_torque}
 \end{equation}
-where $\tau$ is the torque, I is the inertia of the body rotating and $\alpha$ is the angle acceleration the body is affect by. An example is that if the tilt part of the system is accelerating up to some velocity, a torque will be applied to the pan part of the system, this torque is acting perpendicular to the rotation causing the pan to rotate as long as the motor for the tilt part is accelerating. To investigate the impact of the torque-induced precession, equation \ref{eq:motor_model} and \ref{eq:induced_torque} have to be related to each other. As equation \ref{eq:induced_torque} is expressed as torque, equation \ref{eq:motor_model} is rewritten with respect to torque. equation \ref{eq:mechanical_torque}.
+where $\tau$ is the torque, I is the inertia of the body rotating and $\alpha$ is the angle acceleration the body is affected by. An example is that if the tilt part of the system is accelerating up to some velocity, a torque will be applied to the pan part of the system, this torque is acting perpendicular to the rotation causing the pan to rotate as long as the motor for the tilt part is accelerating. To investigate the impact of the torque-induced precession, equation \ref{eq:motor_model} and \ref{eq:induced_torque} have to be related to each other. As equation \ref{eq:induced_torque} is expressed as torque, equation \ref{eq:motor_model} is rewritten with respect to torque. equation \ref{eq:mechanical_torque}.
 \begin{equation}
 	J_L \frac{d\omega}{dt} = \frac{K_T}{R} u - \frac{L J_L}{R} \frac{d^{2}\omega}{dt^{2}} - \frac{K_B K_T}{R} \omega\label{eq:torque_motor_model}
 \end{equation}
@@ -102,7 +102,7 @@ The following will contain a brief discussion on how the parameters were found. 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\textwidth]{graphics/measured_step_tilt.pdf} %trim=l b r t (can cut off from every side)
-	\caption{This graph show the actual velocity of the tilt part of the system. The horizontal axis show time in seconds. The vertical axis show angular velocity in radians per second.}
+	\caption{Actual velocity of the tilt part of the system. Horizontal axis, time in seconds. Vertical axis, angular velocity in radians per second.}
 	\label{fig:measured_step_tilt}			% figure labels are of the form \label{fig:*}
 \end{figure}
 If a mean is calculated from the steady-state part of the graph $22.57 \sfrac{rad}{s}$ is obtained, and compared to the data sheet of the motor which says the rated speed is $22.62 \sfrac{rad}{s}$, the data from the graph represented in figure \ref{fig:measured_step_tilt} is assumed to be correct.
@@ -135,7 +135,7 @@ $R$ & $5.124\Omega$ & $5.124\Omega$\\
 $L$ & $38.4mH$ & $6.471mH$\\
 $K_B = K_T$ & $35.1\sfrac{mV}{\dfrac{rad}{s}}$ & $401.1\sfrac{mV}{\dfrac{rad}{s}}$\\
 	\end{tabular}
-	\caption{Show a table with previous and new results of parameters.}				
+	\caption{Table of previous and new results of parameters.}				
 	\label{tab:newparameters}			
 \end{table}
 
@@ -199,10 +199,10 @@ Looking at the values in \ref{eq:crap_eig_val} show that the last value of the v
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/CrapSim.pdf} %trim=l b r t (can cut off from every side)
-	\caption{This figure illustrates the open-loop step response of the system in equation \ref{eq:crap_ss_model}.}
+	\caption{Open-loop step response of the system in equation \ref{eq:crap_ss_model}.}
 	\label{fig:crap_step}			% figure labels are of the form \label{fig:*}
 \end{figure}
-The step response in figure \ref{fig:crap_step} show some instability as a steady state response is never achieved.  compared to the figure, so the parameters from earlier experiments can not be used. The top graph of figure \ref{fig:crap_step} represent the pan part and the lower graph represent the tilt part. Same procedure is made with the calculated set of parameters, the parameters are $R = 5.124\Omega$, $L = 6.471mH$, and $K_B = K_T = 401.1 \frac{mV}{\sfrac{rad}{s}}$. $J_{Pan}$, $J_{Tilt}$, $I_{Pan}$, and $I_{Tilt}$ can be found in appendix \ref{app:dynamics_calc}.
+The step response in figure \ref{fig:crap_step} show some instability as a steady state response is never achieved.  compared to the figure, so the parameters from earlier experiments cannot be used. The top graph of figure \ref{fig:crap_step} represent the pan part and the lower graph represent the tilt part. Same procedure is made with the calculated set of parameters, the parameters are $R = 5.124\Omega$, $L = 6.471mH$, and $K_B = K_T = 401.1 \frac{mV}{\sfrac{rad}{s}}$. $J_{Pan}$, $J_{Tilt}$, $I_{Pan}$, and $I_{Tilt}$ can be found in appendix \ref{app:dynamics_calc}.
 These parameters leads to the following model:
 \begin{equation}
  \dot{\textbf{x}} =
@@ -260,7 +260,7 @@ The state space model can now be formed from equation \ref{eq:super_ss_model} an
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/ZoomOpenLoop.pdf} %trim=l b r t (can cut off from every side)
-	\caption{This figure a comparison between the actual model made and the adjusted model.}
+	\caption{Comparison between the actual model made and the adjusted model.}
 	\label{fig:zoom_step}			% figure labels are of the form \label{fig:*}
 \end{figure}
 On figure \ref{fig:zoom_step} it is seen that the coupling between pan and tilt is insignificant, this means that the system can be decoupled such that the pan does not affect the tilt and visa versa, forming two simple transfer functions as shown in \ref{eq:model_model} the following way:
@@ -277,7 +277,7 @@ If parameters for pan and tilt are inserted into equation \ref{eq:transfer_funct
 \section{Discussion}
 From models developed throughout this chapter and analysis made on measurements of the actual system, it has been proved that using a state-space model for the pan-tilt system is unnecessary. Therefore two transfer functions have been derived for further analysis of the control system. Decoupling the system was done due to the almost non-existent mutual effect expressed in figure \ref{fig:zoom_step}.
 
-The only still expected gain from using state-space is the possibility of regulating the velocity of the system. This however would only contribute to the settling time of the system and not the precision and is therefore irrelevant according to the purpose of this project.
+The only expected gain from using state-space is the possibility of regulating the velocity of the system. This however would only contribute to the settling time of the system and not the precision and is therefore out of the scope according to the purpose of this project.
 
-\subsection{Conclution}
+\subsection{Conclusion}
 The perspective in developing a state space model was to use it for a full state feedback regulator, but due to the low coupling between the pan and the tilt, this plan is abandoned. This decision has some influence on the other parts of the system, since the need for estimating the velocity is no longer present. Furthermore a classic PID regulator must be developed for each subsystem.

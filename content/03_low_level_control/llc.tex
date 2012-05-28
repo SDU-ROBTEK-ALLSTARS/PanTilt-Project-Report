@@ -1,17 +1,17 @@
 \chapter{Motor control}\label{chap:llc}
-Before the ARM core can control the physical system, an interpreting layer needs to be added, that can receive torque commands and control the physical system based on them, and report position and velocity of the physical system back as useful values.
+Before the ARM core can control the physical system, an interpretation layer needs to be added, that can receive PWM commands and control the physical system based on them, and report position and velocity of the physical system back as useful values.
 This part of the system is situated on the FPGA, and architecturally, it is split in two nearly independent systems, one being the SPI driver and the other being the motor control.
-The SPI driver acts as the link between the ARM processor and the FPGA and is described in chapter \ref{chap:comm}, the motor control section is described in this chapter.
+The SPI driver acts as the link between the ARM processor and the FPGA and is described in chapter \ref{chap:comm}.
 The two subsystems communicate through a shared RAM block using the method described in chapter \ref{chap:comm}, but functions otherwise completely independent of each other.
 
 
 \section{Motor interface}
-The motor interface is responsible for presenting an easy to use interface to the arm processor, making it possible to control the motor torque and receive feedback in the form of pan and tilt position and velocity.
-Also, an auxillary register is implemented, enabling the two parties to set and read flags between them, for instance the ARM can set the freerun bits, which disable the H-bridge entirely or command a reset of the position counters, the FPGA can report whether the index Hall sensors are active (meaning that the physical system approximately is in a neutral position).
+The motor interface is responsible for presenting an easy to use interface to the ARM processor, making it possible to control the motor torque and receive feedback in the form of pan and tilt position and velocity.
+Also, an auxillary register is implemented, enabling the two parts to set and read flags between them, for instance the ARM can set the freerun bits, which disable the H-bridge entirely or command a reset of the position counters, the FPGA can report whether the index Hall sensors are active (meaning that the physical system approximately is in a neutral position).
 All communication is done through the RAM block as seen on figure \ref{fig:FPGAMotorArchitecture}, thus the interface functions independently of the SPI implementation.
 
 \subsection{Overall architecture}
-The motor interface is split into two distinct parts. The PWM controller, which generates a PWM signal from a given input and a decoder controller, which reads the decoder pins, and tracks position and velocity.
+The motor interface is split into two distinct parts as seen on figure \ref{fig:FPGAMotorArchitecture}. The PWM controller, which generates a PWM signal from a given input and a decoder controller, which reads the decoder pins, and tracks position and velocity.
 
 A top level module is introduced to handle all memory interfacing. It houses all the individual component instances, and binds them together.
 
@@ -26,10 +26,10 @@ The input pins of the decoder system comes from the index pins of the hall senso
 \end{figure}
 
 \subsection{Memory layout}
-The memory layout is as seen in table \ref{tab:Memorymapping}. The position is represented by an unsigned bit, centered at 0x8000, this is because it is easier to calculate the position without considering a sign, and it would make no difference for the control system on the arm whether the position is represented by signed or unsigned numbers.
+The memory layout is as seen in table \ref{tab:Memorymapping}. The position is represented by an unsigned bit, centered at 0x8000, this is because it is easier to calculate the position without considering a sign, and it would make no difference for the control system on the ARM whether the position is represented by signed or unsigned numbers.
 Velocity output and duty cycle input is represented as a 16 bit signed twos-complement value.
 This is because the sign bit makes it easy to read what the desired motor direction is.
-The aux register reads position reset, and motor freerun command bits. It also sets two bits, representing whether the hall sensors indicate that the system is in zero position.
+The aux register reads position reset, watchdog and motor freerun command bits. It also sets two bits, representing whether the hall sensors indicate that the system is in zero position.
 
 
 
@@ -74,19 +74,19 @@ When the motor is not in free run, the enable pin on the H-bridge is high, and t
 \end{figure}
 
 \subsection{PWM generator}
-The PWM generator takes a clk signal and a duty cycle (15 bit unsigned value) as input. It also takes two generic parameters as input. A prescaler value to decrease the frequency, and a bit reduction parameter to increase it. These allows the PWM block to be configured for a desired frequency.
+The PWM generator takes a clock signal and a duty cycle (15 bit unsigned value) as input. It also takes two generic parameters as input. A prescaler value to decrease the frequency, and a bit reduction parameter to increase it. These allow the PWM block to be configured for a desired frequency.
 
 Internally the generator consists of a counter register that is decremented each tick as seen of figure \ref{fig:PWMchart}. If the counter is less than the input, the output is 1 otherwise it is zero.
-If the counter value underflows, it is set to the second highest value it can represent. This ensure that the PWM block is able to output high and low value dc if needed, at the cost of lacking an extra bit of resolution.
+If the counter value underflows, it is set to the second highest value it can represent. This ensure that the PWM block is able to output high and low value DC if needed, at the cost of lacking an extra bit of resolution.
 
 The bit reduction parameter effectively reduces the amount of significant bits in the counter and value signals.
 The prescaler is used to introduce a delay between each tick.
 
-The frequency of the PWM needs to be at around 20khz or above. If it is lower than that it is in the audible range of frequencies which would be an annoyance. If the frequency is too high, to much energy is lost in the transistors, not to mention the fact that an h-bridge has a switching time, which would distort the actual duty cycle output.
+The frequency of the PWM needs to be at around 20kHz or above. If it is lower than that, it is in the audible range of frequencies which would be an annoyance. If the frequency is too high, too much energy is lost in the transistors, not to mention the fact that an h-bridge has a switching time, which would distort the actual duty cycle output.
 
 For calculating the PWM frequency the following formula is used: 
 \begin{equation}
-F_{PWM} = \frac{F_{xtal}}{2^{number of bits}}
+F_{PWM} = \frac{F_{clock}}{2^{number of bits}}
 \end{equation}
 
 Without using prescaler and bit reduction values, the PWM frequency is calculated with 16 bit resolution and a 50 mhz internal clock, which gives a resulting frequency:
@@ -94,7 +94,7 @@ Without using prescaler and bit reduction values, the PWM frequency is calculate
 \frac{50 mhz}{2^{15}} = 1525.88 hz
 \end{equation}
 
-This is way to low, and therefore the amount of used bits are reduced by four giving the frequency:
+This is way to low, as the frequency lies within the audible range, and therefore the amount of used bits are reduced by four giving the frequency:
 \begin{equation}
 \frac{50 mhz}{2^{11}} = 24414.1 hz
 \end{equation}
@@ -110,10 +110,10 @@ Which is just above the minimum frequency requirement.
 \subsection{Signed-to-magnitude splitter}
 The signed-to-magnitude splitter takes a signed 16 bit integer as input and outputs the sign and magnitude separately.
 The magnitude is computed as follows:
-If it positive, its just the 15 last bits, if it is negative the twos compliment value is the output.
+If it is positive, its just the 15 last bits, if it is negative the twos compliment value is the output.
 
 \subsection{AUX control}
-The aux control takes the direction, PWM and freerun signals as input, and output the PWM signal on either pin 1 or 2 of the h-bridge. If the freerun pin is not high, the enable pin is high, if the freerun pin is high, no PWM is output, and the enable pin is low.
+The AUX control takes the direction, PWM and freerun signals as input, and output the PWM signal on either pin 1 or 2 of the h-bridge. If the freerun pin is not high, the enable pin is high, if the freerun pin is high, no PWM is sent to the output pins, and the enable pin is low.
 
 \section{Decoder system}
 The decoder system is responsible for reading the state of the pan/tilt system from the hall sensors mounted on the system, and the quadrature encoders on the motors. 
@@ -134,15 +134,15 @@ The decoder is split into 4 major components: The Input filtering, the quadratur
 \subsection{Input filtering}
 Since the input signal comes from the world outside the FPGA, unwanted noise must be removed for it to be used. However, the regulator depends on this signal, so care must be taken not to introduce an unwanted large delay, as that would make the signal  useless.
 
-To remove noise, a simple debounce, with hysteresis is applied, it features a counter that, for every clock pulse counts up if the input signal is high and down if it is low.
-When ever the counter rises above a threshold, and the filter is outputting a low signal, it changes to high. The same opposite when counting down.
-The counter part of the process introduces a delay in output changes, so that a lot of switching back and forth between high and low, will not affect the output. The hysteresis helps negate short burst errors in the input. 
+To remove noise, a simple debounce, with hysteresis is applied. It features a counter that, for every clock pulse counts up if the input signal is high and down if it is low.
+When ever the counter rises above a threshold, and the filter is outputting a low signal, it changes to high and opposite when counting down.
+The counter part of the process introduces a delay in output changes, so that a lot of switching back and forth between high and low, will not affect the output. The hysteresis helps negate flickering in the input. 
 
 The difference between the hysteresis counters lowest value and the rising edge value, or the highest value and the falling edge value, whichever is highest, determines the maximum frequency the input filter will let through, as well as the delay introduced in the position counter.
 
-A set of values must be chosen that filters the signal adequately, without producing error signals. The tilt rotor has been observed to have approximately 1000 ticks pr. full revolution, and with full power to the motors, max one rotation pr. second.
+A set of values must be chosen that filters the signal adequately, without producing error signals. The tilt rotor has 1080 ticks pr. full revolution as seen in chapter \ref{chap:control_system}, and with full power to the motors, max one rotation pr. second as seen from chapter \ref{chap:dynamics}.
 This means that the input filter should be able to let a 1khz signal through at least. \\ 
-Since external forces can temporarily push the system to higher frequencies, it is assumed that a max frequency of 1mHz should cover all but the most extreme cases.
+Since an external force can temporarily push the system to higher frequencies, for instance a short hard push, it is assumed that a maximum frequency of 1mHz should cover all but the most extreme cases of input.
 
 This means that the maximum input delay can be 50 clock ticks.
 In this assignment, a set of values was then chosen within the constraints: 
@@ -151,7 +151,7 @@ Maximum value: 20
 Low hysteresis: 4
 High hysteresis: 16
 
-These values give a maximum input delay of 16 clock ticks(320 ns) which is sufficient for this application.
+These values give a maximum input delay of 16 clock ticks(320 ns) which is assumed to be sufficient for this application.
 
 \subsection{Quadrature encoder}
 The quadrature encoders job is to convert the two decoded signals from the motor, to a relative position. The signal is generated from two hall sensors that are positioned 90 degrees apart. Giving 4 different output states, each state indicating what quadrant the motor is positioned in, an example of the signal can be seen in figure \ref{fig:decodersignal}.
@@ -162,8 +162,8 @@ The quadrature encoders job is to convert the two decoded signals from the motor
 \label{fig:decodersignal}
 \end{figure}
 The decoding process can be thought of as a state machine (with the encoder output being the state variable), where a state transition corresponds to a movement step in one of two directions.
-When the decoder is first powered, a default position value is kept, and then incremented or decremented according to the statetransition. The default value is set at 0x8000 unsigned integer, as this allows for the maximal displacement in either direction. 
-Overflow is not handled in this module, as it is not its job to know anything about the configuration the motor is in, however an external reset pin is provided, which returns the counter to 0x8000. (This reset signal is incidentally powered by the position normalizer module).
+When the decoder is first powered, a default position value is kept, and then incremented or decremented according to the state transition. The default value is set at 0x8000 unsigned integer, as this allows for the maximal displacement in either direction. 
+Overflow is not handled in this module, as it is not its job to know anything about the configuration the motor is in, however an external reset pin is provided, which returns the counter to 0x8000. This reset signal is incidentally driven by the position normalizer module.
 The situation where the input pins both change in one clock cycle is not handled by the system.
 
 \begin{figure}[htb]
@@ -174,15 +174,15 @@ The situation where the input pins both change in one clock cycle is not handled
 \end{figure}
 
 \subsection{Position normalizer}
-The position normalizer block is used for any conversions/adaptations of the raw position value necessary. For instance the position could be converted to radians or similar. It also features a feedback reset signal, if this should be necessary. 
+The position normalizer block is used for any conversions or adaptations of the raw position value necessary. For instance the position could be converted to radians or similar. It also features a feedback reset signal, if this should be necessary. 
 In the final version of the application, this block does nothing other than let the input go directly to the output.
 Should any automatic reset system be required, based on the position, this is the block to handle it.
 
 \subsection{Velocity estimator}
 The velocity estimator is responsible for measuring the velocity based on the counter input.
 There are several methods available for measuring the velocity, each with its drawbacks and strengths.
-A simple method is to compare the position with a fixed frequency, so that for instance each second, the velocity is the difference between the position before and after a second has passed. This has the advantage of being easy to implement and test, also everything is implemented with integers. The drawback is that this method can produce wildly varying velocity measurements, especially if the actual velocity produces a position change frequency just above or below the sampling frequency.
-This drawback can be offset by \"tuning\" the sampling frequency until a desirable behavior has been reached.
+A simple method is to compare the position with a fixed frequency, so that for instance each second, the velocity is the difference between the position before and after a second has passed. This has the advantage of being easy to implement and test, also everything is implemented with integers. The drawback is that this method can produce varying velocity measurements, especially if the actual velocity produces a position change frequency just above or below the sampling frequency.
+This drawback can be offset by tuning the sampling frequency until a desirable behaviour has been reached.
 Another method is the secant method, where the time between each change of the position is measured. The reciprocal of this is then the velocity. The advantage of this method is that it is, in theory, very precise. The drawback is that a floating/fixed point division is necessary, in order to obtain the correct result. Also should there be any imprecision in the motor decoding, it will be reflected strongly in the measured velocity. Furthermore, a time-out period must be included, for there is no edge to detect when the motors stop moving.
 
 In both cases smoothing of the result can be needed. By using a running average filter, the velocity measurement can be smoothed over many samples, but a first order delay in the measurement is introduced.
@@ -192,7 +192,7 @@ In the final application, there is no velocity estimator, since it is not needed
 
 \section{Watchdog}
 Since all control commands are buffered in the RAM until updated to new values, the FPGA has no way of knowing if the commands are still valid commands or they are erroneous commands due to either the ARM processor crashing, or cable failure etc. This means that in case the case of failure, the FPGA it will continue outputting a PWM signal if any velocity command has been issued before the meaningful communication died. To correct this problem, a watchdog is implemented. It outputs an enable signal as long as there is a link between the FPGA and ARM, and the ARM routinely updates its assosiated register. 
-To detect the link presence, two registers in the control register are constantly incremented, and the watchdog keeps a watch on them, should they fail to change within a set time, the watchdog will stop all motor activity and go to a velocity of zero.
+To detect the link presence, two bits in the control register are constantly incremented, and the watchdog keeps a watch on them, should they fail to change within a set time, the watchdog will stop all motor activity and go to a velocity of zero.
 The watchdog module is not included in the final application due to time constraints.
 
 \section{Discussion}

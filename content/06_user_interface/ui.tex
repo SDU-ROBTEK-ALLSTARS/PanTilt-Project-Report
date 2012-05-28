@@ -2,7 +2,7 @@
 
 \section{UI}
 This chapter concerns building an application providing a user interface to the
-pan-tilt system. The application runs on the ARM Cortex M3 based EMP-board
+pan/tilt system. The application runs on the ARM Cortex M3 based EMP-board
 as mentioned in section \ref{sec:microprocessor}.
 
 \subsection{Requirements}
@@ -15,7 +15,7 @@ It should also be considered making a simple solution where the potmeter
 controls the pan and the digiswitch controls the tilt to provide some kind of
 realtime control.
 
-The main application for the UI will be in testing the pan-tilt system.
+The main application for the UI will be in testing the pan/tilt system.
 Therefore a logging system must be built to provide data for the development
 and testing of the system. It is not definite which numbers and values are
 interesting, so a versatile and easily adaptable system is required.
@@ -23,7 +23,7 @@ interesting, so a versatile and easily adaptable system is required.
 Though the system will be used mainly by people with some programming
 experience, it must provide an easy way of configuring and altering the functionalities of the system. Since it is a faily complex system it should be separated and organized to ensure as little focus on programming as possible while configuring and testing the system.
 
-A secondary objective for the software in general is to form a base for further development of the system, so modules should remain low coupled and implementations should be done in a none terminal way.
+A secondary objective for the software in general is to form a base for further development of the system, so modules should remain low coupled and implementations should be done in a non terminal way.
 
 The  menu structure displayed in figure \ref{fig:ui_menu_structure} will be implemented as a start.
 
@@ -37,17 +37,17 @@ The  menu structure displayed in figure \ref{fig:ui_menu_structure} will be impl
 \subsection{Discussion}
 The EMP-board provides several channels for outputting data to the user. One is
 by communication to a computer terminal. This is a good way of displaying large
-amount of data, but should be kept in simple ASCII based text format. It is
+amounts of data, but should be kept in simple ASCII based text format. It is
 important to provide a simple interface so output can be easily changed.
 
 Another output channel is the two displays. Since focus is on displaying facts
-rather than graphics, the small LCD display should not be used. Since the 16x2
+rather than graphics, the small OLED should not be used. Since the 16x2
 is limited to displaying 32 characters at any time, it is necessary to implement
 some form of menu system.
  
 The EMP board also provides a number of inputs. There are several buttons, but
 given the easy to use requirements the use of buttons is avoided. That leaves
-the digiswitch as the main input to control the menus and the potentiometer as a
+the incremental rotary encoder as the main input to control the menus and the potentiometer as a
 secondary input.
 
 
@@ -57,16 +57,16 @@ Implementing a menu based state machine can be split into two parts. One
 concerns the user navigating the menus and the other concerns having the menus or inputs to them
 control the rest of the system. 
 
-To make the system easy to reconfigure, the menus and their functionalities are based upon the configuration file \texttt{menu\_setup.c}. A menu concists of two lines of menu text and a number of fields to shuffle through using the dreh impuls geber. 
+To make the system easy to reconfigure, the menus and their functionalities are based upon the configuration file \texttt{menu\_setup.c}. A menu consists of two lines of menu text and a number of fields to shuffle through using the dreh impuls geber. 
 
 The menu task has the responsibility of handling the systems inputs and outputs based on the rules given by the menu items. Normally it would be preferred to have the task block on a queue or a semaphore, but in this case since there are two types of input to be handled another approach is needed.  Input from the user and updated values from the SPI connection must both be handled by the menu task, but the updates come at fixed intervals at all times and the user inputs are events happening at random times.
 
-Normally it would be preferred to split the task into two sub tasks, each responsible for their own input and thus differently timed. If this approach was followed, the menu task would be split into an input handling task and an output handling task and the output task would run every time the parameters had been updated. 
+Normally it would be preferred to split the task into two sub tasks, each responsible for their own input and thus differently timed. If this approach was followed, the menu task would be split into an input handling task and an output handling task and the output task would run every time the parameters have been updated. 
 
 The reason for the frequent updates is to provide accurate data for the control algorithm, but there is no need to update the display this often. This is the reason for not dividing the menu task. Instead the task runs every five milliseconds, which is sufficient to service both inputs and outputs without the user noticing any delays. Some operating systems support blocking on multiple conditions, but this is not supported by FreeRTOS so on this system blocking on time is the best solution.
 
 \subsection{Task diagram}
-The user interface can be split into three layer as seen in figure \ref{fig:ui_task_diagram}. The layers reside between the pan tilt system and the hardware. A number of service tasks handle the hardware and parses data between the inter task communication modules and the hardware. The menu task then handles the inputs and events parsing to and from the system parameters.
+The user interface can be split into three layer as seen in figure \ref{fig:ui_task_diagram}. The layers reside between the pan/tilt system and the hardware. A number of service tasks handle the hardware and parses data between the inter task communication modules and the hardware. The menu task then handles the inputs and events parsing to and from the system parameters.
 
 The menu task first handles inputs from the dreh impuls geber and updates the current menu based on this. It then checks whether any of the fields in the current menu takes input and handles theese updating relevant parameters. Then the display buffer is updated to contain the two lines provided by the current menu and data from any output fields are written to the buffer before yielding. The system state is held entirely in the menu item, thus reducing the menu task to a piece of sequential code.
 
@@ -82,10 +82,10 @@ The menus are implemented as a linked list to make it possible to add menus from
 The linked list is accessed through the menu handler interface that allocates the position data dynamically and passes as a pointer to the position.
 
 \section{Service tasks}
-The peripherals provided by the EMP board are each assigned a service task. Theese tasks are based on code developed during the EMP course though some changes had to be made in order to comply with a preemptive system. 
+The peripherals provided by the EMP board are each assigned a service task. These tasks are based on code developed during the EMP course though some changes had to be made in order to comply with a pre-emptive system. 
 
-\subsection{Lcd task}
-The lcd task works on a mutex protected buffer and simply runs through the buffer checking the dirty bit and the blink bit of every character in the buffer. If the dirty bit is set, the corresponding character on the lcd display is updated. If the blink bit is set and the blink state is active, the preset blink character is displayed instead of the buffer character.
+\subsection{LCD task}
+The LCD task works on a mutex protected buffer and simply runs through the buffer checking the dirty bit and the blink bit of every character in the buffer. If the dirty bit is set, the corresponding character on the lcd display is updated. If the blink bit is set and the blink state is active, the preset blink character is displayed instead of the buffer character.
 
 \subsection{Dreh task}
 \begin{figure}[htb]
@@ -94,7 +94,7 @@ The lcd task works on a mutex protected buffer and simply runs through the buffe
 	\caption{State transition diagram for the dreh task.}
 	\label{fig:task_dreh_fsm}
 \end{figure}
-The dreh impuls geber also known as a digiswitch is an electrical component that outputs a pair of phase shifted pulse trains when turned. The pulses are used to determine the turning direction as well as the number of clicks. The rod on the dreh impuls geber can also be pushed and thus functions like any button.
+The dreh impuls geber also known as a incremental rotary encoder is an electrical component that outputs a pair of phase shifted pulse trains when turned. The pulses are used to determine the turning direction as well as the number of clicks. The rod on the dreh impuls geber can also be pushed and thus functions like any button.
 
 The driver software for the dreh impuls geber is based on a finite state machine shown in figure \ref{fig:task_dreh_fsm}. When run the task compares the current state of the three input pins with the saved states. If there are differences, it generates an event based on the pins.
 
@@ -105,11 +105,11 @@ The driver software for the dreh impuls geber is based on a finite state machine
 	\caption{Structure of the menu system.}
 	\label{fig:task_numpad_fsm}
 \end{figure}
-The numpad is a three by four matrix wired so that horisontal lines can be powered so that a pushed button will close a connection and thus the state of the four pins connected to the vertical lines will read high if pressed an low otherwise.
+The numpad is a three by four matrix wired with powered horizontal lines so that a pushed button will close a connection, and thus the state of the four pins connected to the vertical lines will read high if pressed an low otherwise.
 
-Since the numpad and lcd display share some common pins theese pins are protected by a mutual exclusion.
+Since the numpad and OLED share some common pins these pins are protected by a mutual exclusion.
 
-Numpad task is based on a Mealy finite state machine, following the diagram in figure \ref{fig:task_numpad_fsm}.  Some flicker was experienced and thus a flicker catch was implemented to delay the chance of state until thirty consecutive tests have confirmed the release of the button.
+Numpad task is based on a Mealy finite state machine, following the diagram in figure \ref{fig:task_numpad_fsm}.  Some flicker was experienced and thus a flicker catch was implemented to delay the change of state until thirty consecutive tests have confirmed the release of the button.
 
 \subsection{Blink task}
 \begin{figure}[htb]
@@ -143,7 +143,6 @@ The user interface was developed with respect to low coupling to both the operat
 
 Another objective for the user interface was to be user friendly and easy to reconfigure. Both are hard to measure, but since menus are well known from practically any embedded system the approach is at least approved. The extra level of abstraction added by the menus being configured outside the code makes it at least easier to reconfigure than having held everything inside the code.
 
-Though not a primary objective of the user interface, the consistent use of inter task communication and blocking has lead to efficient use of the hardware as seen in (REFERENCE TIL KIMS PERFORMANCE TEST)
-
+Though not a primary objective of the user interface, the consistent use of inter task communication and blocking has lead to efficient use of the hardware as seen in appendix \ref{sec:runtimestats}.
 \subsection{Conclusion}
 The system works well, is low coupled and must be considered both user friendly and easy to reconfigure. It provides a fine base for further developing the system.
