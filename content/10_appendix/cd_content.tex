@@ -1,0 +1,36 @@
+\chapter{CD content}
+
+%\begin{description}
+%\item[Documentation] can be found in the folder \custtt{documentation}
+%\item[Internal documents] can be found in the folder \custtt{internal\_docs}
+%\item[Software] can be found in the folder \custtt{source} and contains the following directories.
+%\end{description}
+
+%\begin{itemize}
+%\item Report - The report in PDF format
+%\item ARM sourcecode - ARM software sourcecode.
+%\item FPGA sourcecode- Header files that expose the public interface to applications using it.
+%\item Datasheet - Datasheets refered in the report
+%\item SPI test application - Application for testing SPI reliability
+%\item SPI test data - RAW data from SPI tests
+%\end{itemize}
+
+The CD content is structured as shown below.
+
+\begin{verbatim}
+    ./
+    +-Report/                 The report in PDF format
+    +-ARM Sourcecode/         C code for ARM Cortex-M3 target
+    | +-src/
+    | | +-global/             Global definitions
+    | | +-freertos/           FreeRTOS source
+    | | +-modules/            Each code module lives here
+    | | +-test/               Unit-test applications
+    | +-lib/
+    |   +-StellarisWare/      StellarisWare drivers
+    +-FPGA/                   VHDL designs for Spartan-3E target
+    +-Datasheet/              Datasheets refereed in the report
+    +-SPI test application/   Application used to test the SPI connection
+    +-SPI test data/          RAW data from SPI tests
+    +-Matlab model/           Matlab files and data used for modelling the system
+\end{verbatim}
