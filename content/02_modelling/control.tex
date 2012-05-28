@@ -24,7 +24,7 @@ following way:
 	\label{fig:control_sketch}			% figure labels are of the form \label{fig:*}
 \end{figure}
 Figure \ref{fig:control_sketch} show a system with a feedback loop, $G(s)$ is
-theplant and $H(s)$ is the regulator. When designing a regulator ($H(s)$) is
+the plant and $H(s)$ is the regulator. When designing a regulator ($H(s)$) is
 derived and since the system is SISO, a PID regulator can be designed.
 
 \subsection{PID parameters}
@@ -40,7 +40,7 @@ Though various methods are available for deriving the optimal parameters, the
 approach chosen here is to do a mathematical simulation of the system. Since the
 transfer functions have already been derived, a Simulink model can be developed.
 
-Since the system is decoupled, it can be represented as shown in \ref{fig:control_sketch} \begin{figure}[htb]
+Since the system is decoupled, it can be represented as shown in figure \ref{fig:control_sketch} \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/Simulink.pdf} %trim=l b r t (can cut off from every side)
 	\caption{This figure illustrates the simulink model.}
@@ -49,7 +49,7 @@ Since the system is decoupled, it can be represented as shown in \ref{fig:contro
 The top system represent the pan part of the system, while the lower part represent the tilt.
 
 \subsection{Simulation}
-The goal of the simulation is to find the values providing the most dynamic system, while still remaining stable and robust. To obtain a first guess of the P-term, the root locus method is applied. The root locus plot can be seen in \ref{fig:rlocus_plot}. Aiming to minimize the energy needed to move the system, equal magnitudes of real and imaginary parts are chosen, leading to the base gain denoted in \ref{tab:gain_values}.
+The goal of the simulation is to find the values providing a qickly responding system, while still remaining stable and robust. To obtain a first guess of the P-term, the root locus method is applied. The root locus plot can be seen in figure \ref{fig:rlocus_plot}. Aiming to minimize the energy needed to move the system, equal magnitudes of real and imaginary parts are chosen, leading to the base gain denoted in table \ref{tab:gain_values}.
 
 \begin{figure}[htb]
 	\centering
@@ -58,7 +58,7 @@ The goal of the simulation is to find the values providing the most dynamic syst
 	\label{fig:rlocus_plot}			
 \end{figure}
 
-The simulation is run with various parameters to find the range of values in \ref{tab:gain_vaues}. \ref{chosen_plot} shows a plot of the step response using autotuned parameters with response time 0,0175 s.
+The simulation is run with various parameters to find the range of values in table \ref{tab:gain_vaues}. Figure \ref{chosen_plot} shows a plot of the step response using autotuned parameters with response time 0,0175 s.
 
 \begin{table}[htb]				
 	\begin{center}
@@ -80,7 +80,7 @@ D-gain tilt& 0 & 100** & 1,62\\
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/screensh_pid.jpg} %trim=l b r t (can cut off from every side)
-	\caption{Simulation of the autotune parameters. Angle[rad] plottet with respect to time[s] when initial position is zero and a setpoint of 20 is given as step.}
+	\caption{Simulation of the autotune parameters. Angle[rad] plotted with respect to time[s] when initial position is zero and a setpoint of 20 is given as step.}
 	\label{fig:chosen_plot}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
@@ -95,9 +95,9 @@ The initial parameters for the PID regulator was found in an easy and safe way. 
 % START OF IMPLEMENTATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 \section{Implementation of PID control}
-The control algorithm is implemented in the control task. All parameters are provided from the parameter server but are cast as  floating point values for exact calculations.
+The control algorithm is implemented in the control task and all parameters are provided from the parameter server, but are cast as  floating point values for exact calculations.
 
-When run the control task saves the value of the tick counter and when finished, it uses the FreeRTOS \texttt{vTaskDelayUntil} API to calculate when to unblock. As a starting point the control task runs at one hundred hertz frequency as verified in \ref{subsec:control_freq}.
+When run the control task saves the value of the tick counter and when finished, it uses the FreeRTOS \texttt{vTaskDelayUntil} API to calculate when to unblock. As a starting point the control task runs at one hundred hertz frequency as verified in section \ref{subsec:control_freq}.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -142,7 +142,7 @@ To convert from $[V]$ to $pwm$ the ratio is found
 \frac{27.000 \ pwm}{12 \ V} = 2250 \ pwm/V
 \label{eq:conv4}
 \end{equation}
-From \ref{eq:conv3} and \ref{eq:conv4} a conversion factor for the gain can be derived.
+From equation \ref{eq:conv3} and \ref{eq:conv4} a conversion factor for the gain can be derived.
 \begin{equation}
 \frac{573}{2250} = 0,25
 \label{eq:conv}
@@ -151,29 +151,29 @@ From \ref{eq:conv3} and \ref{eq:conv4} a conversion factor for the gain can be d
 \subsection{Implementing proportionality gain}
 A first guess for the proportionality gain is to use the values provided by the autotune function in the simulation of the system. 
 
-Since it is possible to get PWM values out of the range specified in \ref{tab:parameters}, a maximum function is implemented, so that absolute values out of range are corrected to the maximum value.
+Since it is possible to get PWM values out of the range specified in table \ref{tab:parameters}, a maximum function is implemented, so that absolute values out of range are corrected to the maximum value.
 
-Since PWM values below the minimum specified in \ref{tab:parameters} does not make the motor move, a bias is added so that non-zero values are added with the bias value. This effectively narrows down the range of pwm signals to the value specified as actual pwm range in \ref{tab:parameters}. 
+Since PWM values below the minimum specified in table \ref{tab:parameters} does not make the motor move, a bias is added so that non-zero values are added with the bias value. This effectively narrows down the range of pwm signals to the value specified as actual pwm range in table \ref{tab:parameters}. 
 
 A treshold is implemented so that values inside the +/- treshold area is zeroed before the bias is added. If this was not done even the smallest error would be biased.
 
-Adjusting the P-gain is done empirically and is thus encompassed in \ref{sec:pid_experiments_p}.
+Adjusting the P-gain is done empirically and is thus encompassed in section \ref{sec:pid_experiments_p}.
 
 \subsection{Integrator}\label{sec:integrator}
-As seen in \ref{sec:pid_experiments_p} the system needs an integrator. Since the error grows smaller as the goal is approached, movement almost halt when approaching the goal area, making the system less accurate and slower. Therefore an integration term is implemented by adding the errror to the integration value on each run. Thereby in the situation where the error is too small to make the system move, the integration term will rise and thus add to the input. 
+As seen in section \ref{sec:pid_experiments_p} the system needs an integrator. Since the error grows smaller as the goal is approached, movement almost halt when approaching the goal area, making the system less accurate and slower. Therefore an integration term is implemented by adding the errror to the integration value on each run. Thereby in the situation where the error is too small to make the system move, the integration term will rise and thus add to the input. 
 
 Normally an integration would mean the product of the value and the time since last sample, but presuming that this time is nearly constant it can be included in I-term. 
 
 To keep the integration from going to infinity, an anti wind up filter is implemented. Wind up happens for example when the system is stopped while not at the setpoint and the integration reaches high values that has to be overcome when the system resumes.
 
-As with the P-gain, adjusting the I-gain is done empirically and is thus encompassed in \ref{sec:pid_experiments_i}.
+As with the P-gain, adjusting the I-gain is done empirically and is thus encompassed in section \ref{sec:pid_experiments_i}.
 
 \subsection{Differentiator}
 By saving the error at each entry it is possible to calculate the change in the error. This term will be particularly large just after changing the setpoint, and can thus help improve the acceleration. 
 
 The actual derivative would be the change in value over the time since last entry, but as for the integrator, this can be omitted presuming that it is constant. Since the point is to oppose the changes, the D-term of the pwm calculation is subtracted to keep the gain a positive value.
 
-As with the P- and I-gain, adjusting the D-gain is done empirically and is thus encompassed in \ref{sec:pid_experiments_i}
+As with the P- and I-gain, adjusting the D-gain is done empirically and is thus encompassed in section \ref{sec:pid_experiments_i}
 
 
 \subsection{Discussion}

@@ -8,13 +8,13 @@ The purpose of this test is to find suitable values for the P-gain and to verify
 the values found in simulation.
 
 \subsection*{Setup} The test was performed using the setup described in
-\ref{subsec:precisionofsystem}. The system is given two positions and runs in
+section \ref{subsec:precisionofsystem}. The system is given two positions and runs in
 automode between them. First the P-gain was increased until the system became
 unstable, in this test meaning unable to come to rest at the given position.
 
-\subsection*{Results} From \ref{eq:conv} the gains found in simulation can be
+\subsection*{Results} From equation \ref{eq:conv} the gains found in simulation can be
 converted to the actual system and be compared to the results. The converted
-values can be seen in \ref{tab:actual_gain_values}. At P-gain of 600 the gear
+values can be seen in table \ref{tab:actual_gain_values}. At P-gain of 600 the gear
 belts of the system starts to notch over teeths, while still being stable, so
 testing at higher gains were omitted.
 
@@ -32,15 +32,15 @@ The purpose of this test is to find suitable values for the I-gain and to verify
 the values found in simulation.
 
 \subsection*{Setup} The test was performed using the setup described in
-\ref{subsec:precisionofsystem}. The system is given two positions and runs in
+section \ref{subsec:precisionofsystem}. The system is given two positions and runs in
 automode between them. During the test the P-gain was kept at 20.
 
 First the I-gain was increased until the system became
 unstable, in this test meaning unable to come to rest at the given position.
 
-From \ref{eq:conv} the gains found in simulation can be converted to the actual
+From equation \ref{eq:conv} the gains found in simulation can be converted to the actual
 system and be compared to the results. The converted values can be seen in
-\ref{tab:actual_gain_values}. 
+table \ref{tab:actual_gain_values}. 
 
 \subsection*{Results} 
 At I-gain of 4 the gear belts of the system starts
@@ -66,15 +66,15 @@ the values found in simulation.
 
 \subsection*{Setup}
 The test was performed using the setup described in
-\ref{subsec:precisionofsystem}. The system is given two positions and runs in automode between them. During the test
+section \ref{subsec:precisionofsystem}. The system is given two positions and runs in automode between them. During the test
 the P-gain was kept at 20 and the I-gain at 2.
 
 First the D-gain was increased until the system became unstable, in this test
 meaning unable to come to rest at the given position.
 
-From \ref{eq:conv} the gains found in simulation can be converted to the actual
+From equation \ref{eq:conv} the gains found in simulation can be converted to the actual
 system and be compared to the results. The converted values can be seen in
-\ref{tab:actual_gain_values}. 
+table \ref{tab:actual_gain_values}. 
 
 \subsection*{Results}
 At D-gain of 90 the system becomes unstable.
@@ -107,7 +107,7 @@ The purpose of this test is to increase the accuracy of the system by changing
 the drive belt and retune the parameters of the PID.
 
 \subsection*{Setup}
-The test was performed using the setup described in \ref{subsec:precisionofsystem}. The
+The test was performed using the setup described in section \ref{subsec:precisionofsystem}. The
 system is given two positions and runs in automode between them while tuning the
 parameters of the PID.
 
@@ -116,7 +116,7 @@ The drive belt on the pan was replaced.
 
 The PID parameters were tuned slightly, reducing the D-gain and increasing the
 I-gain to obtain better precision. The new values can be found in
-\ref{tab:actual_gain_values} under best performance. Small changes were made to
+table \ref{tab:actual_gain_values} under best performance. Small changes were made to
 parts of the control algorithm concerned with evaluating when the position is reached.
 
 The precision of the system was raised to a level where this test can no
