@@ -57,18 +57,18 @@ Implementing a menu based state machine can be split into two parts. One
 concerns the user navigating the menus and the other concerns having the menus or inputs to them
 control the rest of the system. 
 
-To make the system easy to reconfigure, the menus and their functionalities are based uponthe configuration file \texttt{menu\_setup.c}. A menu concists of two lines of menu text and a number of fields to shuffle through using the dreh impuls geber. 
+To make the system easy to reconfigure, the menus and their functionalities are based upon the configuration file \texttt{menu\_setup.c}. A menu concists of two lines of menu text and a number of fields to shuffle through using the dreh impuls geber. 
 
 The menu task has the responsibility of handling the systems inputs and outputs based on the rules given by the menu items. Normally it would be preferred to have the task block on a queue or a semaphore, but in this case since there are two types of input to be handled another approach is needed.  Input from the user and updated values from the SPI connection must both be handled by the menu task, but the updates come at fixed intervals at all times and the user inputs are events happening at random times.
 
 Normally it would be preferred to split the task into two sub tasks, each responsible for their own input and thus differently timed. If this approach was followed, the menu task would be split into an input handling task and an output handling task and the output task would run every time the parameters had been updated. 
 
-The reason for the frequent updates is to provide accurate data for the control algorithm, but there is no need to update the display this often. This is he reason for not dividing the menu task. Instead the task runs every five milliseconds, which is sufficient to service both inputs and outputs without the user noticing any delays. Some operating systems support blocking on multiple conditions, but this is not supported by FreeRTOS so on this system blocking on time is the best solution.
+The reason for the frequent updates is to provide accurate data for the control algorithm, but there is no need to update the display this often. This is the reason for not dividing the menu task. Instead the task runs every five milliseconds, which is sufficient to service both inputs and outputs without the user noticing any delays. Some operating systems support blocking on multiple conditions, but this is not supported by FreeRTOS so on this system blocking on time is the best solution.
 
 \subsection{Task diagram}
 The user interface can be split into three layer as seen in \ref{fig:ui_task_diagram}. The layers reside between the pan tilt system and the hardware. A number of service tasks handle the hardware and parses data between the inter task communication modules and the hardware. The menu task then handles the inputs and events parsing to and from the system parameters.
 
-The menu task first handles inputs from the dreh impuls geber and updates current menu based on this. It then checks whether any of the fields in the current menu takes input and handles theese updating relevant parameters. Then the display buffer is updated to contain the two lines provided by the current menu and data from any output fields are written to the buffer before yielding. The system state is held entirely in the menu item, thus reducing the menu task to a piece of sequential code.
+The menu task first handles inputs from the dreh impuls geber and updates the current menu based on this. It then checks whether any of the fields in the current menu takes input and handles theese updating relevant parameters. Then the display buffer is updated to contain the two lines provided by the current menu and data from any output fields are written to the buffer before yielding. The system state is held entirely in the menu item, thus reducing the menu task to a piece of sequential code.
 
 \begin{figure}[htb]
 	\centering
@@ -77,7 +77,7 @@ The menu task first handles inputs from the dreh impuls geber and updates curren
 	\label{fig:ui_task_diagram}
 \end{figure}
 
-The menus are implemented as a linked list to make it possible to add menus from a serial connection or from the user interface. Position setpoints ca then be implemented as menu point to make it possible to cycle through any number of user defined positions in any order.
+The menus are implemented as a linked list to make it possible to add menus from a serial connection or from the user interface. Position setpoints can then be implemented as menu point to make it possible to cycle through any number of user defined positions in any order.
 
 The linked list is accessed through the menu handler interface that allocates the position data dynamically and passes as a pointer to the position.
 
@@ -96,7 +96,7 @@ The lcd task works on a mutex protected buffer and simply runs through the buffe
 \end{figure}
 The dreh impuls geber also known as a digiswitch is an electrical component that outputs a pair of phase shifted pulse trains when turned. The pulses are used to determine the turning direction as well as the number of clicks. The rod on the dreh impuls geber can also be pushed and thus functions like any button.
 
-The driver software for the dreh impuls geber is based on a finite state machine shown in\ref{fig:task_dreh_fsm}. When run the task compares the current state of the three input pins with the saved states. If there are differences, it generates an event based on the pins.
+The driver software for the dreh impuls geber is based on a finite state machine shown in \ref{fig:task_dreh_fsm}. When run the task compares the current state of the three input pins with the saved states. If there are differences, it generates an event based on the pins.
 
 \subsection{Numpad task}
 \begin{figure}[htb]
