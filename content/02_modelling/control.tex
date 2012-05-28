@@ -64,7 +64,7 @@ The simulation is run with various parameters to find the range of values in tab
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=\textwidth,clip,trim=0 15 0 15]{graphics/screensh_pid.jpg} %trim=l b r t
+  \includegraphics[width=\textwidth,clip,trim=0 -10 0 0]{graphics/screensh_pid.jpg} %trim=l b r t
 	\caption{Step response to auto tuned parameters.}
 	\label{fig:screensh_pid}
 \end{figure}
@@ -86,12 +86,6 @@ D-gain tilt& 0 & 100** & 1,62\\
 	\label{tab:gain_values}			
 \end{table}
 
-\begin{figure}[htb]
-	\centering
-	\includegraphics[width=\textwidth,trim=0 0 0 0]{graphics/screensh_pid.jpg} %trim=l b r t (can cut off from every side)
-	\caption{Simulation of the autotune parameters. Angle[rad] plotted with respect to time[s] when initial position is zero and a set point of 20 is given as step.}
-	\label{fig:chosen_plot}			% figure labels are of the form \label{fig:*}
-\end{figure}
 
 \subsection{Discussion}
 The simulation of the system was an easy and fast way of finding parameters for the PID regulator. Since the system has some limitations, this way of finding the range of parameters save the system from wear and tear. The autotune functionality of Simulink and the ease of discretize the system also comes as credit for this approach.
