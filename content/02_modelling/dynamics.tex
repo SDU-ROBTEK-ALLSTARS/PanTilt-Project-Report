@@ -22,7 +22,15 @@ where $\zeta$ is the dampening ratio and $\omega_{n}$ is the undampened natural 
 	\label{fig:s_plane}			% figure labels are of the form \label{fig:*}
 	\end{center}
 \end{figure}
-In figure \ref{fig:s_plane} the real part of the pole is given by $Re(p) = - \zeta\omega_{n} = - \omega_{n} \cos(\varphi)$ and the imaginary part is given by $Im(p) = j\omega_{n}\sqrt{1 - \zeta^{2}} = j\omega_{n}\sin(\varphi)$. Considering equation \ref{eq:time_constant} and figure \ref{fig:s_plane} it can be seen that the real part of a pole directly relates to the time constant. Systems with one pole can therefore have their time constant calculated from the reciprocal of the real part of the pole. Systems consisting of more than one pole can have their time constant calculated from the super positioning the reciprocal of the real part of the poles. Equation \ref{eq:time_constant} show an example.
+In figure \ref{fig:s_plane} the real part of the pole is given by 
+\begin{equation}
+	Re(p) = - \zeta\omega_{n} = - \omega_{n} \cos(\varphi)
+\end{equation}
+and the imaginary part is given by
+\begin{equation}
+	Im(p) = j\omega_{n}\sqrt{1 - \zeta^{2}} = j\omega_{n}\sin(\varphi)
+\end{equation}
+Considering equation \ref{eq:time_constant} and figure \ref{fig:s_plane} it can be seen that the real part of a pole directly relates to the time constant. Systems with one pole can therefore have their time constant calculated from the reciprocal of the real part of the pole. Systems consisting of more than one pole can have their time constant calculated from the super positioning the reciprocal of the real part of the poles. Equation \ref{eq:time_constant} show an example.
 \begin{equation}
 	\tau = \frac{1}{Re(p_{1})} + \frac{1}{Re(p_{2})} + \frac{1}{Re(p_{3})} + ... + \frac{1}{Re(p_{N})}\label{eq:time_constant}
 \end{equation}
@@ -32,7 +40,7 @@ As the time constant is defined as the reciprocal of the real part of the pole, 
 The following will give an overview of the physical aspects of the pan/tilt system and also define the mathematics which is tied to the system. The pan/tilt is assembled from two motors, a set of gears connected to each motor. Each motor can rotate a mass individually by transferring torque from the motors, through the gears, to the masses which are connected to the gears. A model of the motors are needed, along with a model of the reflected inertia through the gears, and other dynamics might be relevant to, but are discussed later in this section.
 
 \subsection{Motor}
-The motor converts electrical energy to mechanical energy as a voltage is supplied to the motor. This voltage make the motor turn and this turning motion deliver torque though some gears to a mass which then spins up to some maximum speed. A simplification of a DC motors circuit can be seen in figure \ref{fig:motor_circuit}, from this a mathematical model of the motor can be derived.
+The motor converts electrical energy to mechanical energy as a voltage is supplied to the motor. This voltage make the motor turn and this turning motion deliver torque through some gears to a mass which then spins up to some maximum speed. A simplification of a DC motors circuit can be seen in figure \ref{fig:motor_circuit}, from this a mathematical model of the motor can be derived.
 \begin{figure}[htb]
 	\begin{center}
 	\includegraphics[scale=1,trim=0 0 0 0]{graphics/motor_circuit.pdf} %trim=l b r t (can cut off from every side)
@@ -69,8 +77,7 @@ Now \ref{eq:electrical_mechanical_torque} and \ref{eq:electrical_mechanical_torq
 
 Stiction, coulomb and viscous friction are omitted as it is assumed that the inertia from the internal friction of the motor is a lot less than the inertia from the mass, so this concludes the model of the motor.
 
-\subsection{Gears}
-The gears between the mass to be rotated and the motor of the system reflect the actual inertia of the mass onto the motor. Calculations for the reflected inertia is kept in appendix \ref{app:dynamics_calc}.
+
   
 \subsection{Torque-induced precession}
 When a body rotates around an axis the phenomenon of precession occurs. The torque-induced precession occurs when a body accelerates around an axis a torque is induced perpendicular to the axis of rotation. In figure \ref{fig:precession} a sketch of this situation is shown.
@@ -96,7 +103,7 @@ Then equation \ref{eq:induced_torque} is subtracted from the total torque \ref{e
 where $\omega_1$ is the velocity of the pan and $\omega_2$ is the velocity of the tilt. 
 
 \section{Finding parameters}
-The following will contain a brief discussion on how the parameters were found. To obtain the parameters for the model some measurements where made on tilt part of the system. These measurements and the MATLAB script which was used for analysing the data is located on the CD. The measurements that where produced is expressed in encoder $[ticks]$ against time $[ms]$. All the previous equations are dependent of the velocity of the system, so the measurements have to be differentiated with respect to time, this is done by a numerical method called the secant method\footnote{NR ref}, the differentiated result is plotted and shown in figure \ref{fig:measured_step_tilt}.
+The following will contain a brief discussion on how the parameters were found. To obtain the parameters for the model some measurements where made on tilt part of the system. These measurements and the MATLAB script which was used for analysing the data is located on the CD. The measurements that where produced is expressed in encoder $[ticks]$ against time $[ms]$. All the previous equations are dependent of the velocity of the system, so the measurements have to be differentiated with respect to time, this is done by a numerical method called the secant method, the differentiated result is plotted and shown in figure \ref{fig:measured_step_tilt}.
 \begin{figure}[htb]
 	\begin{center}
 	\includegraphics[scale=1,trim=0 0 0 0]{graphics/measured_step_tilt.pdf} %trim=l b r t (can cut off from every side)
@@ -106,14 +113,14 @@ The following will contain a brief discussion on how the parameters were found. 
 \end{figure}
 If a mean is calculated from the steady-state part of the graph $22.57 \sfrac{rad}{s}$ is obtained, and compared to the data sheet of the motor which says the rated speed is $22.62 \sfrac{rad}{s}$, the data from the graph represented in figure \ref{fig:measured_step_tilt} is assumed to be correct.
 
-Next a set of equations are formed from equation \ref{eq:model_model}, the input is set to zero and rewritten as follows:
+Next a set of equations are formed from equation \ref{eq:model_model}, the input is set to zero and the equation is rewritten as follows:
 \begin{equation}
 	\frac{d^{2}\omega}{dt^{2}} = - \frac{R}{L} \frac{d\omega}{dt} - \frac{K_B K_T}{L J_L} \omega
 \end{equation}
 where $\frac{d^{2}\omega}{dt^{2}}$, $\frac{d\omega}{dt}$, and $\omega$ is known, from numerical analysis, so the constants $\frac{R}{L}$ and $\frac{K_B K_T}{L J_L}$ can be found. $R$ and $J_L$ are also known and $K_B = K_T$. MATLAB have been used for calculating the set of equations $\textbf{Ax} = \textbf{b}$, so that the rest of the unknowns can be found. The MATLAB script located on the CD contains further details about how the set of equations where formed.
 
 \subsection{Verification}
-Previous experiments and calculations have shown that $R = 5.124\Omega$, $L = 38.4mH$ and $K_B = K_T = 35.1 \sfrac{mV}{\dfrac{rad}{s}}$. Through the MATLAB script included on the CD, $\frac{R}{L}$ and $\frac{K_B K_T}{L J_L}$ is found to be the following:
+Finding parameters for the system is done the following way:
 \begin{equation}
 	\frac{R}{L} = 791.7 \Rightarrow L = \frac{5.124}{791.7} \approx 6.471mH
 \end{equation}
@@ -124,6 +131,21 @@ According to equation \ref{app:eq_reflected_pan_inertia}, $J_L = 0.970 \cdot 10^
 \begin{equation}
 	K_B = K_T = \sqrt{25.63 \cdot L \cdot J_L} \Rightarrow K_B = K_T = \sqrt{25.63 \cdot L \cdot J_L} \approx 401.1 \frac{mV}{\sfrac{rad}{s}}
 \end{equation}
+Previous experiments\cite{DCMOTOR} and calculations gave following results:
+\begin{table}[htb]				
+	\begin{center}
+	\begin{tabular}{l|c|c}			
+Parameter & Previous & New \\			
+	\hline												
+$R$ & $5.124\Omega$ & $5.124\Omega$\\
+$L$ & $38.4mH$ & $6.471mH$\\
+$K_B = K_T$ & $35.1\sfrac{mV}{\dfrac{rad}{s}}$ & $401.1\sfrac{mV}{\dfrac{rad}{s}}$\\
+	\end{tabular}
+	\end{center}
+	\caption{Show a table with previous and new results of parameters.}				
+	\label{tab:parameters}			
+\end{table}
+
 By looking at a pole-zero plot of the system and the open-loop response of the system, it can be decided which set of parameters that can be used for setting up the model. To set up the model a state-space representation is made of the system as follows below. The coupled system is set up with respect to equation \ref{eq:coupled_torque_motor_model}:
 \[
  \dot{\textbf{x}} =
