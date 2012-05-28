@@ -117,10 +117,10 @@ When run the control task saves the value of the tick counter and when finished,
 
 For calculating the error, a common format is needed. The parameter server holds the set point in degrees and the actual position in ticks. To be able to use some intuition about the control algorithm, degrees are chosen and the position in degrees is calculated by using a ticks to degrees factor calculated from knowing the gears and the number of ticks per motor round.
 \begin{equation}
-1 \ tilt \ revolution \ * 30:1 \ planet \ gear \ * 3:1 \ belt \ gear = 90 \ motor \ rounds
+1 \ tilt \ revolution \ \cdot 30:1 \ planet \ gear \ \cdot 3:1 \ belt \ gear = 90 \ motor \ rounds
 \end{equation}
 \begin{equation}
- 90 \ motor \ rounds * 12 \ ticks/round = 1080 \ ticks/tilt \ revolution
+ 90 \ motor \ rounds \cdot 12 \ ticks/round = 1080 \ ticks/tilt \ revolution
 \end{equation}
 This number is then used to calculate the ratio of degrees to ticks, keeping in mind that degrees have an implicit decimal:
 
@@ -132,16 +132,16 @@ The error is then calculated as the difference between set point and actual posi
 
 To compare simulated values to actual values it is necessary to convert the gains so that \ref{eq:conv1} and \ref{eq:conv2} becomes equal. 
 \begin{equation}
-error \ [rad] * gain = input \ [V]
+error \ [rad] \cdot gain = input \ [V]
 \label{eq:conv1}
 \end{equation}
 \begin{equation}
-error \ [deg] * gain = input \ [pwm]
+error \ [deg] \cdot gain = input \ [pwm]
 \label{eq:conv2}
 \end{equation}
 To convert from $rad$ to $deg$ the ratio is found
 \begin{equation}
-\frac{3600 \ deg}{2 \ \Pi \ rad} = 573 \ deg/rad
+\frac{3600 \ deg}{2 \ \pi \ rad} = 573 \ deg/rad
 \label{eq:conv3}
 \end{equation}
 To convert from $[V]$ to $pwm$ the ratio is found
