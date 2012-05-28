@@ -3,16 +3,23 @@ For the main hardware components to be able to communicate, some kind of network
 
 \nomenclature{SPI}{Serial Peripheral Interface}
 
-\section{Low level protocol specification}
-In \marginnote{Not sure about the exact placement of each part of section. Let's talk about that some day!}[-25pt] the assignment proposal it is given that the communication interface between the FPGA and LM3S6965 microcontroller must be SPI. There are no formal SPI protocol standards however, so it must be decided how the link will work. The Stellaris SSI\footnote{Synchronous Serial Interface} module supports three different interfaces: Freescale SPI, MICROWIRE and Texas Instruments SSI. The main difference between these three formats is how they handle each individual serial frame.
+\section{Low level protocol specification}\label{sec:spi_lowlvl_protocol}
+In the assignment proposal it is given that the communication interface between the FPGA and LM3S6965 microcontroller must be SPI. There are no formal SPI protocol standards however, so it must be decided how the link will work. The Stellaris SSI\footnote{Synchronous Serial Interface} module supports three different interfaces: Freescale SPI, MICROWIRE and Texas Instruments SSI. The main difference between these three formats is how they handle each individual serial frame.
 
-The Freescale SPI mode of operation is chosen, as it enables full-duplex transmission (which MICROWIRE does not) and because of the way the select signal (\texttt{SSIFss}) works in this mode. Using the Freescale frame format, the \texttt{SSIFss} is high while the communication line is idle. \marginnote{This calls for an illustration} It is then pulled low while sending a frame. Pulling it low thus signifies the beginning of a frame, and pulling it high tells the slave that the frame is at its end. The Texas Instruments SSI format works by instead pulsing its \texttt{SSIFss} signal for only one \texttt{SSIClk} period to signify the beginning and ending of a frame. This is deemed more error prone as there is no time in-between frames to synchronize. Freescale SPI has one \texttt{SSIClk} period in-between frames, where \texttt{SSIFss} gets pulled high, allowing the slave a chance to "catch up".\nomenclature{SSI}{Synchronous Serial Interface}
+The Freescale SPI mode of operation is chosen, as it enables full-duplex transmission, which MICROWIRE does not, and because of the way the select signal (\texttt{SSIFss}) works in this mode. Using the Freescale frame format, the \texttt{SSIFss} is high while the communication line is idle. It is then pulled low while sending a frame. Pulling it low thus signifies the beginning of a frame, and pulling it high tells the slave that the frame is at its end. The Texas Instruments SSI format works by instead pulsing its \texttt{SSIFss} signal for only one \texttt{SSIClk} period to signify the beginning and ending of a frame. This is deemed more error prone as there is no time in-between frames to synchronize. Freescale SPI has one \texttt{SSIClk} period in-between frames, where \texttt{SSIFss} gets pulled high, allowing the slave a chance to ``catch up''.
 
-The LM3S6965 microcontroller will be operating as master and the FPGA as slave, letting the microcontroller when communication should take place.
+\nomenclature{SSI}{Synchronous Serial Interface}
+
+The LM3S6965 microcontroller will be operating as master and the FPGA as slave, letting the microcontroller choose when communication should take place.
 
 %------------------------------------------
 \section{SPI introduction}
-SPI is short for Serial Peripheral Interface, and is a commonly used standard for internal communication between hardware. Because SPI is a commonly used transmission interface, this will only contain a short introduction. The \marginnote{Check me}{simplest} SPI connection consists of a master, a slave and 4 signal lines: A clock, a signal from master to slave (MOSI\footnote{Master Out Slave In}), a signal from slave to master (MISO\footnote{Master In Slave Out}) and a slave select (SS) signal. The clock is used to control when to put data on the signal lines, and is always controlled by the master device. This way the master device always controls when there is data available on the signal lines, and at what data rate the it is send. An effect of this is that, for the master to be able to get a reply from the slave, some extra data needs to be send to activate the data carrying clock. The synchronisation between the clock and the data on the MOSI and MISO lines can be set up in four different ways, depending on the clock phase (CPHA) and polarity (CPOL). The slave select signal is used to enable the transmission on the slave device. When pulled low, the slave device starts listening for data from the master device. This enables the use of the clock, MOSI and MISO lines for multiple devices. 
+SPI is short for Serial Peripheral Interface, and is a commonly used standard for internal communication between hardware. Because SPI is a commonly used transmission interface, this will only contain a short introduction. The simplest form of a SPI connection consists of a master, a slave and 4 signal lines: A clock, a signal from master to slave (MOSI\footnote{Master Out Slave In}), a signal from slave to master (MISO\footnote{Master In Slave Out}) and a slave select (SS) signal. The clock is used to control when to put data on the signal lines, and is always controlled by the master device. This way the master device always controls when there is data available on the signal lines, and at what rate it is transferring. An effect of this is that, for the master to be able to get a reply from the slave, some extra data needs to be send to activate the data carrying clock. The synchronisation between the clock and the data on the MOSI and MISO lines can be set up in four different ways, depending on the clock phase (CPHA) and polarity (CPOL). The slave select signal is used to enable the transmission on the slave device. When pulled low, the slave device starts listening for data from the master device. This enables the use of the clock, MOSI and MISO lines for multiple devices. 
+
+\nomenclature{MOSI}{Master Out Slave In}
+\nomenclature{MISO}{Master In Slave Out}
+\nomenclature{SS}{Slave Select}
+
 % What is SPI
 % Limitations
 
@@ -43,18 +50,18 @@ SPI is short for Serial Peripheral Interface, and is a commonly used standard fo
 % - What is it used for, and why is it interesting to look at?
 %The first approach for designing the SPI protocol was to look for  
 \section{Protocol requirements}
-Selection the right protocol design for a project greatly depends on the requirements from the other parts as the system. Such requirements would include: 
+Selecting the right protocol design for a project greatly depends on the requirements from the other parts as the system. Such requirements would include: 
 \begin{itemize}
-\item Noise on transmission lines (Need for error correction or detection)
+\item Noise on transmission lines (need for error correction or detection)
 \item Security (encryption)
-\item Package synchronisation (Start and stop flags)
-\item The size of data to be transmitted (Minimum transmission speed)
-\item Timing criteria (Do we need to know how old the data are)
+\item Package synchronisation (start and stop flags)
+\item The size of data to be transmitted (minimum transmission speed)
+\item Timing criteria (how old the data is)%(Do we need to know how old the data are)
 \end{itemize}
 
-Because the data only needs to travel a short distance, noise and security is not considered as a problem in this project. Even if noise should occur, a lot of things could be done to the physical parts to solve this without involving redesign of the protocol (Ex. paired and shielded cables). 
-The protocol are using SPI, so there is no need for synchronising the packages, as this can be done by the SS signal line. This eliminates the needs for overhead such as start or stop flags on packages. 
-\marginnote{Read and comment if it's good enough}The ARM runs the SPI connection at a speed of 1MHz. Each clock pulse transmits 1bit, so 2MHz will carry 2Mbps = 256KBps. With this transmission rate, it will be possible to read or write an entire 32byte memory block at a rate of $\frac{32B}{256KBps} \approx 8KHz$. The ARM is capable of running the SPI at much greater speeds then 2MHz, and a update rate of 8KHz is a lot more then needed, considered physical speed limitations of the \marginnote{pan/tilt}{pan/tilt} system.
+Because the data only needs to travel a short distance, noise and security is not considered a problem in this project. Even if noise should occur, a lot of things could be done to the physical parts to solve this without involving redesign of the protocol (ex. paired and shielded cables). 
+The protocol is using SPI, so there is no need for synchronising the packages, as this can be done by the SS signal line. This eliminates the needs for overhead such as start or stop flags on packages. 
+The microcontroller runs the SPI connection at a speed of $2 \, \mathrm{MHz}$. Each clock pulse transmits 1 bit, so $2 \, \mathrm{MHz}$ will carry $2 \, \mathrm{Mbps} = 256 \, \mathrm{KBps}$. With this transmission rate, it is possible to read or write an entire $32 \, \mathrm{byte}$ memory block at a rate of $\frac{32 \, \mathrm{B}}{256 \, \mathrm{KBps}} \approx 8 \, \mathrm{KHz}$. The microcontroller is capable of running the SPI at much greater speeds than $2 \, \mathrm{MHz}$, and an update rate of $8\, \mathrm{KHz}$ is a lot more then needed, considered physical speed limitations of the system.
 
 
 \section{Protocol ideas}
@@ -63,10 +70,12 @@ During the design of the protocol three approaches were considered. These three 
 
 
 \subsection{Specialised protocol}
-The first approach was to design the protocol to carry just the information that needs to be exchanged between the FPGA and ARM boards. A data package would then consist of a header followed by a series of only the needed data. This idea had the advantage of a low overhead on the protocol and thereby a minimal need for resources on the platforms. This idea was discarded, because a change in the data requirements would require a redesign of the protocol.
+The first approach was to design the protocol to carry just the information that needs to be exchanged between the FPGA and LM3S6965 boards. A data package would then consist of a header followed by a series of only the needed data. This idea had the advantage of a low overhead on the protocol and thereby a minimal need for resources on the platforms. This idea was discarded, because a change in the data requirements would require a redesign of the protocol.
 
 \subsection{Memory synchronisation protocol}
-Another approach to the protocol design was to make a protocol to synchronise a static sized memory between the two platforms. The idea was to take advantage of the 16bit x 8 FIFO on the ARM platform, so one package would fit exactly into it. The advantage would be that the ARM processor only needs to be interrupted when the FIFO was full. A similar solution would then be written in hardware to the FPGA, making this solution quite efficient. The large amount of data in one package would allow a CRC or checksum to be implemented without too much overhead. An example of how this protocol could be made is shown in figure \ref{fig:spi_protocol_format_memsync}.
+Another approach to the protocol design was to make a protocol to synchronise a static sized memory between the two platforms. The idea was to take advantage of the 16bit $ \times $ 8 FIFO on the LM3S6965 platform, so one package would fit exactly into it. The advantage is that the LM3S6965 processor only needs to be interrupted when the FIFO is full. A similar solution would then be written in hardware to the FPGA, making this solution quite efficient. The large amount of data in one package would allow a CRC or checksum to be implemented without too much overhead. An example of how this protocol could be made is shown in figure \ref{fig:spi_protocol_format_memsync}.
+
+\nomenclature{CRC}{Cyclic Redundancy Check}
 
 \begin{figure}[htb]
 	\centering
@@ -79,7 +88,7 @@ The first four bits from the master decides what the slave shall respond. The ne
 
 \subsection{Generic protocol}
 \label{spi_generic_protocol}
-The generic approach was to make the protocol compatible with the protocol of other SPI devices. Because a lot of SPI devices uses specialised protocols, there is not a generic approach as such. Some devices tough share a way of reading and writing registers on the hardware, which in this document will be referred as a generic way. Using this protocol will give the great advantage of both reusable code/hardware, fairly easy implementation and good scalability. The generic design approach was chosen as most appropriate solution for this project and will be described in greater details in section \ref{spi_rotocol_design}.
+The generic approach was to make the protocol compatible with the protocol of other SPI devices. Because a lot of SPI devices uses specialised protocols, there is no generic approach as such. Some devices though share a way of reading and writing registers on the hardware, which in this document will be referred as a generic way. Using this protocol will give the great advantage of both reusable code and hardware, fairly easy implementation and good scalability. The generic design approach was chosen as most appropriate solution for this project and will be described in greater details in section \ref{spi_rotocol_design}.
 
 
 %\section{Protocol selection discussion}
@@ -95,13 +104,13 @@ The generic approach was to make the protocol compatible with the protocol of ot
 
 \section{Protocol design}
 \label{spi_rotocol_design}
-It has been decided to use a generic\footnote{See \ref{spi_generic_protocol} for a definition of generic} way of communicating with SPI between the FPGA and ARM board. Other ideas were considered and can be read about in \ref{spi_protocol_ideas}.
+It has been decided to use a generic - as defined in section \ref{spi_generic_protocol} - way of communicating with SPI between the FPGA and LM3S6965 board. Other ideas were considered and can be read about in section \ref{spi_protocol_ideas}.
 The main advantage for choosing a generic design is the simple implementation and compatibility with other SPI devices. The ADNS9500~\cite{SPI_ADNS} mouse sensor and the ADIS16405~\cite{SPI_ADIS} IMU sensor were used as protocol reference devices, as these has been used in previous projects. The main difference between the protocol in these two devices are the length of the carried data. The ADNS9500 reads and writes only 8 bits at a time, where ADIS16405 supports 16bit data sizes. The 8 bit solution was chosen as reference.
 
 For synchronisation of clock and data on the signal lines, mode 0 was chosen. Mode 0 is when data is available on clock rising edge and changes on falling edge.
 
 % Depending on the address it can be read only, write only or read/write. 
-The general idea is that the SPI slave has a memory block, which the SPI master can read and write from. The list of addresses are determined by the hardware modules on the FGPA and can be found in table \ref{tab:Memorymapping}. The protocol itself is pretty straight forward. The MSB determines if it is a read or write operation, and the last 5 bits determines the address or function. The two bits in between are reserved for future use, and should always be set to zero. The five address bits in the current design gives access to 32 bytes of memory on the slave device, which is enough to hold the data for this project. The command structure is shown in figure \ref{fig:spi_protocol_cmd_structure}. Both reference devices supports a burst command, where a series of relevant data are sent as response of a single command. There was no need to implement such functionality in this design. How the reading and writing is done is described below.
+The general idea is that the SPI slave has a memory block, which the SPI master can read and write from. The list of addresses are determined by the hardware modules on the FGPA and can be found in table \ref{tab:Memorymapping}. The protocol itself is pretty straight forward. The MSB\footnote{Most significant bit} determines if it is a read or write operation, and the last 5 bits determines the address or function. The two bits in between are reserved for future use, and should always be set to zero. The five address bits in the current design gives access to 32 bytes of memory on the slave device, which is enough to hold the data for this project. The command structure is shown in figure \ref{fig:spi_protocol_cmd_structure}. Both reference devices supports a burst command, where a series of relevant data are sent as response of a single command. There was no need to implement such functionality in this design. How the reading and writing is done is described below.
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.96\textwidth,trim=0 0 0 0]{graphics/spi_protocol_cmd_structure.pdf} %trim=l b r t (can cut off from every side)
@@ -111,7 +120,7 @@ The general idea is that the SPI slave has a memory block, which the SPI master 
 
 
 \subsection{Reading from slave device}
-When the master needs to read from the slave device it sends a byte with the MSB\footnote{Most significant bit} to low, and the last five bits according to the address to be read. Meanwhile the command is send, the slave may be sending the response from last command, or just zeroes if it has nothing to return. For the master to be able to receive the response, it needs to send a byte because SPI is synchronous. This may be the next command or just zeroes. The reason for this is, that the communication is always initiated from the master device on SPI. A read command sequence is shown in figure \ref{fig:spi_protocol_command_structure_read} 
+When the master needs to read from the slave device it sends a byte with the MSB to low, and the last five bits according to the address to be read. Meanwhile the command is send, the slave may be sending the response from last command, or just zeroes if it has nothing to return. For the master to be able to receive the response, it needs to send a byte because SPI is synchronous. This may be the next command or just zeroes. The reason for this is, that the communication is always initiated from the master device on SPI. A read command sequence is shown in figure \ref{fig:spi_protocol_command_structure_read} 
 
 \begin{figure}[htb]
 	\centering
@@ -122,7 +131,10 @@ When the master needs to read from the slave device it sends a byte with the MSB
 
 
 \subsection{Writing to slave device}
-The command send from the master device when writing to the slave device is similar to the one used to read the same address, but with the MSB set to high. The structure of the command byte is shown in figure \ref{fig:spi_protocol_cmd_structure}. Meanwhile the command is send, the slave may be sending the response from last command, or just zeroes if it has nothing to return. Next the master sends the value to be written to the address from the command byte. While the value is send, the output from the slave is just an empty byte. The write sequence is shown in figure \ref{fig:spi_protocol_command_structure_write}.
+The command send from the master device when writing to the slave device is similar to the one used to read the same address, but with the MSB set. The structure of the command byte is shown in figure \ref{fig:spi_protocol_cmd_structure}. While the command is sent, the slave may be sending the response from last command, or just zeroes if it has nothing to return. Next, the master sends the value to be written to the address from the command byte. While the value is sent, the output from the slave is just an empty byte. The write sequence is shown in figure \ref{fig:spi_protocol_command_structure_write}.
+
+\nomenclature{MSB}{Most Significant Bit}
+\nomenclature{LSB}{Least Significant Bit}
 
 \begin{figure}[htb]
 	\centering
@@ -133,13 +145,15 @@ The command send from the master device when writing to the slave device is simi
 
 
 
-\section{Protocol ARM implementation}
+\section{Protocol microcontroller implementation}
 \input{content/04_communication/spi_arm.tex}
 
 \section{Protocol FPGA implementation}
 % Something about the memeory interface to the other hardware parts
-The SPI client interface on the FPGA needs to written in hardware language. As interface to other components in the FPGA it was chosen to use a true dual port RAM on the xilinx board. The RAM then has the responsibility of avoiding race conditions, and presenting an easy-to-use and known-to-work interface between the components. 
-Before getting started writing the actual hardware description code, a block and signal description is made to clarify which parts that is needed, and how the internally communicate. Each block is then written in VHDL\footnote{Very high speed integrated circuit Hardware Description Language} and tested in a simulation test bench to ensure the correct functionality. The great advantage of a test bench is the possibility to quickly visualise both internal and external signals over time. When the hardware is tested to work in the simulation, it can be synthesized and put on the FPGA. On the FPGA it is tested with SPI hardware that is known to work. This will make it easier to isolate and debug errors.
+The SPI client interface on the FPGA needs to be written in hardware language. As interface to other components in the FPGA it was chosen to use a true dual port RAM on the Xilinx board. The RAM then has the responsibility of avoiding race conditions, and presenting an easy-to-use and known-to-work interface between the components. 
+Before getting started writing the actual hardware description code, a block and signal description is made to clarify which parts that is needed, and how the internally communicate. Each block is then written in VHDL and tested in a simulation test bench to ensure the correct functionality. The great advantage of a test bench is the possibility to quickly visualise both internal and external signals over time. When the hardware is tested to work in the simulation, it can be synthesized and put on the FPGA. On the FPGA it is tested with SPI hardware that is known to work. This will make it easier to isolate and debug errors.
+
+\nomenclature{VHDL}{Very high speed integrated circuit Hardware Description Language}
 
 \subsection{Hardware planning}
 Before writing any code for the SPI hardware, a diagram of the needed hardware blocks were made. A goal when designing the hardware was to make it modular, so parts could be taken out and reused in other projects. The developed diagram can be seen on figure \ref{fig:spi_protocol_fpga_blocks_final_design}, where the signals are represented as round shapes, and hardware blocks as squares. 
@@ -151,28 +165,28 @@ Before writing any code for the SPI hardware, a diagram of the needed hardware b
 	\label{fig:spi_protocol_fpga_blocks_final_design}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
-On the figure, the four SPI signals to the ARM board are present to the left, and the memory shared with the other hardware parts implemented on the FPGA to the left.
+On figure \ref{fig:spi_protocol_fpga_blocks_final_design}, the four SPI signals to the LM3S6965 board are present to the left, and the memory shared with the other hardware parts implemented on the FPGA to the left.
 
 \subsection{Hardware block description}
-The clock debounce process has the purpose of removing noise from the clock signal, and furthermore it can be used to change clock polarity and phase without having to change anything else in the other SPI components.
+The clock de-bounce process has the purpose of removing noise from the clock signal, and furthermore it can be used to change clock polarity and phase without having to change anything else in the other SPI components.
 
-The MOSI and MISO signals are connected to the two serialiser blocks "Serialiser in" and "Serialiser out". The "Serialiser in" keeps track of the current position in the serialised data, and writes the incoming data to the respective position in the buffer. It can be seen as a demultiplexer where the debounced clock switches to next position in the buffer. When the SS signal is high, the position is always at the starting value. When transmission begins, the SS signal gets pulled low by the master, and the position starts counting accordingly to the pulses from the debounced SPI clock. 
+The MOSI and MISO signals are connected to the two serialiser blocks: ``Serialiser in'' and ``Serialiser out''. ``Serialiser in'' keeps track of the current position in the serialised data, and writes the incoming data to the respective position in the buffer. It can be seen as a demultiplexer where the de-bounced clock switches to next position in the buffer. When the SS signal is high, the position is always at the starting value. When transmission begins, the SS signal gets pulled low by the master, and the position starts counting according to the pulses from the de-bounced SPI clock. 
 
-The "Serialiser out" block can be seen as a multiplexer, where the position is fetched from the "Serialiser in" block.
+The ``Serialiser out'' block can be seen as a multiplexer, where the position is fetched from the ``Serialiser in'' block.
 
-The "parrallel IO interface" process presents an easy to use interface to the serialisers for internal components. It handles the serialiser buffers, and the signals involved in reading and writing from these without race conditions. The interface is made so it is possible to connect other devices then the memory block. This together with the serialisers can be considered the actual SPI hardware. 
+The ``parallel IO interface'' process presents an easy to use interface to the serialisers for internal components. It handles the serialiser buffers, and the signals involved in reading and writing from these without race conditions. The interface is made so it is possible to connect other devices then the memory block. This together with the serialisers can be considered the actual SPI hardware. 
 
-The parallel out connections consist of these signals: \texttt{data\_out}, \texttt{data\_out\_valid}, \texttt{data\_out\_ack}\footnote{ack is short for acknowledge} and \texttt{data\_out\_buffer\_collision}. \texttt{Data\_out} and \texttt{data\_out\_ready} are output signals. When the \texttt{data\_out\_valid} is set high, the data is valid on the \texttt{data\_out} port. After the data is read, the reading device signals this by setting the \texttt{data\_out\_ack} pin to high, and the \texttt{data\_out\_valid} gets pulled low so it is ready to signal next time data is ready. If the data is not acknowledged before the next data arrives, the \texttt{data\_out\_buffer\_collision} is pulled high to warn that an internal buffer was not emptied and data was possible thrown away.
+The parallel out connections consist of the signals \justtt{data\_out}, \justtt{data\_out\_valid}, \justtt{data\_out\_ack}\footnote{ack is short for acknowledge} and \justtt{data\_out\_buffer\_collision}. \justtt{Data\_out} and \justtt{data\_out\_ready} are output signals. When the \justtt{data\_out\_valid} is set high, the data is valid on the \justtt{data\_out} port. After the data is read, the reading device signals this by setting the \justtt{data\_out\_ack} pin to high, and the \justtt{data\_out\_valid} gets pulled low so it is ready to signal next time data is ready. If the data is not acknowledged before the next data arrives, the \justtt{data\_out\_buffer\_collision} is pulled high to warn that an internal buffer was not emptied and data was possible thrown away.
 
-The parallel in connections works in a similar way. It consists of three signals: \texttt{data\_in}, \texttt{data\_in\_ready} and \texttt{data\_in\_ack}. When data is to be written to the SPI master, it is set on the \texttt{data\_in} port and the \texttt{data\_in\_ready} is pulled high. When the \texttt{data\_in\_ack} is set high, the data is read and the \texttt{data\_in\_ready} should be pulled low.
+The parallel in connections works in a similar way. It consists of three signals: \justtt{data\_in}, \justtt{data\_in\_ready} and \justtt{data\_in\_ack}. When data is to be written to the SPI master, it is set on the \justtt{data\_in} port and the \justtt{data\_in\_ready} is pulled high. When the \justtt{data\_in\_ack} is set high, the data is read and the \justtt{data\_in\_ready} should be pulled low.
 
-The SPI protocol controller has the purpose of determining how to respond to the data received on the serialser, and control the memory accordingly. The basics of the controller is a state machine which is described in \ref{spi_protocol_controller}.
+The SPI protocol controller has the purpose of determining how to respond to the data received on the serialiser, and control the memory accordingly. The basics of the controller is a state machine which is described in \ref{spi_protocol_controller}.
 
-As memory a true dual port ram is used, which is out-of-the-box solution from Xilinx. This RAM has two interfaces, which makes it ideal as interface between communication and other hardware block in the FPGA. The data in and data out ports are connected to the parallel interface and the write and enable signals are connected to the protocol controller. The reading and writing process of the memory module is well described in the datasheet ~\cite{XILINX_MEM}.
+As memory a true dual port RAM is used, which is an out-of-the-box solution from Xilinx. This RAM has two interfaces, which makes it ideal as interface between communication and other hardware block in the FPGA. The data in and data out ports are connected to the parallel interface and the write and enable signals are connected to the protocol controller. The reading and writing process of the memory module is well described in \cite{XILINX_MEM}.
 
 \subsection{SPI protocol controller}
 \label{spi_protocol_controller}
-The "SPI protocol controller" is a Mealey finite state machine controlling the package flow according to the protocol. It has access to read the received data from the parallel interface and sets the control signals both on the parallel interface and the memory block. When data is ready on the parallel interface it is read by the protocol controller and a decision is made about how to respond. The states of the state machine is visualised in figure \ref{fig:spi_protocol_controller_prettystates}.
+The ``SPI protocol controller'' is a Mealy finite state machine controlling the package flow according to the protocol. It has access to read the received data from the parallel interface and sets the control signals both on the parallel interface and the memory block. When data is ready on the parallel interface it is read by the protocol controller and a decision is made about how to respond. The states of the state machine is visualised in figure \ref{fig:spi_protocol_controller_prettystates}.
 
 
 \begin{figure}[htb] 
@@ -189,20 +203,22 @@ The "SPI protocol controller" is a Mealey finite state machine controlling the p
 
 The protocol controller is started in an initial state, where it sets up the signals between the SPI and RAM to be ready. When the signals are set, it goes to a waiting mode, where it will wait for the \texttt{data\_out\_ready} to be set high. When this happens, the data/command is read and the next state depends on whether is was a read or write command.
 
-It the received command was a read command, the next state "Read mem init" will set the requested address on the memory block, and continue to the next state "Read mem to SPI", where the \texttt{data\_out\_ready} will be set on the SPI interface. This will signal the SPI to read from mem and protocol controller will continue to the next state "Read mem wait SPI". In the "Read mem wait SPI" state, it waits for the SPI to acknowledge the data. When this is received it continues to the "Clean up" state, where waits for the SPI interface to be ready for next transmission, and returns back to the "Wait for command" state.
+It the received command was a read command, the next state ``Read mem init'' will set the requested address on the memory block, and continue to the next state ``Read mem to SPI'', where the \texttt{data\_out\_ready} will be set on the SPI interface. This will signal the SPI to read from mem and protocol controller will continue to the next state ``Read mem wait SPI''. In the ``Read mem wait SPI'' state, it waits for the SPI to acknowledge the data. When this is received it continues to the ``Clean up'' state, where waits for the SPI interface to be ready for next transmission, and returns back to the ``Wait for command'' state.
 
-Another possible way through the states in the state machine, is that a write command was received in the "Wait for command" state. When the write command is received the requested write address is set on the memory block and continues to the "Write mem init" state. In the "Write mem init" state it waits for the \texttt{from\_spi\_valid} to go low, so the SPI is ready to receive next transmission. Next it goes to the "Wait for next byte" state, where it waits for the \texttt{from\_spi\_valid} to go high again, which will happen when the next transmission occur. Now it will set the "write" signal high on the memory, so the data will be saved to RAM. It then goes to the state "Mem delay" where it set the "write" signal low again, and continues to the "Clean up" state.
+Another possible way through the states in the state machine, is that a write command was received in the ``Wait for command'' state. When the write command is received the requested write address is set on the memory block and continues to the ``Write mem init'' state. In the ``Write mem init'' state it waits for the \texttt{from\_spi\_valid} to go low, so the SPI is ready to receive next transmission. Next it goes to the ``Wait for next byte'' state, where it waits for the \texttt{from\_spi\_valid} to go high again, which will happen when the next transmission occur. Now it will set the ``write'' signal high on the memory, so the data will be saved to RAM. It then goes to the state ``Mem delay'' where it set the ``write'' signal low again, and continues to the ``Clean up'' state.
 %Scaleability
 
 
 \section{Discussion}
-The protocol has been designed to carry 8 bit data sizes. This may cause a problem it a 16-bit value is transmitted, and only 8 bit has arrived when the data i read. Though if the high byte always is written first, the error is not that great. If bigger values need to be transmitted, several solutions could be considered: Increasing the size of transmitted data at once. This will be fairly easy as the ARM already supports up to max 16-bit sized data frames, and the FPGA hardware is written so it is done by changing a few parameters. Another solution would be to implement a command in the protocol for reading and writing bigger data sizes.
+The protocol has been designed to carry 8 bit data sizes. This may cause a problem since it is a 16-bit value is transmitted, and only 8 bit has arrived when the data is read. Though if the high byte is always written first, the error is not that great. If larger values needs to be transmitted, several solutions could be considered: Increasing the size of transmitted data for once. That would be fairly easy as the LM3S6965 already supports a data frame size of up to 16 bit, and the FPGA hardware is written so it is done by changing a few parameters. Another solution would be to implement a command in the protocol for reading and writing larger data sizes.
 
 The protocol has been designed so the data can be abstracted away. Meaning that the protocol does not care about what data is transmitted, but just works as a carrier. If more data needs to be exchanged between the two points, it is easily done by just writing to an empty address in the memory, where the hardware is able to read it.
 
-The SPI software was implemented with one of the main requirements being, that it should support multiple tasks using the SPI simultaneously. In the final implementation, only one task uses the SPI: The task which updates parameters to the control system. When only one task uses the SPI connection, software for handling multiple tasks is redundant and increases processing overhead. However, a watchdog software implementation\footnote{Found on the Git tree in the \texttt{watchdog\_impl} branch}, which must use SPI independently of the control parameter task, is under development. 
+The SPI software was implemented with one of the main requirements being, that it should support multiple tasks using the SPI simultaneously. In the final implementation, only one task uses the SPI: The task which updates parameters to the control system. When only one task uses the SPI connection, software for handling multiple tasks is redundant and increases processing overhead. However, a watchdog software implementation\footnote{Found on the Git tree in the \texttt{watchdog\_impl} branch.}, which must use SPI independently of the control parameter task, was also being developed. It was not completed in time to meet the deadline though.
 
-Using dynamic memory allocation\footnote{Memory management is discussed in detail in section \ref{sec:memoryman}} in the SPI software implementation was a deliberate choice made because of the wish to support an unknown number of user tasks. In the current state of the microcontroller application, that would not have been necessary however. The downside of using dynamically allocated memory is a slightly slower execution time and more error-prone code. The FreeRTOS kernel uses dynamically allocated memory for all of its task creation- and intertask communication API already though \cite{website:freertos-memory}, so opting for only static allocation would be meaningless unless another kernel were used; SafeRTOS for example \cite[13]{safertos}.
+Using dynamic memory allocation, as described in section \ref{sec:memoryman}, in the SPI software implementation was a deliberate choice made because of the wish to support an unknown number of user tasks. In the current state of the microcontroller application, that would not have been necessary however. The downside of using dynamically allocated memory is a slightly slower execution time and more error-prone code. The FreeRTOS kernel uses dynamically allocated memory for all of its task creation- and intertask communication API already though \cite{website:freertos-memory}, so opting for only static allocation would be meaningless unless another kernel were used; SafeRTOS for example \cite[13]{safertos}.
+
+The SPI software reliability was successfully tested using a test application as described in appendix \ref{sec:armspitest}.
 % REF TIL TEST
 
 %
@@ -218,16 +234,16 @@ Using dynamic memory allocation\footnote{Memory management is discussed in detai
 %Overhead linearly proportional with amounts transmitted/received?\\
 %Tasks transmission priority is decided by the order in which they use \texttt{spi\_register\_task()}
 
-The implementation process of the SPI on the FPGA saved a lot of time. The idea of first having a working model in the simulation environment and then build to the platform, spared a lot of on-hardware debugging and synthesising time. The testing was done with a device known to work with SPI, enabling the FPGA SPI part to be tested before it was fully implemented on the ARM.
+The implementation process of the SPI on the FPGA saved a lot of time. The idea of first having a working model in the simulation environment and then build to the platform, spared a lot of on-hardware debugging and synthesising time. The testing was done with a device known to work with SPI, enabling the FPGA SPI part to be tested before it was fully implemented on the microcontroller.
 
 On the FPGA, a 32byte dual port RAM has been used as interface between SPI and motor controller. This has been a great advantage during design and testing, as the parts where able to be tested separately and put together afterwards.
 
-The protocol and FPGA hardware was tested for reliability, which are described in \ref{sec:spi_rel_test}. In the test it is concluded that the protocol and hardware can transmit without errors with cables lengths up to 25cm.
+The protocol and FPGA hardware was tested for reliability, which are described in appendix \ref{sec:spi_rel_test}. In the test it is concluded that the protocol and hardware can transmit without errors with cables lengths up to 25cm.
 
-
+\nomenclature{RAM}{Random Access Memory}
 
 \section{Conclusion}
-A protocol for communication between the ARM and FPGA has been designed. The protocol has been implemented on the ARM as software and hardware on the FPGA. Test shows that the protocol and the implementation can work with a error rate of 0\% in a normal environment with short cables.
+A protocol for communication between the LM3S6965 and FPGA has been designed. The protocol has been implemented on the LM3S6965 as software and hardware on the FPGA. Test shows that the protocol and the implementation can work with a error rate of 0\% in a normal environment with short cables.
 
 
 % Block overview / hardware planning

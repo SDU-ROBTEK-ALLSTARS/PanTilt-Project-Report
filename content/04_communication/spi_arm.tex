@@ -1,11 +1,11 @@
 %\section{Protocol ARM implementation}
 \label{sec:armspi}
-One integral part of the project is the communication between the microprocessor and FPGA. This section describes the process of implementing SPI communication software (in the remainder of this section just referred to as the \textit{implementation}) on the microprocessor. It will go over the initial demands of the implementation, how it was made, how it works, and how it is supposed to be used (by other parts of the system). A test of the implementation is also described. Finally, the results the test yielded, plus thoughts about further improvements, are discussed.
+One integral part of the project is the communication between the microprocessor and FPGA. This section describes the process of implementing SPI communication software, for the remainder of this section just referred to as the \textit{implementation}, on the microprocessor. It will go over the initial demands of the implementation, how it was made, how it works, and how it is supposed to be used by other parts of the system. A test of the implementation is also described. Finally, the results the test yielded, plus thoughts about further improvements, are discussed.
 
 \subsection{Requirements and delimitations}\label{sec:spi_software_reqs}
 The first part of the development process was to specify requirements to the implementation, to make it easier for the rest of the software system to make use of the SPI link. Those requirements were:
 \begin{enumerate}
-  \item The implementation would have to be multi-task/thread safe, as more than one task may have to use the SPI software interface at any given time.
+  \item The implementation would have to be multi-task- and thread safe, as more than one task may have to use the SPI software interface at any given time.
   \item The interface provided by the implementation should be easy to use by other processes in the system.
 \end{enumerate}
 
@@ -25,7 +25,7 @@ The topmost layer of the implementation is the interface between the SPI impleme
 
 The interface quite simply consists of the four functions \texttt{spi\_init}, \texttt{spi\_register\_task}, \texttt{spi\_write\_from\_task} and \texttt{spi\_read\_from\_task}. The \texttt{\_task}-suffix signifies that the function is meant to be called from within a task (and will otherwise have no effect).
 
-The first function to be called under normal circumstances would be \texttt{spi\_init}. It initializes the hardware SPI peripheral for use such as described in\marginnote{MANGLER REFERENCE!}. Also, it creates two tasks; a transmitter and a receiver as well as associated queues and semaphores.
+The first function to be called under normal circumstances would be \texttt{spi\_init}. It initializes the hardware SPI peripheral for use such as described in section \ref{sec:spi_lowlvl_protocol}. Also, it creates two tasks; a transmitter and a receiver as well as associated queues and semaphores.
 
 \begin{figure}[htb]
   \begin{subfigure}[b]{0.495\textwidth}
