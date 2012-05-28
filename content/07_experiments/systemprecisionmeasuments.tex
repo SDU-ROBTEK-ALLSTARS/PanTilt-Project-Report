@@ -10,7 +10,7 @@ table \ref{tab:actual_gain_values}
 The test is performed by fastening a laser pointer on the pan/tilt system. A
 board is placed next to the system and two positions where the pointer is on the
 board are chosen as seen in figure \ref{fig:systemtestsetup}. The laser pointer is placed 180 cm
-from the board. Thus each degree is at aproximately 3 centimetres wide.
+from the board. Thus corresponds to 3cm on the board.
 
 \[ \tan(1 \ deg) \cdot 180 \ cm \approx 3,14 \ cm \]
 
@@ -26,9 +26,9 @@ are marked and the test ends after ten iterations.
 
 \subsection*{Results}
 
-At both points the error was less than five centimetres and most of the time
+At both points the error was less than 5 cm and most of the time
 less than two centimetres. This means that the system have an accuracy between 0.658 and
-3.293 degrees. This precision is reached with overshoot.
+3.293 degrees.
 
 \[ \frac{2,0 \ cm}{3,14\ cm/deg} = 0,64 \ deg \]
 
@@ -36,8 +36,8 @@ less than two centimetres. This means that the system have an accuracy between 0
 
 \subsection*{Conclusion}
 
-The system itself, has a precision of af third degree.
-\[ \frac{360}{160} = 1/3 \]
+The system itself, has a precision of one third degree.
+\[ \frac{360 deg}{1080 tick} = 1/3 deg/tick \]
 
 It is a high precision that have been observed, at times the uncertainty is as
 small as the precision of the system. Though it does also show that a higher
@@ -50,20 +50,18 @@ This experiment will test the PID values found in table \ref{tab:actual_gain_val
 under best performance.
 
 Here the system will run in automode between two position but only one of the
-positions are marked. This is repeated ten times.
+positions are marked. 
 
 \subsection*{Setup}
 
 The setup is similar to the setup in section \ref{subsec:precisionofsystem}, see
-Figure \ref{fig:systemtestsetup}, with the exception that only one point is measured and at
-the distance 370 centimetres. Thus each degree is 6,46 centimetres wide.
+Figure \ref{fig:systemtestsetup}, with the exception that only one point is measured and the distance to the board is increased to 370 cm. Thus each degree compares to 6,46 cm. This is repeated ten times.
 
 \[ \tan(1 \ deg) \cdot 370 \ cm \approx 6,46 \ cm \]
 
 \subsection*{Results}
 
-In this test the precision of the pan and tilt were recorded to be quite
-different. The vertical precision was 7,5 cm, but the horizontal precision was just 2,0 cm. Thus the pan/tilt system have
+In this test the precision of the pan and tilt were recorded to be different. The vertical precision was 7,5 cm, but the horizontal precision was just 2,0 cm. Thus the pan/tilt system have
 reached precision of respectively 0.31 degrees and 1.16 degrees.
 
 
@@ -73,8 +71,8 @@ reached precision of respectively 0.31 degrees and 1.16 degrees.
 
 \subsection*{Conclusion}
 The pan has reached a constant precision on par with the system precision
-of one third of a centimeter. The tilt part have also become more precise, but
-it should be possible to make it even more precise. It could be that because the
+of one third of a centimeter. The tilt part has also become adequately precise, but
+it should be possible to make it perform even better. It could be that because the
 tilt is affected by gravity it is harder to control than the pan.
 
 
