@@ -83,24 +83,6 @@ Though advanced queues are provided by FreeRTOS, a simple version is justified b
 remaining a low coupling between the peripheral modules and the operating
 system.
 
-\subsection{Discussion}
-A common way of sharing variables between tasks is to declare them globally.
-Then letting the individual tasks obtain a mutex and access the variable, either
-directly or by calling a function providing some interface to the variable.
-
-The upside of this solution is that it is easily implemented. The downside is
-increased coupling between different parts of the code, since multiple tasks are
-depending upon knowledge of both the operating system to obtain the mutex and
-the methods to access the variables.
-
-Another solution would be to rely only on the queues and semaphores provided by
-FreeRTOS. This resembles message passing, since the interface is provided by the
-operating system. The upside of this solution is, that coupling is now only
-between the task and the operating system and could be further reduced by using
-the preprocessor to provide a low coupling interface to any queue or semaphore
-in any operating system. The downside is a considerable amount of overhead,
-since the queue structure is a poor way of storing variables.
-
 \subsection{Implementation}
 The chosen solution is to build a simple common interface to shared memory. It
 facilitates the simplicity of shared memory, while still retaining a low
@@ -116,3 +98,63 @@ that as short time as possible is spend under the mutex.
 
 \section{Memory management}\label{sec:memoryman}
 \input{content/05_operating_system/memory.tex}
+
+%\subsection{Discussion}
+%A common way of sharing variables between tasks is to declare them globally.
+%Then letting the individual tasks obtain a mutex and access the variable, either
+%directly or by calling a function providing some interface to the variable.
+%
+%The upside of this solution is that it is easily implemented. The downside is
+%increased coupling between different parts of the code, since multiple tasks are
+%depending upon knowledge of both the operating system to obtain the mutex and
+%the methods to access the variables.
+%
+%Another solution would be to rely only on the queues and semaphores provided by
+%FreeRTOS. This resembles message passing, since the interface is provided by the
+%operating system. The upside of this solution is, that coupling is now only
+%between the task and the operating system and could be further reduced by using
+%the preprocessor to provide a low coupling interface to any queue or semaphore
+%in any operating system. The downside is a considerable amount of overhead,
+%since the queue structure is a poor way of storing variables.
+
+\section{Discussion}
+The microprocessor could have used another scheduling than the pre-emptive
+ provided by FreeRTOS. Though this would have made it harder to add new tasks, because a self but scheduler would not be as flexible.
+
+A common way of sharing variables between tasks is to declare them globally.
+Then letting the individual tasks obtain a mutex and access the variable, either
+directly or by calling a function providing some interface to the variable.
+
+The upside of this solution is that it is easily implemented. The downside is
+increased coupling between different parts of the code, since multiple tasks are
+depending upon knowledge of both the operating system to obtain the mutex and
+the methods to access the variables.
+
+
+Another solution would be to rely only on the queues and semaphores provided by
+FreeRTOS. This resembles message passing, since the interface is provided by the
+operating system. The upside of this solution is, that coupling is now only
+between the task and the operating system and could be further reduced by using
+the preprocessor to provide a low coupling interface to any queue or semaphore
+in any operating system. The downside is a considerable amount of overhead,
+since the queue structure is a poor way of storing variables.
+
+
+\section{Implementation}
+FreeRTOS was implemented and though it options was used extensively,
+ some individual modules for memory management still had to be created. 
+ The test which was performed, see \ref{sec:runtimestats}, showed that the pre-emptive
+ scheduling works well and that it is still possible to use more CPU time. 
+
+
+The chosen solution for intertask communication is to build a simple common interface to shared memory. It
+facilitates the simplicity of shared memory, while still retaining a low
+coupling to the operating system. Another upside is that access to multiple
+variables can be done under the same mutex, reducing overhead.
+
+
+Seen from the calling application, variables are accessed by a function call.
+Obtaining the mutex is done inside the function so instead of having a lot of
+calls to the operating system sprinkled all over the source code, it is held in
+one place. The interface function is based on a switch-case structure, ensuring
+that as short time as possible is spend under the mutex.

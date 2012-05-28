@@ -197,7 +197,7 @@ The watchdog module is not included in the final application due to time constra
 
 \section{Discussion}
 The main design and implementation strategy for the motor control block, has been to divide the problems into small almost trivial modules, designed for maximum re-usability. This strategy demands a lot of time in setting up individual test environments for each block, and extra coding time for the inclusion process (as this is not a trivial task in the VHDL language). The result however was that instead of having a single large hard task to complete, there were several small easy tasks to complete. Also debugging individual elements proved to be trivial, as a testbench was developed along the block description.
-As can be read in chapter \ref{chap:experiments}, all the modules were functional except the velocity estimators, these were the lowest priority in the development process, since it was uncertain whether they were needed until very late in the project. Luckily they were not needed, and therefore it is not a problem that they did not work.
+As can be read in appendix \ref{sec:llctest}, all the modules were functional except the velocity estimators, these were the lowest priority in the development process, since it was uncertain whether they were needed until very late in the project. Luckily they were not needed, and therefore it is not a problem that they did not work.
 
 \section{Conclusion}
 The motor control block met all its final design criteria, and can be used in the project.

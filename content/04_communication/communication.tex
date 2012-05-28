@@ -26,7 +26,7 @@ SPI is short for Serial Peripheral Interface, and is a commonly used standard fo
 % Data Exchange
 % Data on SCK  (the clock rate can vary, unlike RS-232 style communications)
 % SPI sync modes
-% WIKI fact:  frequencies are commonly in the range of 1–70 MHz
+% WIKI fact:  frequencies are commonly in the range of 1ï¿½70 MHz
 
 %\subsection{Hardware support}
 % Support on ARM development board -- The LM3S6965 controller includes one SSI module that provides the functionality for synchronous
@@ -172,7 +172,7 @@ As memory a true dual port ram is used, which is out-of-the-box solution from Xi
 
 \subsection{SPI protocol controller}
 \label{spi_protocol_controller}
-The "SPI protocol controller" is the state machine which controls the package flow according to the protocol. It has access to read the received data from the parallel interface and sets the control signals both on the parallel interface and the memory block. When data is ready on the parallel interface it is read by the protocol controller and a decision is made about how to respond. The states of the state machine is visualised in figure \ref{fig:spi_protocol_controller_prettystates}.
+The "SPI protocol controller" is a Mealey finite state machine controlling the package flow according to the protocol. It has access to read the received data from the parallel interface and sets the control signals both on the parallel interface and the memory block. When data is ready on the parallel interface it is read by the protocol controller and a decision is made about how to respond. The states of the state machine is visualised in figure \ref{fig:spi_protocol_controller_prettystates}.
 
 
 \begin{figure}[htb] 
@@ -196,11 +196,11 @@ Another possible way through the states in the state machine, is that a write co
 
 
 \section{Discussion}
-The protocol has been designed to carry 8 bit data sizes. This may cause a problem it a 16-bit value is transmitted, and only 8 bit has arrived when the data i read. Though if the high byte always is written first, the error is not that great. If bigger values need to be transmitted, several solutions could be considered: Increasing the size of transmitted data at once. This will be fairly easy as the ARM already supports up to max 16-bit sized data frames, and the FPGA hardware is written so it done by changing a few parameters. Another solution would be to implement a command in the protocol for reading writing bigger data sizes.
+The protocol has been designed to carry 8 bit data sizes. This may cause a problem it a 16-bit value is transmitted, and only 8 bit has arrived when the data i read. Though if the high byte always is written first, the error is not that great. If bigger values need to be transmitted, several solutions could be considered: Increasing the size of transmitted data at once. This will be fairly easy as the ARM already supports up to max 16-bit sized data frames, and the FPGA hardware is written so it is done by changing a few parameters. Another solution would be to implement a command in the protocol for reading and writing bigger data sizes.
 
 The protocol has been designed so the data can be abstracted away. Meaning that the protocol does not care about what data is transmitted, but just works as a carrier. If more data needs to be exchanged between the two points, it is easily done by just writing to an empty address in the memory, where the hardware is able to read it.
 
-The SPI software was implemented with one of the main requirements being, that it should be support multiple tasks using the SPI simultaneously. In the final implementation, only one task uses the SPI: The task which updates parameters to the control system. When only one task uses the SPI connection, software for handling multiple tasks is redundant and increases processing overhead. However, a watchdog software implementation\footnote{Found on the Git tree in the \texttt{watchdog\_impl} branch}, which must use SPI independently of the control parameter task, is under development. 
+The SPI software was implemented with one of the main requirements being, that it should support multiple tasks using the SPI simultaneously. In the final implementation, only one task uses the SPI: The task which updates parameters to the control system. When only one task uses the SPI connection, software for handling multiple tasks is redundant and increases processing overhead. However, a watchdog software implementation\footnote{Found on the Git tree in the \texttt{watchdog\_impl} branch}, which must use SPI independently of the control parameter task, is under development. 
 
 Using dynamic memory allocation\footnote{Memory management is discussed in detail in section \ref{sec:memoryman}} in the SPI software implementation was a deliberate choice made because of the wish to support an unknown number of user tasks. In the current state of the microcontroller application, that would not have been necessary however. The downside of using dynamically allocated memory is a slightly slower execution time and more error-prone code. The FreeRTOS kernel uses dynamically allocated memory for all of its task creation- and intertask communication API already though \cite{website:freertos-memory}, so opting for only static allocation would be meaningless unless another kernel were used; SafeRTOS for example \cite[13]{safertos}.
 % REF TIL TEST
@@ -220,7 +220,7 @@ Using dynamic memory allocation\footnote{Memory management is discussed in detai
 
 The implementation process of the SPI on the FPGA saved a lot of time. The idea of first having a working model in the simulation environment and then build to the platform, spared a lot of on-hardware debugging and synthesising time. The testing was done with a device known to work with SPI, enabling the FPGA SPI part to be tested before it was fully implemented on the ARM.
 
-On the FPGA, a 32byte dual port RAM has been used as interface between SPI and motor controller. This has been a great advantage during design and testing, as the parts where able to be tested separately and afterwards be put together.
+On the FPGA, a 32byte dual port RAM has been used as interface between SPI and motor controller. This has been a great advantage during design and testing, as the parts where able to be tested separately and put together afterwards.
 
 The protocol and FPGA hardware was tested for reliability, which are described in \ref{sec:spi_rel_test}. In the test it is concluded that the protocol and hardware can transmit without errors with cables lengths up to 25cm.
 

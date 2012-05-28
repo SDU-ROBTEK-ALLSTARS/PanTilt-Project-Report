@@ -1,6 +1,6 @@
 \chapter{SPI software test}\label{sec:armspitest}
 In order to test the stability and reliability of the SPI software, a test program\footnote{Found in the source file \texttt{arm/src/test/comm/spi\_test.c
-}} was written. The program is essentially a number of tasks created via. the FreeRTOS API. The tasks then all register with, and use, the SPI implementation. The UART is used to signal the outcome of the test by writing to a terminal window on a PC. The test is run while the FPGA and microcontroller system is disconnected from the actuators - if it was not, they would behave unpredictably.
+}} was written. The program is essentially a number of tasks created by the FreeRTOS API. The tasks then all register with, and use, the SPI implementation. The UART is used to signal the outcome of the test by writing to a terminal window on a PC. The test is run while the FPGA and microcontroller system is disconnected from the actuators - if it was not, they would behave unpredictably.
 
 
 \section{Procedure}
