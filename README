@@ -1,0 +1,3 @@
+TeXmakerX / TeXstudio command line:
+
+makeindex %.nlo -s nomencl.ist -o %.nls | biber % | pdflatex -synctex=1 -interaction=nonstopmode %.tex | tmx://internal-pdf-viewer
