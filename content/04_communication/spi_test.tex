@@ -1,12 +1,14 @@
 \chapter{SPI software test}\label{sec:armspitest}
 In order to test the stability and reliability of the SPI software, a test program\footnote{Found in the source file \texttt{arm/src/test/comm/spi\_test.c
-}} was written. The program is essentially a number of tasks created by the FreeRTOS API. The tasks then all register with, and use, the SPI implementation. The UART is used to signal the outcome of the test by writing to a terminal window on a PC. The test is run while the FPGA and microcontroller system is disconnected from the actuators - if it was not, they would behave unpredictably.
+}} was written. The program is essentially a number of tasks created by the FreeRTOS API. The tasks then all register with, and use, the SPI implementation. The UART is used to signal the outcome of the test by writing to a terminal window on a PC.
 
 
 \section{Procedure}
 When the test program is begun, eight tasks are created. Each has its own identification number from 0-7. When the tasks execute, they register with the SPI software to allow them to transmit and receive. Each task will then transmit a different sequence of bytes as many times as wanted. In this particular test, each task was set to loop a transmission 64 times, sending and receiving 4 bytes each loop. The total number of bytes transmitted during one test run is thus $8 \cdot 64 \cdot 4 = 2048$.
 
 When the tasks are transmitting, they are in fact writing the data to addresses in the memory within the FPGA. After some data has been sent, the registers in the FPGA, to which the data was written, are read. The received data can then be compared with that, which was transmitted.
+
+The test is run while the FPGA and microcontroller system is disconnected from the actuators - if it was not, they would behave unpredictably. Any circuitry within the FPGA using the memory is also disabled to make sure no one else is writing to the same memory.
 
 The test has been run a total of ten times.
 
