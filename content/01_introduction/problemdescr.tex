@@ -1,60 +1,60 @@
-
 \section{Project description}
-The purpose of the project work is to construct a pan and tilt system, for the set up shown in figure \ref{fig:pantilysystem}, so that it is possible to control the system from one or more user inputs for example a joystick, a keyboard, buttons or via commands from a computer. In addition the system should also give the user options for feedback of significant system parameters.
+The purpose of the project work is to construct a control system for the pan/tilt frame shown in figure \ref{fig:pantiltsystem}, so that it is possible to control it with one or more user inputs. For example a joystick, a keyboard, buttons or via commands from a computer. In addition the system should also provide the user with options for feedback of significant system parameters. This is to be prioritized in the project:
+\begin{itemize}
+  \item A system analysis and modelling of the individual elements of the system.
+  \item Analysis and design of the regulation loops in Matlab and Simulink.
+  \item Documentation of FPGA design and implementation.
+  \item Documentation of the design and implementation of microprocessor program, including choice of operating system.
+  \item Test and verification of the system.
+\end{itemize}
+
+\nomenclature{FPGA}{Field-Programmable Gate Array}
+
+It is up to the project group to choose the characteristics of the regulator system and the regulator loops.
 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\textwidth]{graphics/pantiltsystem.png} %trim=l b r t
-	\caption{The given pan tilt system.}
-	\label{fig:pantilysystem}
+	\caption{The pan/tilt system.}
+	\label{fig:pantiltsystem}
 \end{figure}
 
-This is to be prioritized in the project:
-\begin{itemize}
-\item A system analysis and modulation of the systems individual elements.
-\item Analysis and design of the regulation loops in Matlab and Simulink.
-\item Documentation of FPGA design and implementation.
-\item Documentation of the microprocessor programs design and implementation, including division into tasks and selection of scheduling.
-\item Test and verification of the system.
-\end{itemize}
-
-It is up to the project group to chose the regulator system and the regulator loops characteristics.
-
+\pagebreak
 \section{Requirements}
-
 The following conditions are set for the system:
 \begin{itemize}
-\item The controllers must be implemented on a microprocessor.
-\item SPI must be used in communication between the microprocessor and the FPGA.
+\item The controller must be implemented on a microprocessor.
+\item SPI must be used as the method of communication between the microprocessor and the FPGA.
 \item The FPGA must control the PWM signals to the motors.
-\item The FPGA must be used to determine the motors position via the encoders.
+\item The FPGA must be used to determine the motors positions through use of  their built-in encoders.
 \end{itemize}
 
-\section{Overall System Design}
+\nomenclature{PWM}{Pulse Width Modulation}
 
-Thus the system will overall consist of four parts. As shown in figure \ref{fig:firstsystem} there is the psychical system \ref{sec:phsycicalsystem} connected with an FPGA \ref{sec:FPGA} which is connected with SPI to a microprocessor \ref{sec:microprocessor} which is connected to i/o devices \ref{sec:iodevices}.
+
+\section{Overall system design}
+The system will consist of four parts overall. As shown in figure \ref{fig:firstsystem}, the physical system is connected with an FPGA, which is connected with SPI to a microprocessor,  which is then connected to I/O devices.
 
 \begin{figure}[htb]
-	\centering
-	\includegraphics[scale=0.6,trim=400 380 400 380]{graphics/firstsystem} %trim=l b r t (can cut off from every side)
-	\caption{Overall view of the system.}
-	\label{fig:firstsystem}			% figure labels are of the form \label{fig:*}
+\centering
+\includegraphics[scale=0.56,trim=400 380 400 380]{graphics/firstsystem.pdf} %trim=l b r t
+\caption{Overall view of the system.}
+\label{fig:firstsystem}	
 \end{figure}
 
-\section{The physical system}\label{sec:phsycicalsystem}
-
-The physical system is provided for the project. It consist of a pan/tilt system driven by two EMG30 \cite{emg30} motors with inbuilt encoders. The motors are driven by an H-bridge \cite{hbridge} with 12 volt dc supply connected. Thus the system are controlled trough the H-bridge and output is collected by the encoders.
+\section{The physical system}\label{sec:physicalsystem}
+The physical system provided for the project consist of a pan/tilt system driven by two EMG30 \cite{emg30} motors with built-in encoders. The motors are driven by an H-bridge \cite{hbridge} with 12 volt DC supply connected. The system is controlled trough the H-bridge and output is collected by the encoders.
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[scale=0.4,trim=200 200 200 200]{graphics/phsycicalsystem} %trim=l b r t (can cut off from every side)
+	\includegraphics[scale=0.42,trim=200 200 200 200]{graphics/phsycicalsystem} %trim=l b r t (can cut off from every side)
 	\caption{Set up of the physical system.}
 	\label{fig:phsysicalsystem}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
 \section{FPGA system}\label{sec:FPGA}
 
-The FPGA is a Xilinx Nexys 2 board with a Spartan-3E chip on board. Multiple processes will have to run on the FPGA. It is controlling the motors, watching the encoders and communicating with the microprocessor. Thus the three main processes are the SPI communication, the motor PWM and the encoder. Both the PWM and encoder process are to run double because two motors are controlled. 
+The FPGA is a Xilinx Nexys 2 board with a Spartan-3E chip on board \cite{nexys2}. Multiple processes will have to run on the FPGA. It is controlling the motors, watching the encoders and communicating with the microprocessor. The three main processes are the SPI communication, the motor PWM and the encoder. Both the PWM and encoder process are to run double because two motors are controlled. 
 
 \begin{figure}[htb]
 	\centering
@@ -65,12 +65,12 @@ The FPGA is a Xilinx Nexys 2 board with a Spartan-3E chip on board. Multiple pro
 
 \section{Microprocessor}\label{sec:microprocessor}
 
-The microprocessor is an ARM Cortex M3 mounted on a Stellaris LM3S6965 Evaluation Board. The microprocessor is both to run the control, the user interface\ref{chap:ui} and the communication with the SPI. By sharing the parameters between the tasks they have a standard interface and are all working with the same parameters as seen in  \ref{tab:parameters}. Because the microprocessor will run multiple tasks communicating with each other some sort of scheduler and intertask communication will be needed\ref{chap:os}.
+The microprocessor is a LM3S6965 \cite{lm3s6965}, which implements an ARM Cortex-M3 core \cite{cm3}, mounted on a Stellaris evaluation board \cite{evalboard}. The microprocessor both runs the \hyperref[chap:control_system]{control}, the \hyperref[chap:ui]{user interface} and the \hyperref[sec:armspi]{communication through the SPI}. Parameters defining motor position, current PWM values and so forth are shared between each module ensuring a common interface between them. These parameters are listed in table \ref{tab:parameters}. Because the microprocessor will run multiple tasks communicating with each other, some sort of \hyperref[chap:os]{scheduler and intertask communication} will be needed. All these things will be discussed in detail in the coming chapters.
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[scale=0.5,clip,trim=0 300 0 300]{graphics/microprocessor} %trim=l b r t (can cut off from every side)
-	\caption{The microprocessors system.}
+	\includegraphics[scale=0.58,clip,trim=0 300 0 300]{graphics/microprocessor} %trim=l b r t (can cut off from every side)
+	\caption{A simplified diagram of the microprocessor software modules.}
 	\label{fig:microprocessor}			% figure labels are of the form \label{fig:*}
 \end{figure}
 
@@ -80,17 +80,17 @@ The microprocessor is an ARM Cortex M3 mounted on a Stellaris LM3S6965 Evaluatio
 	\begin{tabular}{llccccc}			
 	Parameter & Format & Unit & ARM & FPGA & Min value & Max value\\		
 	\midrule										
-Pan pwm (DUTY A) &16 bit signed & none & read/write & read & -32.767 &  32.768  \\
-Tilt pwm (DUTY B) & 16 bit signed  & none&read/write & read & -32.767 &  32.768 \\
-Pan position (POS A) & 16 bit unsigned&ticks & read & write & 32.544 & 32.976 \\
-Tilt position (POS B) & 16 bit unsigned&ticks & read & write & 0 & 65535 \\
-Pan velocity (VEL A) & 16 bit unsigned&ticks/s & read & write & 0 & 65535 \\
-Tilt velocity (VEL B) & 16 bit unsigned & ticks/s&read & write & 0 & 65535 \\
-Aux (AUX) & 16 bit unsigned &binary& read/write & read/write & 0 & 65.535 \\
-Pan current & 32 bit signed & 1/10 deg & read/write & - & -900 & 900 \\
-Tilt current  & 32 bit signed & 1/10 deg & read/write & - & -109.441 & 109.441 \\
-Pan setpoint  & 32 bit signed & 1/10 deg & read/write & - & -900 & 900 \\
-Tilt setpoint  & 32 bit signed & 1/10 deg & read/write & - & -109.441 & 109.441 \\
+Pan PWM  &16 bit signed & none & r/w & r & -32767 &  32768  \\
+Tilt PWM  & 16 bit signed  & none&r/w & r & -32767 &  32768 \\
+Pan position & 16 bit unsigned&ticks & r & w & 32544 & 32976 \\
+Tilt position & 16 bit unsigned&ticks & r & w & 0 & 65535 \\
+Pan velocity  & 16 bit unsigned&ticks/s & r & w & 0 & 65535 \\
+Tilt velocity  & 16 bit unsigned & ticks/s&r & w & 0 & 65535 \\
+Aux  & 16 bit unsigned &binary& r/w & r/w & 0 & 65535 \\
+Pan current & 32 bit signed & 1/10 deg & r/w & - & -900 & 900 \\
+Tilt current  & 32 bit signed & 1/10 deg & r/w & - & -109441 & 109441 \\
+Pan setpoint  & 32 bit signed & 1/10 deg & r/w & - & -900 & 900 \\
+Tilt setpoint  & 32 bit signed & 1/10 deg & r/w & - & -109441 & 109441 \\
 	\end{tabular}
 	\caption{Parameters that define the system.}				
 	\label{tab:parameters}			
@@ -98,8 +98,7 @@ Tilt setpoint  & 32 bit signed & 1/10 deg & read/write & - & -109.441 & 109.441 
 
 
 \section{I/O devices}\label{sec:iodevices}
-
-When the microprocessor Evaluation Board was provided a test board was included. The I/O devices should make it possible to test the control system easily. There are two possible LCD's as output and a numpad, buttons, an incremental rotary encoder and a potentiometer as possible inputs. \ref{chap:ui}
+When the microprocessor evaluation board was provided, an additional test board, incorporating more I/O peripherals, was included. The I/O devices should make it possible to input data to, and receive output from, the control system easily. There are two LCD's usable as output and a numeric keypad, buttons, an incremental rotary encoder and a potentiometer as possible inputs.
 %Thus the incremental rotary encoder is chosen as main input to avoid many different %inputs, though the numpad is also included for situations were the incremental %encoder cannot be used. The test boards LCD was chosen because it is bigger and %therefore it can easier show feedback.
 \begin{figure}[htb]
 	\centering
@@ -111,7 +110,7 @@ When the microprocessor Evaluation Board was provided a test board was included.
 
 \section{The complete system}
 
-The electrical system was set up as shown in figure \ref{fig:digitalsystem}. All the user interface mounted with the microprocessor, all the motor input and output at the FPGA and a SPI connection between the two.
+The electrical system was set up as shown in figure \ref{fig:digitalsystem}. All the user interface in- and outputs are mounted with the microprocessor, all the motor in- and output at the FPGA, and a SPI connection between the two.
 
 \begin{figure}[htb]
 	\centering
